@@ -39,7 +39,7 @@ function PatientConditions(props: Props) {
     error,
     isLoading,
   } = useQuery<Bundle<Condition>>(
-    ["conditions"],
+    ["conditions", patientId],
     () =>
       axios(getFhirServerBaseUrl() + `/Condition?patient=${patientId}`, {
         headers: {

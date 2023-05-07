@@ -39,7 +39,7 @@ function PatientAllergies(props: Props) {
     error,
     isLoading,
   } = useQuery<Bundle<AllergyIntolerance>>(
-    ["allergies"],
+    ["allergies", patientId],
     () =>
       axios(
         getFhirServerBaseUrl() + `/AllergyIntolerance?patient=${patientId}`,

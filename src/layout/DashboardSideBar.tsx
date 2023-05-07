@@ -2,11 +2,8 @@ import { Box, List, ListItemButton, styled, Tooltip } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
-import {
-  ArticleOutlined,
-  DashboardOutlined,
-  SettingsOutlined,
-} from "@mui/icons-material";
+import { ArticleOutlined, SettingsOutlined } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
 
 // custom styled components
 const MainMenu = styled(Box)(({ theme }) => ({
@@ -33,9 +30,9 @@ const StyledListItemButton = styled(ListItemButton)(() => ({
 }));
 
 interface MenuItem {
-    title: string;
-    Icon: any;
-    path: string;
+  title: string;
+  Icon: any;
+  path: string;
 }
 
 const topMenuList: MenuItem[] = [
@@ -46,15 +43,29 @@ const topMenuList: MenuItem[] = [
   },
 ];
 
+function getRouteTitle(pathName: string): string {
+  if (pathName === "/configuration") {
+    return "Configuration";
+  }
+
+  const menuItem = topMenuList.find((item) => item.path === pathName);
+  if (menuItem) {
+    return menuItem.title;
+  }
+
+  return "";
+}
+
 // root component
 function DashboardSideBar() {
   const navigate = useNavigate();
 
-  const [active, setActive] = useState("Patient Summary");
+  const [active, setActive] = useState(getRouteTitle(window.location.pathname));
+  const { closeSnackbar } = useSnackbar();
 
   const handleActiveMainMenu = (menuItem: MenuItem) => () => {
     setActive(menuItem.title);
-
+    closeSnackbar();
     navigate(menuItem.path + window.location.search);
   };
 
@@ -85,11 +96,7 @@ function DashboardSideBar() {
     <List>
       <StyledListItemButton
         disableRipple
-        onClick={handleActiveMainMenu({
-          title: "Dashboard",
-          Icon: DashboardOutlined,
-          path: "/",
-        })}
+        onClick={handleActiveMainMenu(topMenuList[0])}
       >
         <DataSaverOnIcon color="success" sx={{ fontSize: 40 }} />
       </StyledListItemButton>

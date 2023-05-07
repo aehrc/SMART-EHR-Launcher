@@ -36,13 +36,20 @@ import {
   getQuestionnaireServerBaseUrl,
   QUERY_HEADERS,
 } from "../../lib/utils.ts";
+import TableDisabled from "../TableDisabled.tsx";
 
 const tableHeaders = [
   { id: "name", label: "Name" },
   { id: "id", label: "ID" },
 ];
 
-function QuestionnaireTable() {
+interface Props {
+  disabled: boolean;
+}
+
+function QuestionnaireTable(props: Props) {
+  const { disabled } = props;
+
   const [selectedItem, setSelectedItem] =
     useState<QuestionnaireListItem | null>(null);
 
@@ -98,6 +105,18 @@ function QuestionnaireTable() {
       }
     }
   };
+
+  if (disabled) {
+    return (
+      <Card>
+        <TableContainer sx={{ minWidth: 600 }}>
+          <Table>
+            <TableDisabled resourceName={"Questionnaire"} />
+          </Table>
+        </TableContainer>
+      </Card>
+    );
+  }
 
   return (
     <Card>

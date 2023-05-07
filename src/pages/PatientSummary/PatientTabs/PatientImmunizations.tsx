@@ -38,7 +38,7 @@ function PatientImmunizations(props: Props) {
     error,
     isLoading,
   } = useQuery<Bundle<Immunization>>(
-    ["immunizations"],
+    ["immunizations", patientId],
     () =>
       axios(getFhirServerBaseUrl() + `/Immunization?patient=${patientId}`, {
         headers: {
