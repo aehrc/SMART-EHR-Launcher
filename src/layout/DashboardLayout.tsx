@@ -5,11 +5,19 @@ import DashboardNavbar from "./DashboardNavbar.tsx";
 import DashboardSidebar from "./DashboardSideBar.tsx";
 
 // styled components
+
+export const LayoutRoot = styled(Box)({
+  display: "flex",
+  minHeight: "100%",
+  overflowY: "scroll",
+});
+
 const Wrapper = styled(Box)({
   width: `calc(100% - 80px)`,
   maxWidth: 1200,
   margin: "auto",
   paddingLeft: 80,
+  height: "100vh",
 });
 
 interface Props {
@@ -20,7 +28,7 @@ function DashboardLayout(props: Props) {
   const { children } = props;
 
   return (
-    <>
+    <LayoutRoot>
       <DashboardSidebar />
 
       <Wrapper>
@@ -29,7 +37,7 @@ function DashboardLayout(props: Props) {
           {children || <Outlet />}
         </Box>
       </Wrapper>
-    </>
+    </LayoutRoot>
   );
 }
 

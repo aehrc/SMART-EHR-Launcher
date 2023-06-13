@@ -20,6 +20,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { PatientListItem } from "./PatientTable.tsx";
 import { enqueueSnackbar } from "notistack";
+import { grey } from "@mui/material/colors";
 
 interface Props {
   selected: PatientListItem | null;
@@ -66,7 +67,7 @@ function PatientTableToolbar(props: Props) {
           </Button>
         </>
       ) : (
-        <Typography variant="subtitle1" fontWeight="bold" color="#808080">
+        <Typography variant="subtitle1" fontWeight="bold" color={grey.A700}>
           No patient selected
         </Typography>
       )}

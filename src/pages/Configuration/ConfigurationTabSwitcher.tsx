@@ -22,7 +22,11 @@ function ConfigurationTabSwitcher(props: Props) {
       <TabList onChange={handleChange}>
         <StyledTab disableRipple label="Current user" value="1" />
         <StyledTab disableRipple label="Current patient" value="2" />
-        <StyledTab disableRipple label="App Launch URL" value="3" />
+        <StyledTab
+          disableRipple
+          label="App Launch URL & Client Scopes"
+          value="3"
+        />
         <StyledTab disableRipple label="Current questionnaire" value="4" />
       </TabList>
     </Box>

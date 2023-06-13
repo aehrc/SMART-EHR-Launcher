@@ -20,6 +20,7 @@ import { PractitionerListItem } from "./PractitionerTable.tsx";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { enqueueSnackbar } from "notistack";
+import { grey } from "@mui/material/colors";
 
 interface Props {
   selected: PractitionerListItem | null;
@@ -62,7 +63,7 @@ function PractitionerTableToolbar(props: Props) {
           </Button>
         </>
       ) : (
-        <Typography variant="subtitle1" fontWeight="bold" color="#808080">
+        <Typography variant="subtitle1" fontWeight="bold" color={grey.A700}>
           No user selected
         </Typography>
       )}

@@ -59,7 +59,13 @@ function PatientNavProfile() {
     setQuery({
       ...query,
       patient: patient.id,
-      launch_url: "https://www.smartforms.io/launch",
+      launch_url: query.launch_url ?? "https://www.smartforms.io/launch",
+      client_id: launch.client_id ?? "smartforms",
+      scope:
+        launch.scope ??
+        "launch profile fhirUser openid online_access patient/*.read user/Patient.read user/Practitioner.read user/QuestionnaireResponse.*",
+      redirect_uris: launch.redirect_uris ?? "https://www.smartforms.io",
+      validation: "1",
     });
   }, [patient]);
 

@@ -51,7 +51,7 @@ export interface LaunchParams {
   jwks?: string;
   pkce?: PKCEValidation;
   client_type?: SMARTClientType;
-  fhir_context?: string;
+  fhir_context?: string; // non-patient, provider and encounter resources go here
 }
 
 /**

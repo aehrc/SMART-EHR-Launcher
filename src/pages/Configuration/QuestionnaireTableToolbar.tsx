@@ -20,6 +20,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { QuestionnaireListItem } from "./QuestionnaireTable.tsx";
 import { enqueueSnackbar } from "notistack";
+import { grey } from "@mui/material/colors";
 
 interface Props {
   selected: QuestionnaireListItem | null;
@@ -79,12 +80,12 @@ function QuestionnaireTableToolbar(props: Props) {
           variant="subtitle1"
           fontWeight="bold"
           fontSize={15}
-          color="#808080"
+          color={grey.A700}
         >
           {`Questionnaire context set as ${questionnaireContext}`}
         </Typography>
       ) : (
-        <Typography variant="subtitle1" fontWeight="bold" color="#808080">
+        <Typography variant="subtitle1" fontWeight="bold" color={grey.A700}>
           Questionnaire context not set
         </Typography>
       )}
