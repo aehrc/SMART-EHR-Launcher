@@ -101,6 +101,8 @@ function QuestionnaireTable(props: Props) {
         setSelectedItem({
           id: selected.id,
           title: selected.title,
+          url: selected.url,
+          version: selected.version,
         });
       }
     }
@@ -206,6 +208,8 @@ export default QuestionnaireTable;
 export interface QuestionnaireListItem {
   id: string;
   title: string;
+  url: string;
+  version: string;
 }
 
 function getQuestionnaireListItems(
@@ -217,6 +221,8 @@ function getQuestionnaireListItems(
     return {
       id: entry.id ?? i.toString(),
       title: entry.title ?? "Undefined questionnaire",
+      url: entry.url ?? "",
+      version: entry.version ?? "",
     };
   });
 }

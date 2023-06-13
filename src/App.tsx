@@ -12,6 +12,7 @@ import DashboardLayout from "./layout/DashboardLayout";
 import { SnackbarProvider } from "notistack";
 import TitleContextProvider from "./contexts/TitleContext";
 import TokenContextProvider from "./contexts/TokenContext";
+import QuestionnaireContextProvider from "./contexts/QuestionnaireContext.tsx";
 
 function App() {
   const appTheme = theme();
@@ -42,10 +43,12 @@ function App() {
       <SnackbarProvider maxSnack={1}>
         <TokenContextProvider>
           <TitleContextProvider>
-            <PatientContextProvider>
-              <CssBaseline />
-              <RouterProvider router={router} />
-            </PatientContextProvider>
+            <QuestionnaireContextProvider>
+              <PatientContextProvider>
+                <CssBaseline />
+                <RouterProvider router={router} />
+              </PatientContextProvider>
+            </QuestionnaireContextProvider>
           </TitleContextProvider>
         </TokenContextProvider>
       </SnackbarProvider>

@@ -21,6 +21,8 @@ import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { QuestionnaireListItem } from "./QuestionnaireTable.tsx";
 import { enqueueSnackbar } from "notistack";
 import { grey } from "@mui/material/colors";
+import { useContext } from "react";
+import { QuestionnaireContext } from "../../contexts/QuestionnaireContext.tsx";
 
 interface Props {
   selected: QuestionnaireListItem | null;
@@ -30,16 +32,10 @@ interface Props {
 function QuestionnaireTableToolbar(props: Props) {
   const { selected, removeSelected } = props;
 
-  const { setQuery, launch } = useLauncherQuery();
-  let questionnaireContext = undefined;
-  if (launch.fhir_context) {
-    try {
-      const parsedFhirContext = JSON.parse(launch.fhir_context);
-      questionnaireContext = parsedFhirContext["Questionnaire"];
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  const { setQuery } = useLauncherQuery();
+
+  const { questionnaireId, setQuestionnaireId } =
+    useContext(QuestionnaireContext);
 
   return (
     <Box
@@ -61,11 +57,34 @@ function QuestionnaireTableToolbar(props: Props) {
           </Typography>
           <Button
             onClick={() => {
-              setQuery({ fhir_context: `{"Questionnaire":"${selected.id}"}` });
-              enqueueSnackbar(`Questionnaire context set. ID:${selected.id} `, {
-                variant: "success",
-                autoHideDuration: 3000,
-              });
+              const canonical = selected?.url
+                ? `${selected?.url}|${selected?.version}`
+                : "";
+
+              if (canonical) {
+                const questionnaireFhirContext = {
+                  role: "questionnaire-render-on-launch",
+                  canonical: canonical,
+                  type: "Questionnaire",
+                };
+
+                setQuestionnaireId(selected.id);
+                setQuery({
+                  fhir_context: `${JSON.stringify(questionnaireFhirContext)}`,
+                });
+                enqueueSnackbar(
+                  `Questionnaire context set. ID:${selected.id} `,
+                  {
+                    variant: "success",
+                    autoHideDuration: 3000,
+                  }
+                );
+              } else {
+                enqueueSnackbar(`Questionnaire ${selected.id} lacks a url`, {
+                  variant: "warning",
+                  autoHideDuration: 3000,
+                });
+              }
               removeSelected();
             }}
             endIcon={<ArrowForwardIcon />}
@@ -75,14 +94,14 @@ function QuestionnaireTableToolbar(props: Props) {
             </Typography>
           </Button>
         </>
-      ) : questionnaireContext ? (
+      ) : questionnaireId ? (
         <Typography
           variant="subtitle1"
           fontWeight="bold"
           fontSize={15}
           color={grey.A700}
         >
-          {`Questionnaire context set as ${questionnaireContext}`}
+          {`Questionnaire context set as ${questionnaireId}`}
         </Typography>
       ) : (
         <Typography variant="subtitle1" fontWeight="bold" color={grey.A700}>

@@ -56,16 +56,26 @@ function PatientNavProfile() {
     }
 
     setPatient(patient);
+
+    // Define initial questionnaire context in FhirContext
+    const questionnaireFhirContext = {
+      role: "questionnaire-render-on-launch",
+      canonical: "http://www.health.gov.au/assessments/mbs/715|0.1.0-assembled",
+      type: "Questionnaire",
+    };
+
     setQuery({
       ...query,
       patient: patient.id,
-      launch_url: query.launch_url ?? "https://www.smartforms.io/launch",
-      client_id: launch.client_id ?? "smartforms",
+      launch_url: query.launch_url || "https://www.smartforms.io/launch",
+      client_id: launch.client_id || "smart-forms",
       scope:
-        launch.scope ??
-        "launch profile fhirUser openid online_access patient/*.read user/Patient.read user/Practitioner.read user/QuestionnaireResponse.*",
-      redirect_uris: launch.redirect_uris ?? "https://www.smartforms.io",
+        launch.scope ||
+        "launch online_access fhirUser openid profile user/Patient.read user/Practitioner.read user/QuestionnaireResponse.read user/QuestionnaireResponse.write patient/Condition.read patient/Encounter.read patient/Observation.read",
+      redirect_uris: launch.redirect_uris || "https://www.smartforms.io",
       validation: "1",
+      fhir_context:
+        launch.fhir_context || `${JSON.stringify(questionnaireFhirContext)}`,
     });
   }, [patient]);
 

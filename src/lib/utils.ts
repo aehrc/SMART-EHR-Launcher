@@ -15,7 +15,7 @@ import moment from "moment";
 
 const RE_YEAR = /\d{4}$/;
 const RE_MONTH_YEAR = /\d{4}-d{2}$/;
-export const SMART_ENDPOINT = "https://launch.smarthealthit.org";
+export const SMART_ENDPOINT = "https://proxy.smartforms.io";
 
 export const QUERY_HEADERS = {
   "Content-Type": "application/json+fhir; charset=UTF-8",
