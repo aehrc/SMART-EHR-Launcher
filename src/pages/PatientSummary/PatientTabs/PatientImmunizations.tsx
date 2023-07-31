@@ -15,8 +15,8 @@ import moment, { Moment } from "moment";
 import TableFeedback from "../../TableFeedback.tsx";
 import { TokenContext } from "../../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { getFhirServerBaseUrl, QUERY_HEADERS } from "../../../lib/utils.ts";
+import { getFhirServerBaseUrl } from "../../../lib/utils.ts";
+import { fetchResourceFromEHR } from "../../../api/fhirApi.ts";
 
 interface Props {
   patientId: string;
@@ -40,12 +40,11 @@ function PatientImmunizations(props: Props) {
   } = useQuery<Bundle<Immunization>>(
     ["immunizations", patientId],
     () =>
-      axios(getFhirServerBaseUrl() + `/Immunization?patient=${patientId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          ...QUERY_HEADERS,
-        },
-      }).then((res) => res.data),
+      fetchResourceFromEHR(
+        getFhirServerBaseUrl() + `/Immunization?patient=${patientId}`,
+        token ?? ""
+      ),
+
     { enabled: !!token }
   );
 

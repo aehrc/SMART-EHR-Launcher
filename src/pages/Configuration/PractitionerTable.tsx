@@ -29,16 +29,12 @@ import {
 } from "@mui/material";
 import type { Bundle } from "fhir/r5";
 import { Practitioner } from "fhir/r4";
-import {
-  getFhirServerBaseUrl,
-  humanName,
-  QUERY_HEADERS,
-} from "../../lib/utils.ts";
+import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
 import PractitionerTableToolbar from "./PractitionerTableToolbar.tsx";
 import TableFeedback from "../TableFeedback.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
-import axios from "axios";
+import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
 const tableHeaders = [
   { id: "name", label: "Name" },
@@ -62,12 +58,10 @@ function PractitionerTable() {
   } = useQuery<Bundle<Practitioner>>(
     ["practitioner"],
     () =>
-      axios(getFhirServerBaseUrl() + "/Practitioner", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          ...QUERY_HEADERS,
-        },
-      }).then((res) => res.data),
+      fetchResourceFromEHR(
+        getFhirServerBaseUrl() + "/Practitioner",
+        token ?? ""
+      ),
     { enabled: !!token }
   );
 

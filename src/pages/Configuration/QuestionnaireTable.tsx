@@ -31,12 +31,12 @@ import type { Bundle, Questionnaire } from "fhir/r5";
 import QuestionnaireTableToolbar from "./QuestionnaireTableToolbar.tsx";
 import TableFeedback from "../TableFeedback.tsx";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import {
   getQuestionnaireServerBaseUrl,
   QUERY_HEADERS,
 } from "../../lib/utils.ts";
 import TableDisabled from "../TableDisabled.tsx";
+import axios from "axios";
 
 const tableHeaders = [
   { id: "name", label: "Name" },
@@ -61,7 +61,7 @@ function QuestionnaireTable(props: Props) {
     error,
     isLoading,
   } = useQuery<Bundle<Questionnaire>>(["questionnaire"], () =>
-    axios(getQuestionnaireServerBaseUrl() + "/Questionnaire?_count=50", {
+    axios(getQuestionnaireServerBaseUrl() + "/Questionnaire?_count=200", {
       headers: QUERY_HEADERS,
     }).then((res) => res.data)
   );

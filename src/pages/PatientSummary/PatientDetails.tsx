@@ -1,15 +1,11 @@
 import { Typography } from "@mui/material";
 import { Patient } from "fhir/r4";
-import {
-  getFhirServerBaseUrl,
-  humanName,
-  QUERY_HEADERS,
-} from "../../lib/utils.ts";
+import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
 import { PatientListItem } from "../Configuration/PatientTable.tsx";
 import { useContext } from "react";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
 interface Props {
   selectedPatient: PatientListItem | null;
@@ -29,15 +25,10 @@ function PatientDetails(props: Props) {
   } = useQuery<Patient>(
     ["patientDetails"],
     () =>
-      axios(
+      fetchResourceFromEHR(
         getFhirServerBaseUrl() + `/AllergyIntolerance?patient=${patientId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            ...QUERY_HEADERS,
-          },
-        }
-      ).then((res) => res.data),
+        token ?? ""
+      ),
     {
       enabled: typeof patientId === "string" && !!token,
     }

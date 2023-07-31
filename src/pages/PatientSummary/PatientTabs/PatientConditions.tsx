@@ -15,8 +15,8 @@ import moment, { Moment } from "moment";
 import TableFeedback from "../../TableFeedback.tsx";
 import { TokenContext } from "../../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { getFhirServerBaseUrl } from "../../../lib/utils.ts";
+import { fetchResourceFromEHR } from "../../../api/fhirApi.ts";
 
 interface Props {
   patientId: string;
@@ -41,12 +41,10 @@ function PatientConditions(props: Props) {
   } = useQuery<Bundle<Condition>>(
     ["conditions", patientId],
     () =>
-      axios(getFhirServerBaseUrl() + `/Condition?patient=${patientId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.data),
+      fetchResourceFromEHR(
+        getFhirServerBaseUrl() + `/Condition?patient=${patientId}`,
+        token ?? ""
+      ),
     { enabled: !!token }
   );
 

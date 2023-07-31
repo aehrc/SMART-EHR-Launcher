@@ -1,19 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { Bundle, Patient } from "fhir/r4";
-import {
-  formatAge,
-  getFhirServerBaseUrl,
-  humanName,
-  QUERY_HEADERS,
-} from "../../lib/utils.ts";
+import { formatAge, getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { grey } from "@mui/material/colors";
 import { useContext, useEffect } from "react";
 import { PatientContext } from "../../contexts/PatientContext.tsx";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
 function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -32,13 +27,7 @@ function PatientNavProfile() {
     isLoading,
   } = useQuery<Patient | Bundle>(
     ["patientProfile", patientId],
-    () =>
-      axios(queryEndpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          ...QUERY_HEADERS,
-        },
-      }).then((res) => res.data),
+    () => fetchResourceFromEHR(queryEndpoint, token ?? ""),
     { enabled: !!token }
   );
 
@@ -68,7 +57,7 @@ function PatientNavProfile() {
       ...query,
       patient: patient.id,
       launch_url: query.launch_url || "https://www.smartforms.io/launch",
-      client_id: launch.client_id || "smart-forms",
+      client_id: launch.client_id || "9cbba311-bf9b-4200-8dd3-8459046fc522",
       scope:
         launch.scope ||
         "launch online_access fhirUser openid profile user/Patient.read user/Practitioner.read user/QuestionnaireResponse.read user/QuestionnaireResponse.write patient/Condition.read patient/Encounter.read patient/Observation.read",

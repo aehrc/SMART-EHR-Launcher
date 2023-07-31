@@ -1,16 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { Bundle, Practitioner } from "fhir/r4";
-import {
-  getFhirServerBaseUrl,
-  humanName,
-  QUERY_HEADERS,
-} from "../../lib/utils.ts";
+import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
 import { useContext, useEffect } from "react";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -29,13 +25,7 @@ function UserNavProfile() {
     isLoading,
   } = useQuery<Practitioner | Bundle>(
     ["practitionerProfile", userId],
-    () =>
-      axios(queryEndpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          ...QUERY_HEADERS,
-        },
-      }).then((res) => res.data),
+    () => fetchResourceFromEHR(queryEndpoint, token ?? ""),
     { enabled: !!token }
   );
 
