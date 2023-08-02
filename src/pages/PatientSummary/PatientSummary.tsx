@@ -17,7 +17,8 @@ function PatientSummary() {
   const { patient } = useContext(PatientContext);
 
   const [tabValue, setTabValue] = useState("1");
-  const [embeddedViewShown, setEmbeddedViewShown] = useState(false);
+  const [embeddedViewLaunched, setEmbeddedViewLaunched] = useState(false);
+  const [embeddedViewIsVisible, setEmbeddedViewIsVisible] = useState(false);
 
   return (
     <Box pt={2} pb={4}>
@@ -44,7 +45,13 @@ function PatientSummary() {
                 </Box>
 
                 <Box flexGrow={1} />
-                <LaunchButton />
+                <LaunchButton
+                  embeddedViewLaunched={embeddedViewLaunched}
+                  onLaunchEmbeddedView={() => {
+                    setEmbeddedViewLaunched(true);
+                    setEmbeddedViewIsVisible(true);
+                  }}
+                />
               </Box>
             ) : (
               <>Loading Patient...</>
@@ -53,15 +60,19 @@ function PatientSummary() {
 
           <PatientTabSwitcher
             patient={patient}
-            embeddedViewShown={embeddedViewShown}
-            onToggleEmbeddedView={(isShown) => setEmbeddedViewShown(isShown)}
+            embeddedViewLaunched={embeddedViewLaunched}
+            embeddedViewIsVisible={embeddedViewIsVisible}
+            onToggleEmbeddedViewVisible={(isShown) =>
+              setEmbeddedViewIsVisible(isShown)
+            }
             changeTab={(value) => setTabValue(value)}
           />
         </Card>
         {patient ? (
           <PatientDetailsPanel
             patient={patient}
-            embeddedViewShown={embeddedViewShown}
+            embeddedViewLaunched={embeddedViewLaunched}
+            embeddedViewIsVisible={embeddedViewIsVisible}
           />
         ) : null}
       </TabContext>

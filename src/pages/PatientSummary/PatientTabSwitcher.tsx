@@ -1,6 +1,7 @@
 import { SyntheticEvent } from "react";
 import {
   Box,
+  Fade,
   styled,
   Tab,
   ToggleButton,
@@ -8,7 +9,6 @@ import {
 } from "@mui/material";
 import { TabList } from "@mui/lab";
 import { Patient } from "fhir/r4";
-import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -16,25 +16,28 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 
 interface Props {
   patient: Patient | null;
-  embeddedViewShown: boolean;
-  onToggleEmbeddedView: (isShown: boolean) => void;
+  embeddedViewLaunched: boolean;
+  embeddedViewIsVisible: boolean;
+  onToggleEmbeddedViewVisible: (isShown: boolean) => void;
   changeTab: (value: string) => void;
 }
 function PatientTabSwitcher(props: Props) {
-  const { patient, embeddedViewShown, onToggleEmbeddedView, changeTab } = props;
-
-  const { launch } = useLauncherQuery();
-
-  const launchInEmbeddedView = launch.is_embedded_view;
+  const {
+    patient,
+    embeddedViewLaunched,
+    embeddedViewIsVisible,
+    onToggleEmbeddedViewVisible,
+    changeTab,
+  } = props;
 
   const handleTabChange = (_: SyntheticEvent, newValue: string) => {
     changeTab(newValue);
-    onToggleEmbeddedView(false);
+    onToggleEmbeddedViewVisible(false);
   };
 
   const handleShowEmbeddedView = () => {
     changeTab("-1");
-    onToggleEmbeddedView(true);
+    onToggleEmbeddedViewVisible(true);
   };
 
   return (
@@ -53,10 +56,10 @@ function PatientTabSwitcher(props: Props) {
         <StyledTab disableRipple label="Immunisations" value="6" />
         <StyledTab sx={{ display: "none" }} label="Health Check" value="-1" />
       </TabList>
-      {launchInEmbeddedView ? (
+      <Fade in={embeddedViewLaunched}>
         <ToggleButtonGroup
           color="primary"
-          value={embeddedViewShown ? "embedded" : null}
+          value={embeddedViewIsVisible ? "embedded" : null}
           exclusive
           onChange={handleShowEmbeddedView}
         >
@@ -66,10 +69,10 @@ function PatientTabSwitcher(props: Props) {
             disableRipple
             sx={{ textTransform: "capitalize" }}
           >
-            Health Check
+            Embedded Health Check
           </ToggleButton>
         </ToggleButtonGroup>
-      ) : null}
+      </Fade>
     </Box>
   );
 }
