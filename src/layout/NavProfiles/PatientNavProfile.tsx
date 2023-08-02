@@ -65,6 +65,7 @@ function PatientNavProfile() {
       validation: "1",
       fhir_context:
         launch.fhir_context || `${JSON.stringify(questionnaireFhirContext)}`,
+      is_embedded_view: launch.is_embedded_view || false,
     });
   }, [patient]);
 

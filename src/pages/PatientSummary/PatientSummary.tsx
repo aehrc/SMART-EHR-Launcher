@@ -8,19 +8,20 @@ import { formatAge, humanName } from "../../lib/utils.ts";
 import moment from "moment/moment";
 import LaunchButton from "./LaunchButton.tsx";
 import { grey } from "@mui/material/colors";
-import PatientTabContent from "./PatientTabContent.tsx";
 import PatientTabSwitcher from "./PatientTabSwitcher.tsx";
+import PatientDetailsPanel from "./PatientDetailsPanel.tsx";
 
 function PatientSummary() {
   useTitle("Patient Summary");
 
   const { patient } = useContext(PatientContext);
 
-  const [value, setValue] = useState("1");
+  const [tabValue, setTabValue] = useState("1");
+  const [embeddedViewShown, setEmbeddedViewShown] = useState(false);
 
   return (
     <Box pt={2} pb={4}>
-      <TabContext value={value}>
+      <TabContext value={tabValue}>
         <Card>
           <Box sx={{ height: 150, width: "100%", p: 4 }}>
             {patient ? (
@@ -52,10 +53,17 @@ function PatientSummary() {
 
           <PatientTabSwitcher
             patient={patient}
-            changeTab={(value) => setValue(value)}
+            embeddedViewShown={embeddedViewShown}
+            onToggleEmbeddedView={(isShown) => setEmbeddedViewShown(isShown)}
+            changeTab={(value) => setTabValue(value)}
           />
         </Card>
-        {patient ? <PatientTabContent patient={patient} /> : null}
+        {patient ? (
+          <PatientDetailsPanel
+            patient={patient}
+            embeddedViewShown={embeddedViewShown}
+          />
+        ) : null}
       </TabContext>
     </Box>
   );

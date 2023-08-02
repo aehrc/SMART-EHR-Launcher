@@ -1,7 +1,16 @@
-import { Alert, Box, Card, Grid, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Card,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { getValidationErrors } from "../../lib/URLValidation.tsx";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
-import { NotImplementedText } from "./AssessmentURLField.styles.ts";
 import { grey } from "@mui/material/colors";
 
 function AssessmentUrlField() {
@@ -10,6 +19,7 @@ function AssessmentUrlField() {
   const validationErrors = getValidationErrors(launch, query);
 
   const launchUrl = query.launch_url;
+  const isEmbeddedView = launch.is_embedded_view;
   const redirectUris = launch.redirect_uris ?? "";
   const scopes = launch.scope ?? "";
   const clientId = launch.client_id ?? "";
@@ -40,6 +50,16 @@ function AssessmentUrlField() {
           </Alert>
         )}
       </Box>
+      <FormGroup sx={{ mt: 1.5 }}>
+        <FormControlLabel
+          onChange={(_, checked) => {
+            setQuery({ is_embedded_view: checked });
+          }}
+          checked={isEmbeddedView}
+          control={<Switch />}
+          label="Launch SMART App in embedded mode"
+        />
+      </FormGroup>
       <Box sx={{ mt: 5 }}>
         <Box display="flex" justifyContent="space-between">
           <Typography
@@ -50,7 +70,7 @@ function AssessmentUrlField() {
           >
             Client Identity Validation
           </Typography>
-          <NotImplementedText>Validation not implemented</NotImplementedText>
+          {/*<NotImplementedText>Validation not implemented</NotImplementedText>*/}
         </Box>
 
         <Grid container spacing={3} sx={{ pt: 1 }}>

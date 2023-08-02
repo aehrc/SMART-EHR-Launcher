@@ -52,6 +52,7 @@ export interface LaunchParams {
   pkce?: PKCEValidation;
   client_type?: SMARTClientType;
   fhir_context?: string; // non-patient, provider and encounter resources go here
+  is_embedded_view?: boolean; // custom embedded view
 }
 
 /**
@@ -137,6 +138,7 @@ export function encode(params: LaunchParams, ignoreErrors = false): string {
     clientTypes.indexOf(params.client_type || "public"),
     PKCEValidationTypes.indexOf(params.pkce || "auto"),
     params.fhir_context || "",
+    params.is_embedded_view || false,
   ];
 
   return base64UrlEncode(JSON.stringify(arr));
@@ -176,6 +178,7 @@ export function decode(launch: string): LaunchParams {
     client_type: clientTypes[arr[14]],
     pkce: PKCEValidationTypes[arr[15]],
     fhir_context: arr[16] || "",
+    is_embedded_view: arr[17] || false,
   };
 }
 

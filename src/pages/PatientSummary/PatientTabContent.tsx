@@ -18,7 +18,7 @@ function PatientTabContent(props: Props) {
   const patientId: string = patient.id!;
 
   return (
-    <Box marginTop={3} sx={{ width: "100%" }}>
+    <Box marginTop={2} sx={{ width: "100%" }}>
       <Card sx={{ height: "100%", width: "100%", p: 1 }}>
         <TabPanel value="1">
           <PatientProfile patient={patient} />
