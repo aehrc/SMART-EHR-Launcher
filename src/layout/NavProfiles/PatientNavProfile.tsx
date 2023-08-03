@@ -60,7 +60,7 @@ function PatientNavProfile() {
       client_id: launch.client_id || "9cbba311-bf9b-4200-8dd3-8459046fc522",
       scope:
         launch.scope ||
-        "launch online_access fhirUser openid profile user/Patient.read user/Practitioner.read user/QuestionnaireResponse.read user/QuestionnaireResponse.write patient/Condition.read patient/Encounter.read patient/Observation.read",
+        "fhirUser online_access openid profile patient/Condition.read patient/Observation.read launch patient/Encounter.read patient/QuestionnaireResponse.read patient/QuestionnaireResponse.write patient/Patient.read",
       redirect_uris: launch.redirect_uris || "https://www.smartforms.io",
       validation: "1",
       fhir_context:
