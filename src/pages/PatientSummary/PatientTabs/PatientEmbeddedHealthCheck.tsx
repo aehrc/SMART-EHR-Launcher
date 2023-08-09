@@ -16,10 +16,14 @@ function PatientEmbeddedHealthCheck() {
       <Box display="flex" justifyContent="center">
         <iframe
           src={userLaunchUrl.href}
-          width={675}
-          height={500}
-          style={{ border: "1px solid #F5F5F5" }}
-          allow="fullscreen; clipboard-write"
+          width="100%"
+          height="100%"
+          style={{
+            border: "1px solid #F5F5F5",
+            minWidth: "675px",
+            minHeight: "500px",
+          }}
+          allow="clipboard-write"
         />
       </Box>
     </Card>
