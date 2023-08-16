@@ -19,7 +19,7 @@ function PatientTabContent(props: Props) {
 
   return (
     <Box marginTop={2} sx={{ width: "100%" }}>
-      <Card sx={{ height: "100%", width: "100%", p: 1 }}>
+      <Card sx={{ height: "100%", width: "100%" }}>
         <TabPanel value="1">
           <PatientProfile patient={patient} />
         </TabPanel>

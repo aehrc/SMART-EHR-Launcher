@@ -8,6 +8,7 @@ interface LauncherState
 
 export interface LauncherQuery {
   launch_url: string;
+  app_name: string;
   fhir_version: string;
   tab: string;
   launch: string;
@@ -18,6 +19,7 @@ export interface LauncherQuery {
 const LauncherQueryDefaults: LauncherQuery = {
   fhir_version: "r4",
   launch_url: "",
+  app_name: "",
   tab: "0",
   launch: encode({
     launch_type: "provider-ehr",

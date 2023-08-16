@@ -57,6 +57,7 @@ function PatientNavProfile() {
       ...query,
       patient: patient.id,
       launch_url: query.launch_url || "https://www.smartforms.io/launch",
+      app_name: query.app_name || "Health Check Assessment",
       client_id: launch.client_id || "9cbba311-bf9b-4200-8dd3-8459046fc522",
       scope:
         launch.scope ||

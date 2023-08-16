@@ -3,8 +3,8 @@ import {
   Box,
   Card,
   FormControlLabel,
-  FormGroup,
   Grid,
+  Stack,
   Switch,
   TextField,
   Typography,
@@ -19,6 +19,7 @@ function AssessmentUrlField() {
   const validationErrors = getValidationErrors(launch, query);
 
   const launchUrl = query.launch_url;
+  const appName = query.app_name;
   const isEmbeddedView = launch.is_embedded_view;
   const redirectUris = launch.redirect_uris ?? "";
   const scopes = launch.scope ?? "";
@@ -33,34 +34,55 @@ function AssessmentUrlField() {
           color={grey.A700}
           sx={{ mb: 1 }}
         >
-          App Launch Url
+          App Launch Config
         </Typography>
-        <TextField
-          value={launchUrl}
-          sx={{ width: "100%" }}
-          onChange={(e) => setQuery({ launch_url: e.target.value })}
-        />
-        {validationErrors.length > 0 ? (
-          <Alert severity="error" sx={{ mt: 1 }}>
-            {validationErrors[0]}
-          </Alert>
-        ) : (
-          <Alert severity="success" sx={{ mt: 1 }}>
-            App Launch URL valid!
-          </Alert>
-        )}
+
+        <Stack mt={3} rowGap={0.5}>
+          <Typography variant="subtitle2">Launch URL</Typography>
+          <TextField
+            value={launchUrl}
+            size="small"
+            onChange={(e) => setQuery({ launch_url: e.target.value })}
+          />
+          {validationErrors.length > 0 ? (
+            <Alert severity="error" sx={{ mt: 1 }}>
+              {validationErrors[0]}
+            </Alert>
+          ) : (
+            <Alert severity="success" sx={{ mt: 1 }}>
+              App Launch URL valid!
+            </Alert>
+          )}
+        </Stack>
+
+        <Stack mt={3} rowGap={0.5}>
+          <Typography variant="subtitle2">SMART App Name</Typography>
+          <TextField
+            value={appName}
+            size="small"
+            onChange={(e) => setQuery({ app_name: e.target.value })}
+          />
+          <Typography variant="subtitle2" fontSize={12}>
+            This field can contain any value
+          </Typography>
+        </Stack>
+
+        <Stack mt={3} rowGap={0.5}>
+          <Typography variant="subtitle2">
+            Launch SMART App in embedded mode?
+          </Typography>
+          <FormControlLabel
+            onChange={(_, checked) => {
+              setQuery({ is_embedded_view: checked });
+            }}
+            checked={isEmbeddedView}
+            control={<Switch />}
+            label={isEmbeddedView ? "Yes" : "No"}
+          />
+        </Stack>
       </Box>
-      <FormGroup sx={{ mt: 1.5 }}>
-        <FormControlLabel
-          onChange={(_, checked) => {
-            setQuery({ is_embedded_view: checked });
-          }}
-          checked={isEmbeddedView}
-          control={<Switch />}
-          label="Launch SMART App in embedded mode"
-        />
-      </FormGroup>
-      <Box sx={{ mt: 5 }}>
+
+      <Box mt={5}>
         <Box display="flex" justifyContent="space-between">
           <Typography
             variant="subtitle1"
@@ -80,6 +102,7 @@ function AssessmentUrlField() {
               value={clientId}
               fullWidth
               sx={{ my: 0.5 }}
+              size="small"
               onChange={(e) => setQuery({ client_id: e.target.value })}
             />
             <Typography variant="subtitle2" fontSize={12}>
@@ -96,6 +119,7 @@ function AssessmentUrlField() {
                 my: 0.5,
               }}
               multiline
+              size="small"
               onChange={(e) => setQuery({ scope: e.target.value })}
             />
             <Typography variant="subtitle2" fontSize={12}>
@@ -110,6 +134,7 @@ function AssessmentUrlField() {
               value={redirectUris}
               fullWidth
               sx={{ my: 0.5 }}
+              size="small"
               onChange={(e) => setQuery({ redirect_uris: e.target.value })}
             />
             <Typography variant="subtitle2" fontSize={12}>

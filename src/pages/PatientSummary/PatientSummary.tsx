@@ -10,6 +10,7 @@ import LaunchButton from "./LaunchButton.tsx";
 import { grey } from "@mui/material/colors";
 import PatientTabSwitcher from "./PatientTabSwitcher.tsx";
 import PatientDetailsPanel from "./PatientDetailsPanel.tsx";
+import EmbeddedViewTab from "./EmbeddedViewTab.tsx";
 
 function PatientSummary() {
   useTitle("Patient Summary");
@@ -45,28 +46,38 @@ function PatientSummary() {
                 </Box>
 
                 <Box flexGrow={1} />
-                <LaunchButton
-                  embeddedViewLaunched={embeddedViewLaunched}
-                  onLaunchEmbeddedView={() => {
-                    setEmbeddedViewLaunched(true);
-                    setEmbeddedViewIsVisible(true);
-                  }}
-                />
+                <LaunchButton />
               </Box>
             ) : (
               <>Loading Patient...</>
             )}
           </Box>
+          <Box display="flex" padding="0 1.5rem">
+            <PatientTabSwitcher
+              patient={patient}
+              onToggleEmbeddedViewVisible={(isShown) => {
+                if (!embeddedViewLaunched) {
+                  setEmbeddedViewLaunched(true);
+                }
 
-          <PatientTabSwitcher
-            patient={patient}
-            embeddedViewLaunched={embeddedViewLaunched}
-            embeddedViewIsVisible={embeddedViewIsVisible}
-            onToggleEmbeddedViewVisible={(isShown) =>
-              setEmbeddedViewIsVisible(isShown)
-            }
-            changeTab={(value) => setTabValue(value)}
-          />
+                setEmbeddedViewIsVisible(isShown);
+              }}
+              changeTab={(value) => setTabValue(value)}
+            />
+            <Box flexGrow={1} />
+            <EmbeddedViewTab
+              embeddedViewLaunched={embeddedViewLaunched}
+              embeddedViewIsVisible={embeddedViewIsVisible}
+              onToggleEmbeddedViewVisible={(isShown) => {
+                if (!embeddedViewLaunched) {
+                  setEmbeddedViewLaunched(true);
+                }
+
+                setEmbeddedViewIsVisible(isShown);
+              }}
+              onChangePatientTab={(value) => setTabValue(value)}
+            />
+          </Box>
         </Card>
         {patient ? (
           <PatientDetailsPanel
