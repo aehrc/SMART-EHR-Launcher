@@ -6,7 +6,7 @@ import { useState } from "react";
 import ConfigurationTabSwitcher from "./ConfigurationTabSwitcher.tsx";
 import PatientTable from "./PatientTable.tsx";
 import QuestionnaireTable from "./QuestionnaireTable.tsx";
-import AssessmentUrlField from "./AssessmentURLField.tsx";
+import AppConfig from "./AppConfig.tsx";
 import PractitionerTable from "./PractitionerTable.tsx";
 import { getFhirServerBaseUrl } from "../../lib/utils.ts";
 import { useQuery } from "@tanstack/react-query";
@@ -64,7 +64,7 @@ function Configuration() {
           </TabPanel>
 
           <TabPanel value="3" sx={{ p: 0 }}>
-            <AssessmentUrlField />
+            <AppConfig />
           </TabPanel>
 
           <TabPanel value="4" sx={{ p: 0 }}>

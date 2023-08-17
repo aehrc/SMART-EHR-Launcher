@@ -40,8 +40,10 @@ const sampleAppConfigs = [
   },
 ];
 
-function LaunchConfigSampleApps() {
+function AppConfigSampleApps() {
   const { setQuery, query } = useLauncherQuery();
+
+  const launchUrl = query.launch_url;
 
   function handleSelectApp(e: SelectChangeEvent) {
     const appConfig = sampleAppConfigs.find(
@@ -71,7 +73,7 @@ function LaunchConfigSampleApps() {
       <Stack mt={1} rowGap={0.5}>
         <FormControl fullWidth>
           <Select
-            value={query.launch_url ?? ""}
+            value={launchUrl ?? ""}
             size="small"
             onChange={handleSelectApp}
           >
@@ -91,4 +93,4 @@ function LaunchConfigSampleApps() {
   );
 }
 
-export default LaunchConfigSampleApps;
+export default AppConfigSampleApps;
