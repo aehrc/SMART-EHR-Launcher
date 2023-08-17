@@ -12,6 +12,7 @@ import {
 import { getValidationErrors } from "../../lib/URLValidation.tsx";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { grey } from "@mui/material/colors";
+import LaunchConfigSampleApps from "./LaunchConfigSampleApps.tsx";
 
 function AssessmentUrlField() {
   const { launch, query, setQuery } = useLauncherQuery();
@@ -27,17 +28,13 @@ function AssessmentUrlField() {
 
   return (
     <Card sx={{ p: 3 }}>
-      <Box>
-        <Typography
-          variant="subtitle1"
-          fontWeight="bold"
-          color={grey.A700}
-          sx={{ mb: 1 }}
-        >
+      <LaunchConfigSampleApps />
+      <Box mt={4}>
+        <Typography variant="subtitle1" fontWeight="bold" color={grey.A700}>
           App Launch Config
         </Typography>
 
-        <Stack mt={3} rowGap={0.5}>
+        <Stack mt={1} rowGap={0.5}>
           <Typography variant="subtitle2">Launch URL</Typography>
           <TextField
             value={launchUrl}
@@ -82,7 +79,7 @@ function AssessmentUrlField() {
         </Stack>
       </Box>
 
-      <Box mt={5}>
+      <Box mt={4}>
         <Box display="flex" justifyContent="space-between">
           <Typography
             variant="subtitle1"
@@ -95,7 +92,7 @@ function AssessmentUrlField() {
           {/*<NotImplementedText>Validation not implemented</NotImplementedText>*/}
         </Box>
 
-        <Grid container spacing={3} sx={{ pt: 1 }}>
+        <Grid container spacing={3}>
           <Grid item xs={6}>
             <Typography variant="subtitle2">Client ID</Typography>
             <TextField
