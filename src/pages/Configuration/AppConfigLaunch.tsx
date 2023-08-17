@@ -67,6 +67,12 @@ function AppConfigLaunch() {
           control={<Switch />}
           label={isEmbeddedView ? "Yes" : "No"}
         />
+        {isEmbeddedView ? (
+          <Typography variant="subtitle2" fontSize={12}>
+            Some unsecured sites (HTTP) could fail to run in embedded mode. If
+            that happens, a white screen is displayed.
+          </Typography>
+        ) : null}
       </Stack>
     </>
   );

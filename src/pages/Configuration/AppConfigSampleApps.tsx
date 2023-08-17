@@ -36,7 +36,7 @@ const sampleAppConfigs = [
     scope:
       "openid profile launch patient/Observation.read patient/Patient.read offline_access",
     redirect_uris: "http://examples.smarthealthit.org/growth-chart-app",
-    is_embedded_view: true,
+    is_embedded_view: false,
   },
   {
     app_name: "Manually configured SMART app",
