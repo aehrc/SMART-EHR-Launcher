@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { QuestionnaireListItem } from "./QuestionnaireTable.tsx";
@@ -23,6 +23,7 @@ import { enqueueSnackbar } from "notistack";
 import { grey } from "@mui/material/colors";
 import { useContext } from "react";
 import { QuestionnaireContext } from "../../contexts/QuestionnaireContext.tsx";
+import ClearIcon from "@mui/icons-material/Clear";
 
 interface Props {
   selected: QuestionnaireListItem | null;
@@ -95,14 +96,31 @@ function QuestionnaireTableToolbar(props: Props) {
           </Button>
         </>
       ) : questionnaireId ? (
-        <Typography
-          variant="subtitle1"
-          fontWeight="bold"
-          fontSize={15}
-          color={grey.A700}
-        >
-          {`Questionnaire context set as ${questionnaireId}`}
-        </Typography>
+        <>
+          <Typography
+            variant="subtitle1"
+            fontWeight="bold"
+            fontSize={15}
+            color={grey.A700}
+          >
+            {`Questionnaire context set as ${questionnaireId}`}
+          </Typography>
+          <Tooltip title="Remove questionnaire context">
+            <IconButton
+              onClick={() => {
+                setQuestionnaireId("");
+                setQuery({
+                  fhir_context: "",
+                });
+                enqueueSnackbar("Questionnaire context removed", {
+                  autoHideDuration: 3000,
+                });
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+          </Tooltip>
+        </>
       ) : (
         <Typography variant="subtitle1" fontWeight="bold" color={grey.A700}>
           Questionnaire context not set
