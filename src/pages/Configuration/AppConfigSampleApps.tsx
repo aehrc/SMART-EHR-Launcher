@@ -38,6 +38,14 @@ const sampleAppConfigs = [
     redirect_uris: "http://examples.smarthealthit.org/growth-chart-app",
     is_embedded_view: true,
   },
+  {
+    app_name: "Manually configured SMART app",
+    launch_url: "",
+    client_id: "",
+    scope: "",
+    redirect_uris: "",
+    is_embedded_view: false,
+  },
 ];
 
 function AppConfigSampleApps() {
