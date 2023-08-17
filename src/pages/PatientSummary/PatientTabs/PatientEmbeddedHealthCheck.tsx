@@ -23,7 +23,6 @@ function PatientEmbeddedHealthCheck() {
             minWidth: "675px",
             minHeight: "500px",
           }}
-          allow="clipboard-write"
         />
       </Box>
     </Card>
