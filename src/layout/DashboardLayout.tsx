@@ -14,7 +14,7 @@ export const LayoutRoot = styled(Box)({
 
 const Wrapper = styled(Box)({
   width: `calc(100% - 80px)`,
-  maxWidth: 1200,
+  maxWidth: 1400,
   margin: "auto",
   paddingLeft: 80,
   height: "100vh",
