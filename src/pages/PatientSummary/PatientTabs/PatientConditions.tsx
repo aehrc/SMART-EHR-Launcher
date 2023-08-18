@@ -151,7 +151,7 @@ function getConditionListItems(conditions: Condition[]): ConditionListItem[] {
 
       return {
         id: entry.id ?? i.toString(),
-        name: entry.code?.text ?? "unknown",
+        name: entry.code?.text ?? entry.code?.coding?.[0].display ?? "unknown",
         status: status,
         onsetDate: entry.onsetDateTime
           ? moment(entry.onsetDateTime).format("DD/MM/YYYY")

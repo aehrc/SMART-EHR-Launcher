@@ -142,7 +142,10 @@ function getAllergyListItems(
 
       return {
         id: entry.id ?? i.toString(),
-        name: entry.medicationCodeableConcept?.text ?? "unknown",
+        name:
+          entry.medicationCodeableConcept?.text ??
+          entry.medicationCodeableConcept?.coding?.[0].display ??
+          "unknown",
         status: entry.status ?? "unknown",
         authoredOn: authoredOnMoment
           ? authoredOnMoment.format("DD/MM/YYYY")

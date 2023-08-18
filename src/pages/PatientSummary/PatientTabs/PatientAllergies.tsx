@@ -149,7 +149,7 @@ function getAllergyListItems(
 
       return {
         id: entry.id ?? i.toString(),
-        name: entry.code?.text ?? "unknown",
+        name: entry.code?.text ?? entry.code?.coding?.[0].display ?? "unknown",
         category: category,
         criticality: entry.criticality ?? "unknown",
         recordedDate: recordedDateMoment

@@ -143,7 +143,10 @@ function getImmunizationListItems(
 
       return {
         id: entry.id ?? i.toString(),
-        vaccine: entry.vaccineCode?.text ?? "unknown",
+        vaccine:
+          entry.vaccineCode?.text ??
+          entry.vaccineCode?.coding?.[0].display ??
+          "unknown",
         status: entry.status,
         occurrenceDate: occurrenceDateMoment
           ? occurrenceDateMoment.format("DD/MM/YYYY")

@@ -142,7 +142,7 @@ function getProcedureListItems(procedures: Procedure[]): ProcedureListItem[] {
 
       return {
         id: entry.id ?? i.toString(),
-        name: entry.code?.text ?? "unknown",
+        name: entry.code?.text ?? entry.code?.coding?.[0].display ?? "unknown",
         status: entry.status,
         reason: entry.reasonReference?.[0].display ?? "unknown",
         performedOn: performedOnMoment
