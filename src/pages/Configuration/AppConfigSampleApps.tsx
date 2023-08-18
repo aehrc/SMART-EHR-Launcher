@@ -22,7 +22,7 @@ const sampleAppConfigs = [
   {
     app_name: "Smart Forms Dev",
     launch_url: "http://127.0.0.1:5173/launch",
-    client_id: "a57d90e3-5f69-4b92-aa2e-2992180863c",
+    client_id: "a57d90e3-5f69-4b92-aa2e-2992180863c0",
     scope:
       "fhirUser online_access openid profile patient/Condition.read patient/Observation.read launch patient/Encounter.read patient/QuestionnaireResponse.read patient/QuestionnaireResponse.write patient/Patient.read",
     redirect_uris: "http://127.0.0.1:5173/",
