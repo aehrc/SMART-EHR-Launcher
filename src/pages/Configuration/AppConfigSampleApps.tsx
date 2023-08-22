@@ -20,22 +20,33 @@ const sampleAppConfigs = [
     is_embedded_view: false,
   },
   {
-    app_name: "Smart Forms Dev",
-    launch_url: "http://127.0.0.1:5173/launch",
-    client_id: "a57d90e3-5f69-4b92-aa2e-2992180863c0",
-    scope:
-      "fhirUser online_access openid profile patient/Condition.read patient/Observation.read launch patient/Encounter.read patient/QuestionnaireResponse.read patient/QuestionnaireResponse.write patient/Patient.read",
-    redirect_uris: "http://127.0.0.1:5173/",
-    is_embedded_view: false,
-  },
-  {
-    app_name: "Pediatric Growth Chart Application",
+    app_name: "Pediatric Growth Chart",
     launch_url:
       "http://examples.smarthealthit.org/growth-chart-app/launch.html",
     client_id: "growth_chart",
     scope:
       "openid profile launch patient/Observation.read patient/Patient.read offline_access",
     redirect_uris: "http://examples.smarthealthit.org/growth-chart-app",
+    is_embedded_view: false,
+  },
+  {
+    app_name: "SMART Australian Tester",
+    launch_url:
+      "https://smartqedit4.azurewebsites.net/ts/Tester/smart-launch.html",
+    client_id: "16cbfe7c-6c56-4876-944f-534f9306bf8b",
+    scope:
+      "openid profile patient/Patient.read patient/Flag.read user/Practitioner.read user/PractitionerRole.read user/Organization.read launch",
+    redirect_uris:
+      "https://smartqedit4.azurewebsites.net/ts/Tester/smart-index.html",
+    is_embedded_view: true,
+  },
+  {
+    app_name: "Smart Forms Dev Build",
+    launch_url: "http://127.0.0.1:5173/launch",
+    client_id: "a57d90e3-5f69-4b92-aa2e-2992180863c0",
+    scope:
+      "fhirUser online_access openid profile patient/Condition.read patient/Observation.read launch patient/Encounter.read patient/QuestionnaireResponse.read patient/QuestionnaireResponse.write patient/Patient.read",
+    redirect_uris: "http://127.0.0.1:5173/",
     is_embedded_view: false,
   },
   {
