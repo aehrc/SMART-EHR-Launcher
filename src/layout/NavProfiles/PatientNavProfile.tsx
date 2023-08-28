@@ -65,10 +65,12 @@ function PatientNavProfile() {
       redirect_uris: launch.redirect_uris || "https://www.smartforms.io",
       validation: "1",
       fhir_context:
-        launch.fhir_context || `${JSON.stringify(questionnaireFhirContext)}`,
+        typeof launch.fhir_context === "string"
+          ? launch.fhir_context
+          : `${JSON.stringify(questionnaireFhirContext)}`,
       is_embedded_view: launch.is_embedded_view || false,
     });
-  }, []);
+  }, [patient]);
 
   return (
     <Box display="flex" alignItems="center" gap={1.5}>
