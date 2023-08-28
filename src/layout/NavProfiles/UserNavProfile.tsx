@@ -43,7 +43,7 @@ function UserNavProfile() {
     }
 
     setQuery({ ...query, provider: user.id });
-  }, [user]);
+  }, []);
 
   return (
     <Box display="flex" alignItems="center" gap={1.5}>

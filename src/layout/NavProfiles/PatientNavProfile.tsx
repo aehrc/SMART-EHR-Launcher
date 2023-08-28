@@ -68,7 +68,7 @@ function PatientNavProfile() {
         launch.fhir_context || `${JSON.stringify(questionnaireFhirContext)}`,
       is_embedded_view: launch.is_embedded_view || false,
     });
-  }, [patient]);
+  }, []);
 
   return (
     <Box display="flex" alignItems="center" gap={1.5}>
