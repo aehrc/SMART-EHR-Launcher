@@ -177,7 +177,7 @@ export function decode(launch: string): LaunchParams {
     jwks: arr[13] || "",
     client_type: clientTypes[arr[14]],
     pkce: PKCEValidationTypes[arr[15]],
-    fhir_context: arr[16] || undefined,
+    fhir_context: typeof arr[16] === "string" ? arr[16] : undefined,
     is_embedded_view: arr[17] || false,
   };
 }
