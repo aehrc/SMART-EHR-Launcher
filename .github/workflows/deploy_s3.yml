@@ -34,4 +34,4 @@ jobs:
           npm run build
 
       - name: Upload benchmark file to S3
-        run: aws s3 sync dist s3://smart-forms-ehr-app/ehr/
+        run: aws s3 sync dist s3://smart-forms-ehr-app/

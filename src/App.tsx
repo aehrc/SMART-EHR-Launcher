@@ -15,7 +15,7 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/ehr",
+      path: "/",
       element: <DashboardLayout />,
       children: [
         {
