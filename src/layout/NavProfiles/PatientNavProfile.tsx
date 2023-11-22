@@ -63,13 +63,13 @@ function PatientNavProfile() {
     setQuery({
       ...query,
       patient: patient.id,
-      launch_url: query.launch_url || "https://www.smartforms.io/launch",
+      launch_url: query.launch_url || "https://smartforms.csiro.au/launch",
       app_name: query.app_name || "Health Check Assessment",
-      client_id: launch.client_id || "9cbba311-bf9b-4200-8dd3-8459046fc522",
+      client_id: launch.client_id || "smart-forms",
       scope:
         launch.scope ||
-        "fhirUser online_access openid profile patient/Condition.read patient/Observation.read launch patient/Encounter.read patient/QuestionnaireResponse.read patient/QuestionnaireResponse.write patient/Patient.read",
-      redirect_uris: launch.redirect_uris || "https://www.smartforms.io",
+        "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      redirect_uris: launch.redirect_uris || "https://smartforms.csiro.au",
       validation: "1",
       is_embedded_view: launch.is_embedded_view || false,
     });

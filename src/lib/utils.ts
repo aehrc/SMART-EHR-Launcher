@@ -97,5 +97,5 @@ export function getFhirServerBaseUrl() {
 }
 
 export function getQuestionnaireServerBaseUrl() {
-  return `https://api.smartforms.io/fhir`;
+  return `https://smartforms.csiro.au/api/fhir`;
 }

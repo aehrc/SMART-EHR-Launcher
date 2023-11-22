@@ -12,11 +12,11 @@ import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 const sampleAppConfigs = [
   {
     app_name: "Health Check Assessment",
-    launch_url: "https://www.smartforms.io/launch",
-    client_id: "9cbba311-bf9b-4200-8dd3-8459046fc522",
+    launch_url: "https://smartforms.csiro.au/launch",
+    client_id: "smart-forms",
     scope:
-      "fhirUser online_access openid profile patient/Condition.read patient/Observation.read launch patient/Encounter.read patient/QuestionnaireResponse.read patient/QuestionnaireResponse.write patient/Patient.read",
-    redirect_uris: "https://www.smartforms.io",
+      "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+    redirect_uris: "https://smartforms.csiro.au",
     is_embedded_view: false,
   },
   {
@@ -43,9 +43,9 @@ const sampleAppConfigs = [
   {
     app_name: "Smart Forms Dev Build",
     launch_url: "http://127.0.0.1:5173/launch",
-    client_id: "a57d90e3-5f69-4b92-aa2e-2992180863c0",
+    client_id: "smart-forms-dev",
     scope:
-      "fhirUser online_access openid profile patient/Condition.read patient/Observation.read launch patient/Encounter.read patient/QuestionnaireResponse.read patient/QuestionnaireResponse.write patient/Patient.read",
+      "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
     redirect_uris: "http://127.0.0.1:5173/",
     is_embedded_view: false,
   },
