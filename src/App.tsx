@@ -1,9 +1,5 @@
 import { theme } from "./Theme";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Configuration from "./pages/Configuration/Configuration";
 import PatientSummary from "./pages/PatientSummary/PatientSummary";
@@ -19,7 +15,7 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/ehr",
       element: <DashboardLayout />,
       children: [
         {
@@ -31,10 +27,6 @@ function App() {
           element: <Configuration />,
         },
       ],
-    },
-    {
-      path: "*",
-      element: <Navigate to="/" replace />,
     },
   ]);
 
