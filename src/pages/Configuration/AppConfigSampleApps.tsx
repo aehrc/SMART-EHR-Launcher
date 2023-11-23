@@ -13,7 +13,7 @@ const sampleAppConfigs = [
   {
     app_name: "Health Check Assessment",
     launch_url: "https://smartforms.csiro.au/launch",
-    client_id: "smart-forms",
+    client_id: "csiro-smart-forms",
     scope:
       "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
     redirect_uris: "https://smartforms.csiro.au",
@@ -43,7 +43,7 @@ const sampleAppConfigs = [
   {
     app_name: "Smart Forms Dev Build",
     launch_url: "http://127.0.0.1:5173/launch",
-    client_id: "smart-forms-dev",
+    client_id: "csiro-smart-forms-dev",
     scope:
       "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
     redirect_uris: "http://127.0.0.1:5173/",
