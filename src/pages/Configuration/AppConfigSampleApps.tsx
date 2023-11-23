@@ -42,11 +42,11 @@ const sampleAppConfigs = [
   },
   {
     app_name: "Smart Forms Dev Build",
-    launch_url: "http://127.0.0.1:5173/launch",
+    launch_url: "http://localhost:5173/launch",
     client_id: "csiro-smart-forms-dev",
     scope:
       "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
-    redirect_uris: "http://127.0.0.1:5173/",
+    redirect_uris: "http://localhost:5173/",
     is_embedded_view: false,
   },
   {

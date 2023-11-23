@@ -106,84 +106,89 @@ function PractitionerTable() {
   };
 
   return (
-    <Card>
-      <PractitionerTableToolbar
-        selected={selectedItem}
-        removeSelected={() => setSelectedItem(null)}
-      />
+    <>
+      <Typography variant="subtitle2" color="text.secondary">
+        Connected to proxy FHIR server at <b>{getFhirServerBaseUrl()}</b>
+      </Typography>
+      <Card>
+        <PractitionerTableToolbar
+          selected={selectedItem}
+          removeSelected={() => setSelectedItem(null)}
+        />
 
-      <TableContainer sx={{ minWidth: 600 }}>
-        <Table>
-          <TableHead sx={{ bgcolor: "background.default" }}>
-            <TableRow sx={{ height: 56 }}>
-              {tableHeaders.map((headCell, index) => (
-                <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
-                  {isLoading ? null : headCell.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {practitionerListItems
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                const { name, id } = row;
-                const isSelected = selectedItem?.id === id;
-
-                return (
-                  <TableRow
-                    hover
-                    key={id}
-                    tabIndex={-1}
-                    selected={isSelected}
-                    onClick={() => handleRowClick(row.id)}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <TableCell scope="row" sx={{ pl: 4 }}>
-                      <Typography
-                        variant="subtitle2"
-                        fontWeight={600}
-                        sx={{ textTransform: "Capitalize" }}
-                      >
-                        {name}
-                      </Typography>
-                    </TableCell>
-
-                    <TableCell sx={{ pl: 0 }}>{id}</TableCell>
-                  </TableRow>
-                );
-              })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
+        <TableContainer sx={{ minWidth: 600 }}>
+          <Table>
+            <TableHead sx={{ bgcolor: "background.default" }}>
+              <TableRow sx={{ height: 56 }}>
+                {tableHeaders.map((headCell, index) => (
+                  <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
+                    {isLoading ? null : headCell.label}
+                  </TableCell>
+                ))}
               </TableRow>
-            )}
-          </TableBody>
+            </TableHead>
+            <TableBody>
+              {practitionerListItems
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  const { name, id } = row;
+                  const isSelected = selectedItem?.id === id;
 
-          {isEmpty || error || isLoading ? (
-            <TableFeedback
-              isEmpty={isEmpty}
-              loading={isLoading}
-              error={error}
-              resourceNamePlural={"practitioners"}
-            />
-          ) : null}
-        </Table>
-      </TableContainer>
+                  return (
+                    <TableRow
+                      hover
+                      key={id}
+                      tabIndex={-1}
+                      selected={isSelected}
+                      onClick={() => handleRowClick(row.id)}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      <TableCell scope="row" sx={{ pl: 4 }}>
+                        <Typography
+                          variant="subtitle2"
+                          fontWeight={600}
+                          sx={{ textTransform: "Capitalize" }}
+                        >
+                          {name}
+                        </Typography>
+                      </TableCell>
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={practitionerListItems.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={(_, newPage) => setPage(newPage)}
-        onRowsPerPageChange={(event) => {
-          setRowsPerPage(parseInt(event.target.value));
-          setPage(0);
-        }}
-      />
-    </Card>
+                      <TableCell sx={{ pl: 0 }}>{id}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+
+            {isEmpty || error || isLoading ? (
+              <TableFeedback
+                isEmpty={isEmpty}
+                loading={isLoading}
+                error={error}
+                resourceNamePlural={"practitioners"}
+              />
+            ) : null}
+          </Table>
+        </TableContainer>
+
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={practitionerListItems.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(_, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value));
+            setPage(0);
+          }}
+        />
+      </Card>
+    </>
   );
 }
 
