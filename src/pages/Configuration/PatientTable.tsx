@@ -16,32 +16,15 @@
  */
 
 import { useContext, useMemo, useState } from "react";
-import {
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { Bundle } from "fhir/r5";
 import { Patient } from "fhir/r4";
 import { formatAge, getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
-import PractitionerTableToolbar from "./PatientTableToolbar.tsx";
-import TableFeedback from "../TableFeedback.tsx";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
-
-const tableHeaders = [
-  { id: "name", label: "Name" },
-  { id: "gender", label: "Gender" },
-  { id: "age", label: "Age" },
-  { id: "dob", label: "Date of Birth" },
-];
+import PatientTableView from "./PatientTableView.tsx";
+import EncounterTable from "./EncounterTable.tsx";
 
 function PatientTable() {
   const [selectedItem, setSelectedItem] = useState<PatientListItem | null>(
@@ -102,92 +85,22 @@ function PatientTable() {
       <Typography variant="subtitle2" color="text.secondary">
         Connected to proxy FHIR server at <b>{getFhirServerBaseUrl()}</b>
       </Typography>
-      <Card>
-        <PractitionerTableToolbar
-          selected={selectedItem}
-          removeSelected={() => setSelectedItem(null)}
-        />
-
-        <TableContainer sx={{ minWidth: 400 }}>
-          <Table>
-            <TableHead sx={{ bgcolor: "background.default" }}>
-              <TableRow sx={{ height: 56 }}>
-                {tableHeaders.map((headCell, index) => (
-                  <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
-                    {isLoading ? null : headCell.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {patientListItems
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { id, name, dob, age, gender } = row;
-                  const isSelected = selectedItem?.id === id;
-
-                  return (
-                    <TableRow
-                      hover
-                      key={id}
-                      tabIndex={-1}
-                      selected={isSelected}
-                      onClick={() => handleRowClick(row.id)}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      <TableCell scope="row" sx={{ pl: 4 }}>
-                        <Typography
-                          variant="subtitle2"
-                          fontWeight={600}
-                          sx={{ textTransform: "Capitalize" }}
-                        >
-                          {name}
-                        </Typography>
-                      </TableCell>
-
-                      <TableCell sx={{ pl: 0, textTransform: "Capitalize" }}>
-                        {gender}
-                      </TableCell>
-                      <TableCell sx={{ pl: 0, textTransform: "Capitalize" }}>
-                        {age}
-                      </TableCell>
-                      <TableCell sx={{ pl: 0, textTransform: "Capitalize" }}>
-                        {dob}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-
-            {isEmpty || error || isLoading ? (
-              <TableFeedback
-                isEmpty={isEmpty}
-                loading={isLoading}
-                error={error}
-                resourceNamePlural={"patients"}
-              />
-            ) : null}
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={patientListItems.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(_, newPage) => setPage(newPage)}
-          onRowsPerPageChange={(event) => {
-            setRowsPerPage(parseInt(event.target.value));
-            setPage(0);
-          }}
-        />
-      </Card>
+      <PatientTableView
+        selectedItem={selectedItem}
+        patientsIsLoading={isLoading}
+        patientsIsEmpty={isEmpty}
+        fetchError={error}
+        patientListItems={patientListItems}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        emptyRows={emptyRows}
+        onSelectItem={setSelectedItem}
+        onRowClick={handleRowClick}
+        onPageChange={setPage}
+        onRowsPerPageChange={setRowsPerPage}
+      />
+      <Box my={2} />
+      <EncounterTable />
     </>
   );
 }

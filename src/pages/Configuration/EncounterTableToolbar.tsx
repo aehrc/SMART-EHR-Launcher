@@ -16,18 +16,18 @@
  */
 
 import { Box, Button, Typography } from "@mui/material";
-import { PractitionerListItem } from "./PractitionerTable.tsx";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
+import { EncounterListItem } from "./EncounterTable.tsx";
 import { enqueueSnackbar } from "notistack";
 import { grey } from "@mui/material/colors";
 
 interface Props {
-  selected: PractitionerListItem | null;
+  selected: EncounterListItem | null;
   removeSelected: () => void;
 }
 
-function PractitionerTableToolbar(props: Props) {
+function EncounterTableToolbar(props: Props) {
   const { selected, removeSelected } = props;
 
   const { setQuery } = useLauncherQuery();
@@ -47,11 +47,13 @@ function PractitionerTableToolbar(props: Props) {
     >
       {selected ? (
         <>
-          <Typography fontWeight="bold">{selected.name} selected</Typography>
+          <Typography variant="subtitle1" fontWeight="bold">
+            {selected.id} selected
+          </Typography>
           <Button
             onClick={() => {
-              setQuery({ provider: selected.id });
-              enqueueSnackbar(`User changed to ${selected.name}`, {
+              setQuery({ encounter: selected.id });
+              enqueueSnackbar(`Encounter changed to ${selected?.id}`, {
                 variant: "success",
                 autoHideDuration: 3000,
               });
@@ -59,16 +61,18 @@ function PractitionerTableToolbar(props: Props) {
             }}
             endIcon={<ArrowForwardIcon />}
           >
-            <Typography fontWeight="bold">Set as user</Typography>
+            <Typography variant="subtitle1" fontWeight="bold">
+              Set as encounter
+            </Typography>
           </Button>
         </>
       ) : (
         <Typography variant="subtitle1" fontWeight="bold" color={grey.A700}>
-          No user selected
+          No encounter selected
         </Typography>
       )}
     </Box>
   );
 }
 
-export default PractitionerTableToolbar;
+export default EncounterTableToolbar;

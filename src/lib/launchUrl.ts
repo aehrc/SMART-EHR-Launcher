@@ -27,7 +27,7 @@ export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
     launch_type,
     patient: launch.patient,
     provider: launch.provider,
-    encounter: "AUTO",
+    encounter: launch.encounter,
     skip_login: launch.skip_login,
     skip_auth: launch.skip_auth,
     sim_ehr,

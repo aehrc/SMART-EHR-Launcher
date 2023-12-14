@@ -17,6 +17,7 @@ function PatientNavProfile() {
   const { token } = useContext(TokenContext);
 
   const patientId = launch.patient;
+  const encounterId = launch.encounter;
 
   const queryEndpoint =
     getFhirServerBaseUrl() + (patientId ? `/Patient/${patientId}` : "/Patient");
@@ -75,6 +76,13 @@ function PatientNavProfile() {
     });
   }, [patient]);
 
+  let encounterSelected = "";
+  if (encounterId && encounterId !== "AUTO") {
+    encounterSelected = encounterId;
+  } else {
+    encounterSelected = "No encounter selected";
+  }
+
   return (
     <Box display="flex" alignItems="center" gap={1.5}>
       <PersonOutlineOutlinedIcon sx={{ fontSize: 30, color: "primary.main" }} />
@@ -88,8 +96,11 @@ function PatientNavProfile() {
             <Typography fontSize={16} fontWeight="bold" color="primary.main">
               {humanName(patient)}
             </Typography>
-            <Typography fontSize={12} fontWeight="bold" color={grey["500"]}>
+            <Typography fontSize={12} color={grey["500"]}>
               {formatAge(patient)} {patient.gender}
+            </Typography>
+            <Typography fontSize={12} fontWeight="bold" color={grey["500"]}>
+              {encounterSelected}
             </Typography>
           </>
         )}

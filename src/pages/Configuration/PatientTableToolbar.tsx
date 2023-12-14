@@ -35,7 +35,7 @@ function PatientTableToolbar(props: Props) {
   return (
     <Box
       sx={{
-        height: 85,
+        height: 70,
         display: "flex",
         justifyContent: "space-between",
         gap: 5,
@@ -52,7 +52,7 @@ function PatientTableToolbar(props: Props) {
           </Typography>
           <Button
             onClick={() => {
-              setQuery({ patient: selected.id });
+              setQuery({ patient: selected.id, encounter: "AUTO" });
               enqueueSnackbar(`Patient changed to ${selected?.name}`, {
                 variant: "success",
                 autoHideDuration: 3000,

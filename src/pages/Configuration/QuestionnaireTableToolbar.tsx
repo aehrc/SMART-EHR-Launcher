@@ -41,7 +41,7 @@ function QuestionnaireTableToolbar(props: Props) {
   return (
     <Box
       sx={{
-        height: 85,
+        height: 70,
         display: "flex",
         justifyContent: "space-between",
         gap: 5,
