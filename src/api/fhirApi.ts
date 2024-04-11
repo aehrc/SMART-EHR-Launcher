@@ -1,13 +1,9 @@
 import axios from "axios";
 import { QUERY_HEADERS } from "../lib/utils.ts";
 
-export async function fetchResourceFromEHR(
-  endpointUrl: string,
-  bearerToken: string
-) {
+export async function fetchResourceFromEHR(endpointUrl: string) {
   const response = await axios(endpointUrl, {
     headers: {
-      Authorization: `Bearer ${bearerToken}`,
       ...QUERY_HEADERS,
     },
   });

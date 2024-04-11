@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import {
   Card,
   Divider,
@@ -13,7 +13,6 @@ import {
 import { Bundle, Immunization } from "fhir/r4";
 import moment, { Moment } from "moment";
 import TableFeedback from "../../TableFeedback.tsx";
-import { TokenContext } from "../../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { getFhirServerBaseUrl } from "../../../lib/utils.ts";
 import { fetchResourceFromEHR } from "../../../api/fhirApi.ts";
@@ -31,21 +30,14 @@ const tableHeaders = [
 function PatientImmunizations(props: Props) {
   const { patientId } = props;
 
-  const { token } = useContext(TokenContext);
-
   const {
     data: bundle,
     error,
     isLoading,
-  } = useQuery<Bundle<Immunization>>(
-    ["immunizations", patientId],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + `/Immunization?patient=${patientId}`,
-        token ?? ""
-      ),
-
-    { enabled: !!token }
+  } = useQuery<Bundle<Immunization>>(["immunizations", patientId], () =>
+    fetchResourceFromEHR(
+      getFhirServerBaseUrl() + `/Immunization?patient=${patientId}`
+    )
   );
 
   const immunizations: Immunization[] = useMemo(

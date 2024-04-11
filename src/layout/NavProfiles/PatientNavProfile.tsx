@@ -6,15 +6,12 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import { grey } from "@mui/material/colors";
 import { useContext, useEffect } from "react";
 import { PatientContext } from "../../contexts/PatientContext.tsx";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
 function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
   const { setPatient } = useContext(PatientContext);
-
-  const { token } = useContext(TokenContext);
 
   const patientId = launch.patient;
   const encounterId = launch.encounter;
@@ -26,10 +23,8 @@ function PatientNavProfile() {
     data: resource,
     error,
     isLoading,
-  } = useQuery<Patient | Bundle>(
-    ["patientProfile", patientId],
-    () => fetchResourceFromEHR(queryEndpoint, token ?? ""),
-    { enabled: !!token }
+  } = useQuery<Patient | Bundle>(["patientProfile", patientId], () =>
+    fetchResourceFromEHR(queryEndpoint)
   );
 
   let patient: Patient | null = null;

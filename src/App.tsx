@@ -11,7 +11,6 @@ import PatientContextProvider from "./contexts/PatientContext";
 import DashboardLayout from "./layout/DashboardLayout";
 import { SnackbarProvider } from "notistack";
 import TitleContextProvider from "./contexts/TitleContext";
-import TokenContextProvider from "./contexts/TokenContext";
 import QuestionnaireContextProvider from "./contexts/QuestionnaireContext.tsx";
 
 function App() {
@@ -41,16 +40,14 @@ function App() {
   return (
     <ThemeProvider theme={appTheme}>
       <SnackbarProvider maxSnack={1}>
-        <TokenContextProvider>
-          <TitleContextProvider>
-            <QuestionnaireContextProvider>
-              <PatientContextProvider>
-                <CssBaseline />
-                <RouterProvider router={router} />
-              </PatientContextProvider>
-            </QuestionnaireContextProvider>
-          </TitleContextProvider>
-        </TokenContextProvider>
+        <TitleContextProvider>
+          <QuestionnaireContextProvider>
+            <PatientContextProvider>
+              <CssBaseline />
+              <RouterProvider router={router} />
+            </PatientContextProvider>
+          </QuestionnaireContextProvider>
+        </TitleContextProvider>
       </SnackbarProvider>
     </ThemeProvider>
   );

@@ -3,15 +3,12 @@ import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { Bundle, Practitioner } from "fhir/r4";
 import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
-import { useContext, useEffect } from "react";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
-
-  const { token } = useContext(TokenContext);
 
   const userId = launch.provider;
 
@@ -23,10 +20,8 @@ function UserNavProfile() {
     data: resource,
     error,
     isLoading,
-  } = useQuery<Practitioner | Bundle>(
-    ["practitionerProfile", userId],
-    () => fetchResourceFromEHR(queryEndpoint, token ?? ""),
-    { enabled: !!token }
+  } = useQuery<Practitioner | Bundle>(["practitionerProfile", userId], () =>
+    fetchResourceFromEHR(queryEndpoint)
   );
 
   let user: Practitioner | null = null;

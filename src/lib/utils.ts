@@ -15,7 +15,7 @@ import moment from "moment";
 
 const RE_YEAR = /\d{4}$/;
 const RE_MONTH_YEAR = /\d{4}-d{2}$/;
-export const SMART_ENDPOINT = "https://proxy.smartforms.io";
+export const SMART_ENDPOINT = "https://gw.interop.community/SmartProblems";
 
 export const QUERY_HEADERS = {
   "Content-Type": "application/json+fhir; charset=UTF-8",
@@ -93,7 +93,7 @@ export function humanName(human: FHIRPerson, separator = " "): string {
 }
 
 export function getFhirServerBaseUrl() {
-  return `${SMART_ENDPOINT}/v/r4/fhir`;
+  return `${SMART_ENDPOINT}/open`;
 }
 
 export function getQuestionnaireServerBaseUrl() {

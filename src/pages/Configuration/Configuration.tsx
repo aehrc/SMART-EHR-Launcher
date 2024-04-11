@@ -8,7 +8,7 @@ import PatientTable from "./PatientTable.tsx";
 import QuestionnaireTable from "./QuestionnaireTable.tsx";
 import AppConfig from "./AppConfig.tsx";
 import PractitionerTable from "./PractitionerTable.tsx";
-import { getFhirServerBaseUrl } from "../../lib/utils.ts";
+import { SMART_ENDPOINT } from "../../lib/utils.ts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -31,7 +31,7 @@ function Configuration() {
   const [value, setValue] = useState("1");
 
   const smartConfigurationEndpoint =
-    getFhirServerBaseUrl() + "/.well-known/smart-configuration";
+    SMART_ENDPOINT + "/data/.well-known/smart-configuration";
 
   const { data } = useQuery(["smart-configuration"], () =>
     axios(smartConfigurationEndpoint).then((res) => res.data)

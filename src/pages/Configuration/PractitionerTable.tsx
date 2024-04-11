@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Card,
   Table,
@@ -33,7 +33,6 @@ import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
 import PractitionerTableToolbar from "./PractitionerTableToolbar.tsx";
 import TableFeedback from "../TableFeedback.tsx";
 import { useQuery } from "@tanstack/react-query";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
 const tableHeaders = [
@@ -49,20 +48,12 @@ function PractitionerTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { token } = useContext(TokenContext);
-
   const {
     data: bundle,
     error,
     isLoading,
-  } = useQuery<Bundle<Practitioner>>(
-    ["practitioner"],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + "/Practitioner",
-        token ?? ""
-      ),
-    { enabled: !!token }
+  } = useQuery<Bundle<Practitioner>>(["practitioner"], () =>
+    fetchResourceFromEHR(getFhirServerBaseUrl() + "/Practitioner")
   );
 
   const records: Practitioner[] = useMemo(

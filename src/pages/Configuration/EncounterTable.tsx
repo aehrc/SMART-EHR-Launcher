@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { Bundle } from "fhir/r5";
 import { Encounter } from "fhir/r4";
 import { getFhirServerBaseUrl } from "../../lib/utils.ts";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
@@ -30,8 +29,6 @@ function EncounterTable() {
     null
   );
 
-  const { token } = useContext(TokenContext);
-
   const { launch } = useLauncherQuery();
   const patientId = launch.patient;
 
@@ -39,14 +36,10 @@ function EncounterTable() {
     data: bundle,
     error,
     isLoading,
-  } = useQuery<Bundle<Encounter>>(
-    ["encounters" + patientId],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + `/Encounter?patient=${patientId}`,
-        token ?? ""
-      ),
-    { enabled: !!token }
+  } = useQuery<Bundle<Encounter>>(["encounters" + patientId], () =>
+    fetchResourceFromEHR(
+      getFhirServerBaseUrl() + `/Encounter?patient=${patientId}`
+    )
   );
 
   const records: Encounter[] = useMemo(

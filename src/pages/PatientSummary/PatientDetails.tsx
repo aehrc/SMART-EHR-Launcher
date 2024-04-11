@@ -2,8 +2,6 @@ import { Typography } from "@mui/material";
 import { Patient } from "fhir/r4";
 import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
 import { PatientListItem } from "../Configuration/PatientTable.tsx";
-import { useContext } from "react";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 
@@ -16,8 +14,6 @@ function PatientDetails(props: Props) {
 
   const patientId = selectedPatient?.id;
 
-  const { token } = useContext(TokenContext);
-
   const {
     data: patient,
     error,
@@ -26,11 +22,10 @@ function PatientDetails(props: Props) {
     ["patientDetails"],
     () =>
       fetchResourceFromEHR(
-        getFhirServerBaseUrl() + `/AllergyIntolerance?patient=${patientId}`,
-        token ?? ""
+        getFhirServerBaseUrl() + `/AllergyIntolerance?patient=${patientId}`
       ),
     {
-      enabled: typeof patientId === "string" && !!token,
+      enabled: typeof patientId === "string",
     }
   );
 
