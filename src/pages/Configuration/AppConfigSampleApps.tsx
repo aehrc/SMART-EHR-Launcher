@@ -51,11 +51,11 @@ const sampleAppConfigs = [
   },
   {
     app_name: "SMART on FHIR Problem List Demo",
-    launch_url: "https://main-vite.d2gc21b6xr8ukx.amplifyapp.com/launch",
+    launch_url: "https://main.d2gc21b6xr8ukx.amplifyapp.com/launch",
     client_id: "a5403f19-3b1c-4f19-b298-cc42e8c3a9c0",
     scope:
       "fhirUser online_access openid profile launch patient/Patient.rs patient/Encounter.cruds patient/Condition.cruds",
-    redirect_uris: "https://main-vite.d2gc21b6xr8ukx.amplifyapp.com/",
+    redirect_uris: "https://main.d2gc21b6xr8ukx.amplifyapp.com/",
     is_embedded_view: false,
   },
   {
