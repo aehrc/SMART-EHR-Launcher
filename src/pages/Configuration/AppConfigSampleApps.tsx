@@ -41,7 +41,25 @@ const sampleAppConfigs = [
     is_embedded_view: true,
   },
   {
-    app_name: "Smart Forms Dev Build",
+    app_name: "dev.smartforms.io",
+    launch_url: "https://dev.smartforms.io/launch",
+    client_id: "a57d90e3-5f69-4b92-aa2e-2992180863c1",
+    scope:
+      "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+    redirect_uris: "https://dev.smartforms.io/",
+    is_embedded_view: false,
+  },
+  {
+    app_name: "acdcpilot.smartforms.io",
+    launch_url: "https://acdcpilot.smartforms.io/launch",
+    client_id: "31b7f0fa-369f-49b4-4ad7-08dc6e2e0cf1",
+    scope:
+      "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+    redirect_uris: "https://acdcpilot.smartforms.io/",
+    is_embedded_view: false,
+  },
+  {
+    app_name: "localhost:5173",
     launch_url: "http://localhost:5173/launch",
     client_id: "1ff7bdc2-36b2-4303-8c05-c57342c5b043",
     scope:

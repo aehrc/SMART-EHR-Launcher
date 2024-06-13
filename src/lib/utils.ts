@@ -34,7 +34,9 @@ type FHIRPerson =
 export function formatAge(patient: R2Patient | R3Patient | R4Patient): string {
   let dob = patient.birthDate;
 
-  if (!dob || patient.deceasedBoolean) return "";
+  if (!dob || patient.deceasedBoolean) {
+    return "";
+  }
 
   // If deceasedDateTime exists, we have a death date so show age as
   // the range between date of birth and date of death.
