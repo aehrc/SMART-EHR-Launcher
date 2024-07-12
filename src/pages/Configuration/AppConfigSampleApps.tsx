@@ -59,6 +59,15 @@ const sampleAppConfigs = [
     is_embedded_view: false,
   },
   {
+    app_name: "healthchecks.smartforms.io",
+    launch_url: "https://healthchecks.smartforms.io/launch",
+    client_id: "29b79fe3-720e-48a8-976f-eca25b19f187",
+    scope:
+      "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+    redirect_uris: "https://healthchecks.smartforms.io/",
+    is_embedded_view: false,
+  },
+  {
     app_name: "localhost:5173",
     launch_url: "http://localhost:5173/launch",
     client_id: "1ff7bdc2-36b2-4303-8c05-c57342c5b043",
