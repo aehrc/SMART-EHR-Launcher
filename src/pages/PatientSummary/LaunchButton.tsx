@@ -3,6 +3,7 @@ import { Box, Button, Tooltip } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getValidationErrors } from "../../lib/URLValidation.tsx";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { getUserLaunchUrl } from "../../lib/launchUrl.ts";
 
 function LaunchButton() {
@@ -20,6 +21,16 @@ function LaunchButton() {
     return null;
   }
 
+  let questionnaireContextUrl = "";
+  try {
+    if (launch.fhir_context) {
+      const questionnaireContext = JSON.parse(launch.fhir_context);
+      questionnaireContextUrl = questionnaireContext.canonical;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
   return (
     <Box display="flex" alignItems="center" gap={1}>
       <Button
@@ -31,6 +42,13 @@ function LaunchButton() {
       >
         Launch {appName}
       </Button>
+      {questionnaireContextUrl !== "" ? (
+        <Tooltip
+          title={`Questionnaire context set: ${questionnaireContextUrl}`}
+        >
+          <ArticleOutlinedIcon color="info" />
+        </Tooltip>
+      ) : null}
       {validationErrors.length > 0 ? (
         <Tooltip title={"Invalid app launch URL"}>
           <ErrorOutlineIcon color="error" />
