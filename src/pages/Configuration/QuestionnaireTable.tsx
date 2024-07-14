@@ -112,7 +112,7 @@ function QuestionnaireTable(props: Props) {
     return (
       <Card>
         <TableContainer sx={{ minWidth: 600 }}>
-          <Table>
+          <Table size="small">
             <TableDisabled resourceName={"Questionnaire"} />
           </Table>
         </TableContainer>
@@ -132,9 +132,9 @@ function QuestionnaireTable(props: Props) {
         />
 
         <TableContainer sx={{ minWidth: 600 }}>
-          <Table>
+          <Table size="small">
             <TableHead sx={{ bgcolor: "background.default" }}>
-              <TableRow sx={{ height: 56 }}>
+              <TableRow sx={{ height: 42 }}>
                 {tableHeaders.map((headCell, index) => (
                   <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
                     {isLoading ? null : headCell.label}

@@ -24,6 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import EncounterTableView from "./EncounterTableView.tsx";
+import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 
 function EncounterTable() {
   const [selectedItem, setSelectedItem] = useState<EncounterListItem | null>(
@@ -33,6 +34,7 @@ function EncounterTable() {
   const { token } = useContext(TokenContext);
 
   const { launch } = useLauncherQuery();
+  const { serverUrl } = useSourceFhirServer();
   const patientId = launch.patient;
 
   const {
@@ -40,13 +42,14 @@ function EncounterTable() {
     error,
     isLoading,
   } = useQuery<Bundle<Encounter>>(
-    ["encounters" + patientId],
+    ["encounters", serverUrl, patientId],
     () =>
       fetchResourceFromEHR(
         getFhirServerBaseUrl() + `/Encounter?patient=${patientId}`,
+        serverUrl,
         token ?? ""
       ),
-    { enabled: !!token }
+    { enabled: token !== null }
   );
 
   const records: Encounter[] = useMemo(

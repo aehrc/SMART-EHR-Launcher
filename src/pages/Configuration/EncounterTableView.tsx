@@ -46,7 +46,7 @@ function EncounterTableView(props: EncounterTableViewProps) {
       />
 
       <TableContainer sx={{ minWidth: 400 }}>
-        <Table>
+        <Table size="small">
           <TableHead sx={{ bgcolor: "background.default" }}>
             <TableRow>
               {tableHeaders.map((headCell, index) => (

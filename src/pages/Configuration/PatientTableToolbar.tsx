@@ -35,7 +35,7 @@ function PatientTableToolbar(props: Props) {
   return (
     <Box
       sx={{
-        height: 70,
+        height: 64,
         display: "flex",
         justifyContent: "space-between",
         gap: 5,

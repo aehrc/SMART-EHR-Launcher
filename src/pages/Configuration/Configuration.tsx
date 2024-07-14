@@ -8,9 +8,10 @@ import PatientTable from "./PatientTable.tsx";
 import QuestionnaireTable from "./QuestionnaireTable.tsx";
 import AppConfig from "./AppConfig.tsx";
 import PractitionerTable from "./PractitionerTable.tsx";
-import { getFhirServerBaseUrl } from "../../lib/utils.ts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { getFhirServerBaseUrl } from "../../lib/utils.ts";
+import SourceFhirServerConfig from "./SourceFhirServerConfig.tsx";
 
 interface SmartConfiguration {
   issuer: string;
@@ -47,6 +48,8 @@ function Configuration() {
     }
   }
 
+  // FIXME create a new loading page that takes patient, practitioner, and questionnaire
+  // <LoadingPage>
   return (
     <Box pt={2} pb={4}>
       <TabContext value={value}>
@@ -71,6 +74,10 @@ function Configuration() {
             <QuestionnaireTable
               disabled={!scopes.includes("launch/questionnaire")}
             />
+          </TabPanel>
+
+          <TabPanel value="5" sx={{ p: 0 }}>
+            <SourceFhirServerConfig />
           </TabPanel>
         </Box>
       </TabContext>

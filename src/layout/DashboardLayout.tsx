@@ -1,8 +1,10 @@
-import { Box, styled } from "@mui/material";
-import { ReactNode } from "react";
+import { Box, Card, Stack, styled, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import DashboardNavbar from "./DashboardNavbar.tsx";
 import DashboardSidebar from "./DashboardSideBar.tsx";
+import { getFhirServerBaseUrl } from "../lib/utils.ts";
+import useSourceFhirServer from "../hooks/useSourceFhirServer.ts";
+import useLoadResources from "../hooks/useLoadResources.ts";
 
 // styled components
 
@@ -20,21 +22,39 @@ const Wrapper = styled(Box)({
   height: "100vh",
 });
 
-interface Props {
-  children?: ReactNode;
-}
+function DashboardLayout() {
+  const { serverUrl } = useSourceFhirServer();
 
-function DashboardLayout(props: Props) {
-  const { children } = props;
+  useLoadResources();
 
   return (
     <LayoutRoot>
       <DashboardSidebar />
-
       <Wrapper>
         <DashboardNavbar />
-        <Box pt={2} pb={4}>
-          {children || <Outlet />}
+        <Box mt={2} mb={4}>
+          <Outlet />
+
+          <Stack mx={10} alignItems="center">
+            <Card>
+              <Box p={2}>
+                <Typography
+                  variant="subtitle2"
+                  fontWeight="bold"
+                  sx={{ mb: 0.5 }}
+                >
+                  Server Details
+                </Typography>
+                <Typography variant="subtitle2">
+                  Proxy FHIR Server: <b>{getFhirServerBaseUrl()}</b>
+                </Typography>
+                <Typography variant="subtitle2">
+                  Actual FHIR Server: <b>{serverUrl}</b> (Configurable in
+                  Configuration —&gt; Source FHIR Server)
+                </Typography>
+              </Box>
+            </Card>
+          </Stack>
         </Box>
       </Wrapper>
     </LayoutRoot>

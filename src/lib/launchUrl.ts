@@ -41,6 +41,7 @@ export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
     client_type: launch.client_type,
     pkce: launch.pkce,
     fhir_context: launch.fhir_context,
+    source_fhir_server: launch.source_fhir_server,
     is_embedded_view: launch.is_embedded_view,
   });
 

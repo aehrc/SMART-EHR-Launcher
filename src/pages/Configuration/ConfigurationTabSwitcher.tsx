@@ -28,6 +28,7 @@ function ConfigurationTabSwitcher(props: Props) {
           value="3"
         />
         <StyledTab disableRipple label="Current questionnaire" value="4" />
+        <StyledTab disableRipple label="Current FHIR Server" value="5" />
       </TabList>
     </Box>
   );

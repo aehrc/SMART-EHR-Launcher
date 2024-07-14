@@ -35,6 +35,7 @@ import TableFeedback from "../TableFeedback.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
+import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 
 const tableHeaders = [
   { id: "name", label: "Name" },
@@ -50,19 +51,21 @@ function PractitionerTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { token } = useContext(TokenContext);
+  const { serverUrl } = useSourceFhirServer();
 
   const {
     data: bundle,
     error,
     isLoading,
   } = useQuery<Bundle<Practitioner>>(
-    ["practitioner"],
+    ["practitioner", serverUrl],
     () =>
       fetchResourceFromEHR(
         getFhirServerBaseUrl() + "/Practitioner",
+        serverUrl,
         token ?? ""
       ),
-    { enabled: !!token }
+    { enabled: token !== null }
   );
 
   const records: Practitioner[] = useMemo(
@@ -107,9 +110,6 @@ function PractitionerTable() {
 
   return (
     <>
-      <Typography variant="subtitle2" color="text.secondary">
-        Connected to proxy FHIR server at <b>{getFhirServerBaseUrl()}</b>
-      </Typography>
       <Card>
         <PractitionerTableToolbar
           selected={selectedItem}
@@ -117,9 +117,9 @@ function PractitionerTable() {
         />
 
         <TableContainer sx={{ minWidth: 600 }}>
-          <Table>
+          <Table size="small">
             <TableHead sx={{ bgcolor: "background.default" }}>
-              <TableRow sx={{ height: 56 }}>
+              <TableRow sx={{ height: 42 }}>
                 {tableHeaders.map((headCell, index) => (
                   <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
                     {isLoading ? null : headCell.label}

@@ -1,7 +1,4 @@
 import { createContext, ReactNode } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { SMART_ENDPOINT } from "../lib/utils.ts";
 
 interface TokenContextType {
   token: string | null;
@@ -25,27 +22,26 @@ interface EnvVars {
 
 const TokenContextProvider = (props: { children: ReactNode }) => {
   const { children } = props;
-  const envEndpoint = SMART_ENDPOINT + "/env.js";
 
-  let token: string | null = null;
-
-  const { data } = useQuery(["env"], () =>
-    axios(envEndpoint).then((res) => res.data)
-  );
-
-  if (data) {
-    try {
-      const env: EnvVars = JSON.parse(
-        data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1)
-      );
-      token = env.ACCESS_TOKEN;
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  // const { data } = useQuery(["env"], () =>
+  //   axios(envEndpoint).then((res) => res.data)
+  // );
+  //
+  // if (data) {
+  //   try {
+  //     const env: EnvVars = JSON.parse(
+  //       data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1)
+  //     );
+  //     token = env.ACCESS_TOKEN;
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }
 
   return (
-    <TokenContext.Provider value={{ token }}>{children}</TokenContext.Provider>
+    <TokenContext.Provider value={{ token: "" }}>
+      {children}
+    </TokenContext.Provider>
   );
 };
 

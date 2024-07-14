@@ -7,11 +7,16 @@ import { useContext, useEffect } from "react";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
+import { UserContext } from "../../contexts/UserContext.tsx";
+import { getPractitioner } from "../../utils/getResources.ts";
+import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
+  const { serverUrl } = useSourceFhirServer();
 
   const { token } = useContext(TokenContext);
+  const { user, setUser } = useContext(UserContext);
 
   const userId = launch.provider;
 
@@ -24,26 +29,21 @@ function UserNavProfile() {
     error,
     isLoading,
   } = useQuery<Practitioner | Bundle>(
-    ["practitionerProfile", userId],
-    () => fetchResourceFromEHR(queryEndpoint, token ?? ""),
-    { enabled: !!token }
+    ["practitionerProfile", serverUrl, userId],
+    () => fetchResourceFromEHR(queryEndpoint, serverUrl, token ?? ""),
+    { enabled: token !== null }
   );
 
-  let user: Practitioner | null = null;
-  if (resource) {
-    user =
-      resource.resourceType === "Practitioner"
-        ? resource
-        : (resource.entry?.[0]?.resource as Practitioner);
-  }
+  const newUser = getPractitioner(resource);
 
   useEffect(() => {
-    if (!user) {
+    if (!newUser) {
       return;
     }
 
-    setQuery({ ...query, provider: user.id });
-  }, [user]);
+    setUser(newUser);
+    setQuery({ ...query, provider: newUser.id });
+  }, [newUser]);
 
   return (
     <Box display="flex" alignItems="center" gap={1.5}>

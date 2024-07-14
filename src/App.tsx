@@ -13,6 +13,7 @@ import { SnackbarProvider } from "notistack";
 import TitleContextProvider from "./contexts/TitleContext";
 import TokenContextProvider from "./contexts/TokenContext";
 import QuestionnaireContextProvider from "./contexts/QuestionnaireContext.tsx";
+import UserContextProvider from "./contexts/UserContext.tsx";
 
 function App() {
   const appTheme = theme();
@@ -45,8 +46,10 @@ function App() {
           <TitleContextProvider>
             <QuestionnaireContextProvider>
               <PatientContextProvider>
-                <CssBaseline />
-                <RouterProvider router={router} />
+                <UserContextProvider>
+                  <CssBaseline />
+                  <RouterProvider router={router} />
+                </UserContextProvider>
               </PatientContextProvider>
             </QuestionnaireContextProvider>
           </TitleContextProvider>

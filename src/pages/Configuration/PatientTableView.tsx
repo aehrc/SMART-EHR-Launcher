@@ -59,7 +59,7 @@ function PatientTableView(props: PatientTableViewProps) {
       />
 
       <TableContainer sx={{ minWidth: 400 }}>
-        <Table>
+        <Table size="small">
           <TableHead sx={{ bgcolor: "background.default" }}>
             <TableRow>
               {tableHeaders.map((headCell, index) => (

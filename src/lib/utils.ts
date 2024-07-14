@@ -15,11 +15,11 @@ import moment from "moment";
 
 const RE_YEAR = /\d{4}$/;
 const RE_MONTH_YEAR = /\d{4}-d{2}$/;
-export const SMART_ENDPOINT = "https://proxy.smartforms.io";
+export const PROXY_SERVER_URL = "http://localhost:8445";
 
 export const QUERY_HEADERS = {
-  "Content-Type": "application/json+fhir; charset=UTF-8",
-  Accept: "application/json+fhir; charset=utf-8",
+  "Content-Type": "application/fhir+json",
+  Accept: "application/fhir+json",
   "Cache-Control": "no-cache",
 };
 
@@ -95,7 +95,7 @@ export function humanName(human: FHIRPerson, separator = " "): string {
 }
 
 export function getFhirServerBaseUrl() {
-  return `${SMART_ENDPOINT}/v/r4/fhir`;
+  return `${PROXY_SERVER_URL}/v/r4/fhir`;
 }
 
 export function getQuestionnaireServerBaseUrl() {

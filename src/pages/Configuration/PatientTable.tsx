@@ -16,7 +16,7 @@
  */
 
 import { useContext, useMemo, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import type { Bundle } from "fhir/r5";
 import { Patient } from "fhir/r4";
 import { formatAge, getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
@@ -25,6 +25,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 import PatientTableView from "./PatientTableView.tsx";
 import EncounterTable from "./EncounterTable.tsx";
+import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 
 function PatientTable() {
   const [selectedItem, setSelectedItem] = useState<PatientListItem | null>(
@@ -35,16 +36,21 @@ function PatientTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { token } = useContext(TokenContext);
+  const { serverUrl } = useSourceFhirServer();
 
   const {
     data: bundle,
     error,
     isLoading,
   } = useQuery<Bundle<Patient>>(
-    ["patients"],
+    ["patients", serverUrl],
     () =>
-      fetchResourceFromEHR(getFhirServerBaseUrl() + "/Patient", token ?? ""),
-    { enabled: !!token }
+      fetchResourceFromEHR(
+        getFhirServerBaseUrl() + "/Patient",
+        serverUrl,
+        token ?? ""
+      ),
+    { enabled: token !== null }
   );
 
   const records: Patient[] = useMemo(
@@ -82,9 +88,6 @@ function PatientTable() {
 
   return (
     <>
-      <Typography variant="subtitle2" color="text.secondary">
-        Connected to proxy FHIR server at <b>{getFhirServerBaseUrl()}</b>
-      </Typography>
       <PatientTableView
         selectedItem={selectedItem}
         patientsIsLoading={isLoading}

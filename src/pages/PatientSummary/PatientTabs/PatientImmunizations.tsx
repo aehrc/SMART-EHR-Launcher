@@ -17,6 +17,7 @@ import { TokenContext } from "../../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { getFhirServerBaseUrl } from "../../../lib/utils.ts";
 import { fetchResourceFromEHR } from "../../../api/fhirApi.ts";
+import useSourceFhirServer from "../../../hooks/useSourceFhirServer.ts";
 
 interface Props {
   patientId: string;
@@ -33,19 +34,22 @@ function PatientImmunizations(props: Props) {
 
   const { token } = useContext(TokenContext);
 
+  const { serverUrl } = useSourceFhirServer();
+
   const {
     data: bundle,
     error,
     isLoading,
   } = useQuery<Bundle<Immunization>>(
-    ["immunizations", patientId],
+    ["immunizations", serverUrl, patientId],
     () =>
       fetchResourceFromEHR(
         getFhirServerBaseUrl() + `/Immunization?patient=${patientId}`,
+        serverUrl,
         token ?? ""
       ),
 
-    { enabled: !!token }
+    { enabled: token !== null }
   );
 
   const immunizations: Immunization[] = useMemo(
@@ -70,9 +74,9 @@ function PatientImmunizations(props: Props) {
 
       <Card>
         <TableContainer sx={{ minWidth: 600 }}>
-          <Table>
+          <Table size="small">
             <TableHead sx={{ bgcolor: "background.default" }}>
-              <TableRow sx={{ height: 56 }}>
+              <TableRow sx={{ height: 42 }}>
                 {tableHeaders.map((headCell, index) => (
                   <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
                     <Typography variant="subtitle2" fontWeight="bold">
