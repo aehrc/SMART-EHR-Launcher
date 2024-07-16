@@ -19,7 +19,11 @@ import { useContext, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import type { Bundle } from "fhir/r5";
 import { Patient } from "fhir/r4";
-import { formatAge, getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
+import {
+  formatAge,
+  getFhirServerBaseUrl,
+  humanName,
+} from "../../utils/misc.ts";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";

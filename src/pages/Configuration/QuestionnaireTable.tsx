@@ -36,7 +36,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getQuestionnaireServerBaseUrl,
   QUERY_HEADERS,
-} from "../../lib/utils.ts";
+} from "../../utils/misc.ts";
 import TableDisabled from "../TableDisabled.tsx";
 import axios from "axios";
 

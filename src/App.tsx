@@ -1,10 +1,8 @@
-import { theme } from "./Theme";
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
 import Configuration from "./pages/Configuration/Configuration";
 import PatientSummary from "./pages/PatientSummary/PatientSummary";
 import PatientContextProvider from "./contexts/PatientContext";
@@ -16,8 +14,6 @@ import QuestionnaireContextProvider from "./contexts/QuestionnaireContext.tsx";
 import UserContextProvider from "./contexts/UserContext.tsx";
 
 function App() {
-  const appTheme = theme();
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -40,22 +36,20 @@ function App() {
   ]);
 
   return (
-    <ThemeProvider theme={appTheme}>
-      <SnackbarProvider maxSnack={1}>
-        <TokenContextProvider>
-          <TitleContextProvider>
-            <QuestionnaireContextProvider>
-              <PatientContextProvider>
-                <UserContextProvider>
-                  <CssBaseline />
-                  <RouterProvider router={router} />
-                </UserContextProvider>
-              </PatientContextProvider>
-            </QuestionnaireContextProvider>
-          </TitleContextProvider>
-        </TokenContextProvider>
-      </SnackbarProvider>
-    </ThemeProvider>
+    <SnackbarProvider maxSnack={1}>
+      <TokenContextProvider>
+        <TitleContextProvider>
+          <QuestionnaireContextProvider>
+            <PatientContextProvider>
+              <UserContextProvider>
+                hello
+                <RouterProvider router={router} />
+              </UserContextProvider>
+            </PatientContextProvider>
+          </QuestionnaireContextProvider>
+        </TitleContextProvider>
+      </TokenContextProvider>
+    </SnackbarProvider>
   );
 }
 

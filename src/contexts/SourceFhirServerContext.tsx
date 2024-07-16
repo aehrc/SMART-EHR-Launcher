@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from "react";
-import { getFhirServerBaseUrl } from "../lib/utils.ts";
+import { getFhirServerBaseUrl } from "../utils/misc.ts";
 
 interface SourceFhirServerContextType {
   serverUrl: string;

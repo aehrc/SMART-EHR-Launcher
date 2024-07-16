@@ -15,7 +15,7 @@ import moment, { Moment } from "moment";
 import TableFeedback from "../../TableFeedback.tsx";
 import { TokenContext } from "../../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
-import { getFhirServerBaseUrl } from "../../../lib/utils.ts";
+import { getFhirServerBaseUrl } from "../../../utils/misc.ts";
 import { fetchResourceFromEHR } from "../../../api/fhirApi.ts";
 import useSourceFhirServer from "../../../hooks/useSourceFhirServer.ts";
 

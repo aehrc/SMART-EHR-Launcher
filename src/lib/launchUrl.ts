@@ -1,6 +1,6 @@
 import { base64UrlEncode, encode, LaunchParams } from "./codec.ts";
-import { getFhirServerBaseUrl } from "./utils.ts";
 import { LauncherQuery } from "../hooks/useLauncherQuery.ts";
+import { getFhirServerBaseUrl } from "../utils/misc.ts";
 
 export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
   launch_type: "provider-ehr",

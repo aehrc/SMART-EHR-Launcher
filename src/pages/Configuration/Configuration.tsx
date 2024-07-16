@@ -10,7 +10,7 @@ import AppConfig from "./AppConfig.tsx";
 import PractitionerTable from "./PractitionerTable.tsx";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getFhirServerBaseUrl } from "../../lib/utils.ts";
+import { getFhirServerBaseUrl } from "../../utils/misc.ts";
 import SourceFhirServerConfig from "./SourceFhirServerConfig.tsx";
 
 interface SmartConfiguration {

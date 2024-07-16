@@ -18,7 +18,7 @@
 import { useContext, useMemo, useState } from "react";
 import type { Bundle } from "fhir/r5";
 import { Encounter } from "fhir/r4";
-import { getFhirServerBaseUrl } from "../../lib/utils.ts";
+import { getFhirServerBaseUrl } from "../../utils/misc.ts";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";

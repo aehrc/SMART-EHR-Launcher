@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { Bundle, Practitioner } from "fhir/r4";
-import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
+import { getFhirServerBaseUrl, humanName } from "../../utils/misc.ts";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
 import { useContext, useEffect } from "react";
 import { TokenContext } from "../../contexts/TokenContext.tsx";

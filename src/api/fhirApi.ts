@@ -1,4 +1,4 @@
-import { QUERY_HEADERS } from "../lib/utils.ts";
+import { QUERY_HEADERS } from "../utils/misc.ts";
 
 export async function fetchResourceFromEHR(
   requestUrl: string,

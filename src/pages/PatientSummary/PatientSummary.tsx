@@ -4,7 +4,7 @@ import useTitle from "../../hooks/useTitle.ts";
 import { TabContext } from "@mui/lab";
 import { PatientContext } from "../../contexts/PatientContext.tsx";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { formatAge, humanName } from "../../lib/utils.ts";
+import { formatAge, humanName } from "../../utils/misc.ts";
 import moment from "moment/moment";
 import LaunchButton from "./LaunchButton.tsx";
 import { grey } from "@mui/material/colors";

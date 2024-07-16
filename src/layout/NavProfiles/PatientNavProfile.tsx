@@ -1,5 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import { formatAge, getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
+import {
+  formatAge,
+  getFhirServerBaseUrl,
+  humanName,
+} from "../../utils/misc.ts";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { grey } from "@mui/material/colors";
 import { useContext, useEffect } from "react";

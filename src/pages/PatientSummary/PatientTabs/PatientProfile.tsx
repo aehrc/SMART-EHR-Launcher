@@ -1,6 +1,6 @@
 import { Divider, Grid, Typography } from "@mui/material";
 import moment from "moment";
-import { formatAge, humanName } from "../../../lib/utils.ts";
+import { formatAge, humanName } from "../../../utils/misc.ts";
 import PatientTelecom from "../PatientTelecom.tsx";
 import PatientAddress from "../PatientAddress.tsx";
 import { Patient } from "fhir/r4";

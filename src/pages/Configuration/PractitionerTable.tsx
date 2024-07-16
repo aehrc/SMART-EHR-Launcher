@@ -29,7 +29,7 @@ import {
 } from "@mui/material";
 import type { Bundle } from "fhir/r5";
 import { Practitioner } from "fhir/r4";
-import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
+import { getFhirServerBaseUrl, humanName } from "../../utils/misc.ts";
 import PractitionerTableToolbar from "./PractitionerTableToolbar.tsx";
 import TableFeedback from "../TableFeedback.tsx";
 import { useQuery } from "@tanstack/react-query";
