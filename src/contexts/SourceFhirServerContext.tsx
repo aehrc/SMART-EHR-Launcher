@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useState } from "react";
+import { getFhirServerBaseUrl } from "../lib/utils.ts";
 
 interface SourceFhirServerContextType {
   serverUrl: string;
@@ -21,7 +22,7 @@ type ProviderProps = {
 };
 
 const SourceFhirServerContextProvider = ({ children }: ProviderProps) => {
-  const [serverUrl, setServerUrl] = useState("");
+  const [serverUrl, setServerUrl] = useState(getFhirServerBaseUrl());
   const [isModified, setIsModified] = useState(false);
 
   return (

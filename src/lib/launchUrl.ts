@@ -1,4 +1,4 @@
-import { encode, LaunchParams } from "./codec.ts";
+import { base64UrlEncode, encode, LaunchParams } from "./codec.ts";
 import { getFhirServerBaseUrl } from "./utils.ts";
 import { LauncherQuery } from "../hooks/useLauncherQuery.ts";
 
@@ -18,6 +18,7 @@ export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
   pkce: "auto",
 };
 
+// Dont use this for AU Core Test Server
 export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
   const { launch_type, sim_ehr } = launch;
   const { launch_url } = query;
@@ -63,6 +64,34 @@ export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
       origin
     );
   }
+
+  return userLaunchUrl;
+}
+
+export function getAuCoreTestServerLaunchUrl(
+  query: LauncherQuery,
+  launch: LaunchParams
+) {
+  const { launch_url } = query;
+  const launchCode = base64UrlEncode(
+    JSON.stringify({
+      patient: launch.patient,
+      practitioner: launch.provider,
+    })
+  );
+  console.log(launchCode);
+
+  // FHIR baseUrl for EHR launches
+  const iss = getFhirServerBaseUrl();
+
+  let userLaunchUrl: URL | undefined;
+  try {
+    userLaunchUrl = new URL(launch_url || "", origin);
+  } catch {
+    userLaunchUrl = new URL("/", origin);
+  }
+  userLaunchUrl.searchParams.set("iss", iss);
+  userLaunchUrl.searchParams.set("launch", launchCode);
 
   return userLaunchUrl;
 }

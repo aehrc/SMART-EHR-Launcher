@@ -17,6 +17,8 @@
 
 import { useMemo, useState } from "react";
 import {
+  Box,
+  Button,
   Card,
   Table,
   TableBody,
@@ -49,6 +51,8 @@ interface Props {
 
 function QuestionnaireTable(props: Props) {
   const { disabled } = props;
+
+  const [isDisabled, setIsDisabled] = useState(disabled);
 
   const [selectedItem, setSelectedItem] =
     useState<QuestionnaireListItem | null>(null);
@@ -108,9 +112,15 @@ function QuestionnaireTable(props: Props) {
     }
   };
 
-  if (disabled) {
+  if (isDisabled) {
     return (
       <Card>
+        <Box display={"flex"} justifyContent="end">
+          <Button variant="contained" onClick={() => setIsDisabled(false)}>
+            Enable anyway (launch may fail or questionnaire context may not
+            work!)
+          </Button>
+        </Box>
         <TableContainer sx={{ minWidth: 600 }}>
           <Table size="small">
             <TableDisabled resourceName={"Questionnaire"} />

@@ -2,19 +2,15 @@ import { QUERY_HEADERS } from "../lib/utils.ts";
 
 export async function fetchResourceFromEHR(
   requestUrl: string,
-  sourceFhirServerUrl: string,
+  _sourceFhirServerUrl: string,
   bearerToken: string
 ) {
   const headers: any = {
     ...QUERY_HEADERS,
   };
 
-  if (sourceFhirServerUrl) {
-    headers["Source-Fhir-Server"] = sourceFhirServerUrl;
-  }
-
   if (bearerToken) {
-    headers["Authorization"] = `Bearer ${bearerToken}`;
+    headers["Authorization"] = `${bearerToken}`;
   }
 
   const response = await fetch(requestUrl, {

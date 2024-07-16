@@ -61,7 +61,7 @@ function PractitionerTable() {
     ["practitioner", serverUrl],
     () =>
       fetchResourceFromEHR(
-        getFhirServerBaseUrl() + "/Practitioner",
+        getFhirServerBaseUrl() + "/Practitioner?_count=400",
         serverUrl,
         token ?? ""
       ),

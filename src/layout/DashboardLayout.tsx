@@ -2,7 +2,6 @@ import { Box, Card, Stack, styled, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import DashboardNavbar from "./DashboardNavbar.tsx";
 import DashboardSidebar from "./DashboardSideBar.tsx";
-import { getFhirServerBaseUrl } from "../lib/utils.ts";
 import useSourceFhirServer from "../hooks/useSourceFhirServer.ts";
 import useLoadResources from "../hooks/useLoadResources.ts";
 
@@ -45,12 +44,11 @@ function DashboardLayout() {
                 >
                   Server Details
                 </Typography>
+                {/*<Typography variant="subtitle2">*/}
+                {/*  Proxy FHIR Server: <b>{getFhirServerBaseUrl()}</b>*/}
+                {/*</Typography>*/}
                 <Typography variant="subtitle2">
-                  Proxy FHIR Server: <b>{getFhirServerBaseUrl()}</b>
-                </Typography>
-                <Typography variant="subtitle2">
-                  Actual FHIR Server: <b>{serverUrl}</b> (Configurable in
-                  Configuration —&gt; Source FHIR Server)
+                  FHIR Server: <b>{serverUrl}</b>
                 </Typography>
               </Box>
             </Card>

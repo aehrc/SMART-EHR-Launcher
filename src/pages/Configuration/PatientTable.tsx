@@ -46,7 +46,7 @@ function PatientTable() {
     ["patients", serverUrl],
     () =>
       fetchResourceFromEHR(
-        getFhirServerBaseUrl() + "/Patient",
+        getFhirServerBaseUrl() + "/Patient?_count=400",
         serverUrl,
         token ?? ""
       ),

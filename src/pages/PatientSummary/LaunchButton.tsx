@@ -4,13 +4,13 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getValidationErrors } from "../../lib/URLValidation.tsx";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
-import { getUserLaunchUrl } from "../../lib/launchUrl.ts";
+import { getAuCoreTestServerLaunchUrl } from "../../lib/launchUrl.ts";
 
 function LaunchButton() {
   // The URL to launch the user-specified app
   const { query, launch } = useLauncherQuery();
 
-  const userLaunchUrl = getUserLaunchUrl(query, launch);
+  const userLaunchUrl = getAuCoreTestServerLaunchUrl(query, launch);
 
   const isEmbeddedView = launch.is_embedded_view;
   const appName = query.app_name;

@@ -18,6 +18,7 @@ const tableHeaders = [
   { id: "gender", label: "Gender" },
   { id: "age", label: "Age" },
   { id: "dob", label: "Date of Birth" },
+  { id: "id", label: "ID" },
 ];
 
 interface PatientTableViewProps {
@@ -104,6 +105,7 @@ function PatientTableView(props: PatientTableViewProps) {
                     <TableCell sx={{ pl: 0, textTransform: "Capitalize" }}>
                       {dob}
                     </TableCell>
+                    <TableCell sx={{ pl: 0 }}>{id}</TableCell>
                   </TableRow>
                 );
               })}
