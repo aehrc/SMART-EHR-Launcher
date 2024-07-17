@@ -1,45 +1,22 @@
-import { Box, List, ListItemButton, styled, Tooltip } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
-import { ArticleOutlined, SettingsOutlined } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
+import { Settings, User } from "lucide-react";
+import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
+import DashboardSideBarItem from "@/layout/DashboardSideBarItem.tsx";
+import DashboardSideBarLogo from "@/layout/DashboardSideBarLogo.tsx";
 
-// custom styled components
-const MainMenu = styled(Box)(({ theme }) => ({
-  left: 0,
-  width: 80,
-  display: "flex",
-  flexDirection: "column",
-  height: "100%",
-  position: "fixed",
-  boxShadow: theme.shadows[2],
-  transition: "left 0.3s ease",
-  zIndex: theme.zIndex.drawer + 11,
-  backgroundColor: theme.palette.background.paper,
-  "& .simplebar-track.simplebar-vertical": { width: 7 },
-  "& .simplebar-scrollbar:before": {
-    background: theme.palette.text.primary,
-  },
-}));
-
-const StyledListItemButton = styled(ListItemButton)(() => ({
-  marginBottom: "1rem",
-  justifyContent: "center",
-  "&:hover": { backgroundColor: "transparent" },
-}));
-
-interface MenuItem {
+export interface MenuItem {
   title: string;
-  Icon: any;
   path: string;
+  Icon: JSX.Element;
 }
 
 const topMenuList: MenuItem[] = [
   {
-    title: "Patient Summary",
-    Icon: ArticleOutlined,
+    title: "Home",
     path: "/",
+    Icon: <User />,
   },
 ];
 
@@ -60,71 +37,51 @@ function getRouteTitle(pathName: string): string {
 function DashboardSideBar() {
   const navigate = useNavigate();
 
-  const [active, setActive] = useState(getRouteTitle(window.location.pathname));
+  const [activeTitle, setActiveTitle] = useState(
+    getRouteTitle(window.location.pathname)
+  );
   const { closeSnackbar } = useSnackbar();
 
-  const handleActiveMainMenu = (menuItem: MenuItem) => () => {
-    setActive(menuItem.title);
+  function handleSwitchActivePage(newTitle: string, newPath: string) {
+    setActiveTitle(newTitle);
     closeSnackbar();
-    navigate(menuItem.path + window.location.search);
-  };
-
-  const configurationButton = (
-    <List>
-      <Tooltip title="Configuration" placement="right">
-        <StyledListItemButton
-          disableRipple
-          onClick={handleActiveMainMenu({
-            title: "Configuration",
-            Icon: SettingsOutlined,
-            path: "/configuration",
-          })}
-        >
-          <SettingsOutlined
-            sx={{
-              color:
-                active === "Configuration" ? "primary.main" : "secondary.400",
-            }}
-          />
-        </StyledListItemButton>
-      </Tooltip>
-    </List>
-  );
-
-  // main menus content
-  const mainSideBarContent = (
-    <List>
-      <StyledListItemButton
-        disableRipple
-        onClick={handleActiveMainMenu(topMenuList[0])}
-      >
-        <DataSaverOnIcon color="success" sx={{ fontSize: 40 }} />
-      </StyledListItemButton>
-
-      {topMenuList.map((nav, index) => (
-        <Tooltip title={nav.title} placement="right" key={index}>
-          <StyledListItemButton
-            disableRipple
-            onClick={handleActiveMainMenu(nav)}
-          >
-            <nav.Icon
-              sx={{
-                color: active === nav.title ? "primary.main" : "secondary.400",
-              }}
-            />
-          </StyledListItemButton>
-        </Tooltip>
-      ))}
-    </List>
-  );
+    navigate(newPath + window.location.search);
+  }
 
   return (
-    <MainMenu>
-      {mainSideBarContent}
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+        <DashboardSideBarLogo
+          sidebarItem={{
+            title: "Smart EHR Launcher",
+            path: "/",
+            Icon: <DataSaverOnIcon />,
+          }}
+          onSwitchActivePage={handleSwitchActivePage}
+        />
 
-      <Box sx={{ flexGrow: 1 }} />
-      {configurationButton}
-    </MainMenu>
+        <DashboardSideBarItem
+          sidebarItem={{
+            title: "Patient Summary",
+            path: "/",
+            Icon: <User />,
+          }}
+          activeTitle={activeTitle}
+          onSwitchActivePage={handleSwitchActivePage}
+        />
+      </nav>
+      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+        <DashboardSideBarItem
+          sidebarItem={{
+            title: "Configuration",
+            path: "/configuration",
+            Icon: <Settings />,
+          }}
+          activeTitle={activeTitle}
+          onSwitchActivePage={handleSwitchActivePage}
+        />
+      </nav>
+    </aside>
   );
 }
 
