@@ -1,11 +1,4 @@
-import { Box, Typography } from "@mui/material";
-import {
-  formatAge,
-  getFhirServerBaseUrl,
-  humanName,
-} from "../../utils/misc.ts";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { grey } from "@mui/material/colors";
+import { getFhirServerBaseUrl, humanName } from "../../utils/misc.ts";
 import { useContext, useEffect } from "react";
 import { PatientContext } from "../../contexts/PatientContext.tsx";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
@@ -15,6 +8,8 @@ import { Bundle, Patient } from "fhir/r4";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 import { getPatient } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
+import { User } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton.tsx";
 
 function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -58,28 +53,38 @@ function PatientNavProfile() {
   }, [newPatient]);
 
   return (
-    <Box display="flex" alignItems="center" gap={1.5}>
-      <PersonOutlineOutlinedIcon sx={{ fontSize: 30, color: "primary.main" }} />
-      <Box fontSize={16} fontWeight="bold" color="primary.main">
+    <div className="flex items-center gap-3 h-16 px-4 bg-muted rounded">
+      <div className="flex flex-col items-center text-blue-800">
+        <User className="h-5 w-5" />
+        <div className="text-xs font-medium px-2.5 py-0.5 mt-1 rounded bg-blue-100">
+          Patient
+        </div>
+      </div>
+
+      <div className="border-l border-gray-300 dark:border-gray-600 h-10" />
+
+      <div className="text-gray-600">
         {isLoading ? (
-          "Loading patient..."
+          <div className="space-y-1">
+            <Skeleton className="h-5 w-32 bg-gray-200 animate-pulse" />
+            <Skeleton className="h-2 w-32 bg-gray-200 animate-pulse" />
+            <Skeleton className="h-2 w-32 bg-gray-200 animate-pulse" />
+          </div>
         ) : error || !patient ? (
-          "Patient not selected"
+          <div className="text-sm font-medium text-red-500">
+            Patient not selected
+          </div>
         ) : (
           <>
-            <Typography fontSize={16} fontWeight="bold" color="primary.main">
-              {humanName(patient)}
-            </Typography>
-            <Typography fontSize={12} color={grey["500"]}>
-              {formatAge(patient)} {patient.gender}
-            </Typography>
-            <Typography fontSize={12} fontWeight="bold" color={grey["500"]}>
+            <div className="text-sm font-medium">{humanName(patient)}</div>
+            <div className="text-xs font-light text-gray-600">{patient.id}</div>
+            <div className="text-xs text-gray-500 mt-1.5">
               {encounterSelected}
-            </Typography>
+            </div>
           </>
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }
 

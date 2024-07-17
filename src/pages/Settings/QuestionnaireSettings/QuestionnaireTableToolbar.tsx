@@ -17,12 +17,12 @@
 
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
+import useLauncherQuery from "../../../hooks/useLauncherQuery.ts";
 import { QuestionnaireListItem } from "./QuestionnaireTable.tsx";
 import { enqueueSnackbar } from "notistack";
 import { grey } from "@mui/material/colors";
 import { useContext } from "react";
-import { QuestionnaireContext } from "../../contexts/QuestionnaireContext.tsx";
+import { QuestionnaireContext } from "../../../contexts/QuestionnaireContext.tsx";
 import ClearIcon from "@mui/icons-material/Clear";
 
 interface Props {

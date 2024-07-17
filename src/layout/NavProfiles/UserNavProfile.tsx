@@ -1,8 +1,6 @@
-import { Box, Typography } from "@mui/material";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { Bundle, Practitioner } from "fhir/r4";
 import { getFhirServerBaseUrl, humanName } from "../../utils/misc.ts";
-import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
 import { useContext, useEffect } from "react";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +8,8 @@ import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 import { UserContext } from "../../contexts/UserContext.tsx";
 import { getPractitioner } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
+import { BriefcaseMedical } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton.tsx";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -46,16 +46,33 @@ function UserNavProfile() {
   }, [newUser]);
 
   return (
-    <Box display="flex" alignItems="center" gap={1.5}>
-      <MedicalInformationOutlinedIcon sx={{ fontSize: 30, color: "#2d6da5" }} />
-      <Typography fontSize={16} fontWeight="bold" color="primary.main">
-        {isLoading
-          ? "Loading user..."
-          : error || !user
-          ? "User not selected"
-          : humanName(user)}
-      </Typography>
-    </Box>
+    <div className="flex items-center gap-3 h-16 px-4 bg-muted rounded">
+      <div className="flex flex-col items-center text-purple-800 ">
+        <BriefcaseMedical className="h-5 w-5" />
+        <div className="text-xs font-medium px-2.5 py-0.5 mt-1 rounded bg-purple-100 ">
+          User
+        </div>
+      </div>
+
+      <div className="border-l border-gray-300 dark:border-gray-600 h-10" />
+
+      <div className="text-gray-600">
+        {isLoading ? (
+          <div>
+            <Skeleton className="h-5 w-32 bg-gray-200 animate-pulse" />
+          </div>
+        ) : error || !user ? (
+          <div className="text-sm font-medium text-red-500">
+            User not selected
+          </div>
+        ) : (
+          <>
+            <div className="text-sm font-medium">{humanName(user)}</div>
+            <div className="text-xs font-light text-gray-600"></div>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 

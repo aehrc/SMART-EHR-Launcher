@@ -1,61 +1,26 @@
-import { Box, Card, Stack, styled, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
-import DashboardNavbar from "./DashboardNavbar.tsx";
-import DashboardSidebar from "./DashboardSideBar.tsx";
-import useSourceFhirServer from "../hooks/useSourceFhirServer.ts";
 import useLoadResources from "../hooks/useLoadResources.ts";
-
-// styled components
-
-export const LayoutRoot = styled(Box)({
-  display: "flex",
-  minHeight: "100%",
-  overflowY: "scroll",
-});
-
-const Wrapper = styled(Box)({
-  width: `calc(100% - 80px)`,
-  maxWidth: 1400,
-  margin: "auto",
-  paddingLeft: 80,
-  height: "100vh",
-});
+import SideBar from "@/layout/Sidebar/SideBar.tsx";
+import SideBarMobile from "@/layout/SidebarMobile/SideBarMobile.tsx";
+import PatientNavProfile from "@/layout/NavProfiles/PatientNavProfile.tsx";
+import UserNavProfile from "@/layout/NavProfiles/UserNavProfile.tsx";
 
 function DashboardLayout() {
-  const { serverUrl } = useSourceFhirServer();
-
   useLoadResources();
 
   return (
-    <LayoutRoot>
-      <DashboardSidebar />
-      <Wrapper>
-        <DashboardNavbar />
-        <Box mt={2} mb={4}>
-          <Outlet />
-
-          <Stack mx={10} alignItems="center">
-            <Card>
-              <Box p={2}>
-                <Typography
-                  variant="subtitle2"
-                  fontWeight="bold"
-                  sx={{ mb: 0.5 }}
-                >
-                  Server Details
-                </Typography>
-                {/*<Typography variant="subtitle2">*/}
-                {/*  Proxy FHIR Server: <b>{getFhirServerBaseUrl()}</b>*/}
-                {/*</Typography>*/}
-                <Typography variant="subtitle2">
-                  FHIR Server: <b>{serverUrl}</b>
-                </Typography>
-              </Box>
-            </Card>
-          </Stack>
-        </Box>
-      </Wrapper>
-    </LayoutRoot>
+    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <SideBar />
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+          <SideBarMobile />
+          <div className="flex-grow"></div>
+          <PatientNavProfile />
+          <UserNavProfile />
+        </header>
+        <Outlet />
+      </div>
+    </div>
   );
 }
 
