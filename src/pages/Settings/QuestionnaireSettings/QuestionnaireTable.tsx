@@ -15,189 +15,83 @@
  * limitations under the License.
  */
 
-import { useMemo, useState } from "react";
-import type { Bundle, Questionnaire } from "fhir/r5";
-import { useQuery } from "@tanstack/react-query";
-import {
-  getQuestionnaireServerBaseUrl,
-  QUERY_HEADERS,
-} from "../../../utils/misc.ts";
-import axios from "axios";
-
-const tableHeaders = [
-  { id: "name", label: "Name" },
-  { id: "id", label: "ID" },
-];
+import { useContext } from "react";
+import { QuestionnaireContext } from "@/contexts/QuestionnaireContext.tsx";
+import useFetchQuestionnaires from "@/hooks/useFetchQuestionnaires.ts";
+import { createQuestionnaireTableColumns } from "@/utils/dataTable.tsx";
+import DataTable from "@/components/DataTable.tsx";
+import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
+import { useSnackbar } from "notistack";
 
 function QuestionnaireTable() {
-  const [selectedItem, setSelectedItem] =
-    useState<QuestionnaireListItem | null>(null);
+  const { selectedQuestionnaire, setSelectedQuestionnaire } =
+    useContext(QuestionnaireContext);
+  const { setQuery } = useLauncherQuery();
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const {
-    data: bundle,
-    error,
-    isLoading,
-  } = useQuery<Bundle<Questionnaire>>(["questionnaire"], () =>
-    axios(getQuestionnaireServerBaseUrl() + "/Questionnaire?_count=200", {
-      headers: QUERY_HEADERS,
-    }).then((res) => res.data)
+  const { questionnaires, isInitialLoading } = useFetchQuestionnaires();
+
+  const columns = createQuestionnaireTableColumns(
+    selectedQuestionnaire,
+    handleSetQuestionnaireContext
   );
 
-  const records: Questionnaire[] = useMemo(
-    () => bundle?.entry?.map((p) => p.resource!) || [],
-    [bundle]
-  );
+  function handleSetQuestionnaireContext(id: string) {
+    const newQuestionnaire = questionnaires.find(
+      (questionnaire) => questionnaire.id === id
+    );
 
-  if (error) {
-    console.error("No questionnaires found. " + error);
+    // Questionnaire not found OR questionnaire is already selected, unset questionnaire and context
+    if (
+      !newQuestionnaire ||
+      selectedQuestionnaire?.id === newQuestionnaire.id
+    ) {
+      setSelectedQuestionnaire(null);
+      setQuery({
+        fhir_context: "",
+      });
+      return;
+    }
+
+    // Selected questionnaire lacks a URL, unset questionnaire and context
+    if (!newQuestionnaire.url) {
+      setSelectedQuestionnaire(null);
+      setQuery({
+        fhir_context: "",
+      });
+      enqueueSnackbar(`Questionnaire context set. ID:${newQuestionnaire.id} `, {
+        variant: "success",
+        autoHideDuration: 3000,
+      });
+      return;
+    }
+
+    // Set selected questionnaire and set query
+    const questionnaireFhirContext = {
+      role: "questionnaire-render-on-launch",
+      canonical: newQuestionnaire.url,
+      type: "Questionnaire",
+    };
+
+    setSelectedQuestionnaire(newQuestionnaire);
+    setQuery({
+      fhir_context: `${JSON.stringify(questionnaireFhirContext)}`,
+    });
+    enqueueSnackbar(`Questionnaire context set. ID:${newQuestionnaire.id} `, {
+      variant: "success",
+      autoHideDuration: 3000,
+    });
   }
 
-  // construct questionnaire list items for data display
-  const questionnaireListItems: QuestionnaireListItem[] = useMemo(
-    () => getQuestionnaireListItems(records),
-    [records]
+  return (
+    <DataTable
+      data={questionnaires}
+      columns={columns}
+      isLoading={isInitialLoading}
+      selectedData={selectedQuestionnaire}
+    />
   );
-
-  const emptyRows: number = useMemo(
-    () =>
-      page > 0
-        ? Math.max(0, (1 + page) * rowsPerPage - questionnaireListItems.length)
-        : 0,
-    [page, questionnaireListItems.length, rowsPerPage]
-  );
-
-  const isEmpty = questionnaireListItems.length === 0;
-
-  const handleRowClick = (id: string) => {
-    const selected = questionnaireListItems.find((item) => item.id === id);
-
-    if (selected) {
-      if (selected.id === selectedItem?.id) {
-        setSelectedItem(null);
-      } else {
-        setSelectedItem({
-          id: selected.id,
-          title: selected.title,
-          url: selected.url,
-          version: selected.version,
-        });
-      }
-    }
-  };
-
-  return <></>;
-
-  // return (
-  //   <>
-  //     <Typography variant="subtitle2" color="text.secondary">
-  //       Connected to forms server at <b>{getQuestionnaireServerBaseUrl()}</b>
-  //     </Typography>
-  //     <Card>
-  //       <QuestionnaireTableToolbar
-  //         selected={selectedItem}
-  //         removeSelected={() => setSelectedItem(null)}
-  //       />
-  //
-  //       <TableContainer sx={{ minWidth: 600 }}>
-  //         <Table size="small">
-  //           <TableHead sx={{ bgcolor: "background.default" }}>
-  //             <TableRow sx={{ height: 42 }}>
-  //               {tableHeaders.map((headCell, index) => (
-  //                 <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
-  //                   {isLoading ? null : headCell.label}
-  //                 </TableCell>
-  //               ))}
-  //             </TableRow>
-  //           </TableHead>
-  //           <TableBody>
-  //             {questionnaireListItems
-  //               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-  //               .map((row) => {
-  //                 const { title, id } = row;
-  //                 const isSelected = selectedItem?.id === id;
-  //
-  //                 return (
-  //                   <TableRow
-  //                     hover
-  //                     key={id}
-  //                     tabIndex={-1}
-  //                     selected={isSelected}
-  //                     onClick={() => handleRowClick(row.id)}
-  //                     sx={{ cursor: "pointer" }}
-  //                   >
-  //                     <TableCell scope="row" sx={{ pl: 4 }}>
-  //                       <Typography
-  //                         variant="subtitle2"
-  //                         fontWeight={600}
-  //                         sx={{ textTransform: "Capitalize" }}
-  //                       >
-  //                         {title}
-  //                       </Typography>
-  //                     </TableCell>
-  //
-  //                     <TableCell sx={{ pl: 0 }}>{id}</TableCell>
-  //                   </TableRow>
-  //                 );
-  //               })}
-  //             {emptyRows > 0 && (
-  //               <TableRow style={{ height: 53 * emptyRows }}>
-  //                 <TableCell colSpan={6} />
-  //               </TableRow>
-  //             )}
-  //           </TableBody>
-  //
-  //           {isEmpty || error || isLoading ? (
-  //             <TableFeedback
-  //               isEmpty={isEmpty}
-  //               loading={isLoading}
-  //               error={error}
-  //               resourceNamePlural={"questionnaires"}
-  //             />
-  //           ) : null}
-  //         </Table>
-  //       </TableContainer>
-  //
-  //       <TablePagination
-  //         rowsPerPageOptions={[5, 10, 25]}
-  //         component="div"
-  //         count={questionnaireListItems.length}
-  //         rowsPerPage={rowsPerPage}
-  //         page={page}
-  //         onPageChange={(_, newPage) => setPage(newPage)}
-  //         onRowsPerPageChange={(event) => {
-  //           setRowsPerPage(parseInt(event.target.value));
-  //           setPage(0);
-  //         }}
-  //       />
-  //     </Card>
-  //   </>
-  // );
 }
 
 export default QuestionnaireTable;
-
-// Helper interfaces and functions
-export interface QuestionnaireListItem {
-  id: string;
-  title: string;
-  url: string;
-  version: string;
-}
-
-function getQuestionnaireListItems(
-  records: Questionnaire[]
-): QuestionnaireListItem[] {
-  if (!records || records.length === 0) return [];
-
-  return records.map((entry, i) => {
-    return {
-      id: entry.id ?? i.toString(),
-      title: entry.title ?? "Undefined questionnaire",
-      url: entry.url ?? "",
-      version: entry.version ?? "",
-    };
-  });
-}

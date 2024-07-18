@@ -1,14 +1,13 @@
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
 import useUnlockQuestionnaireSettings from "@/hooks/useUnlockQuestionnaireSettings.ts";
-import QuestionnaireTable from "@/pages/Settings/QuestionnaireSettings/QuestionnaireTable.tsx";
 import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
+import QuestionnaireTable from "@/pages/Settings/QuestionnaireSettings/QuestionnaireTable.tsx";
 
 function QuestionnaireSettings() {
   const questionnaireScopePresent = useUnlockQuestionnaireSettings();
@@ -19,12 +18,12 @@ function QuestionnaireSettings() {
     <div className="grid gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Questionnaire</CardTitle>
+          <CardTitle>Questionnaire Context</CardTitle>
           <CardDescription>
             Select the Questionnaire to be used as a Questionnaire launch
             context
           </CardDescription>
-          <CardContent>
+          <div className="pt-2">
             {isUnlocked ? (
               <QuestionnaireTable />
             ) : (
@@ -47,13 +46,11 @@ function QuestionnaireSettings() {
                 </div>
               </div>
             )}
-          </CardContent>
+          </div>
         </CardHeader>
       </Card>
     </div>
   );
 }
-
-// Cancel
 
 export default QuestionnaireSettings;

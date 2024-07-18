@@ -13,6 +13,7 @@ function SettingsMenu(props: SettingsMenuProps) {
     <nav className="grid gap-4 text-sm">
       {configItem.map(({ title, path }) => (
         <Link
+          key={path}
           title={title}
           path={path}
           activePath={activePath}

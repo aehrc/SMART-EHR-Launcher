@@ -4,6 +4,8 @@ import SideBar from "@/layout/Sidebar/SideBar.tsx";
 import SideBarMobile from "@/layout/SidebarMobile/SideBarMobile.tsx";
 import PatientNavProfile from "@/layout/NavProfiles/PatientNavProfile.tsx";
 import UserNavProfile from "@/layout/NavProfiles/UserNavProfile.tsx";
+import EncounterNavProfile from "@/layout/NavProfiles/EncounterNavProfile.tsx";
+import QuestionnaireNavProfile from "@/layout/NavProfiles/QuestionnaireNavProfile.tsx";
 
 function DashboardLayout() {
   useLoadResources();
@@ -17,6 +19,8 @@ function DashboardLayout() {
           <div className="flex-grow"></div>
           <PatientNavProfile />
           <UserNavProfile />
+          <EncounterNavProfile />
+          <QuestionnaireNavProfile />
         </header>
         <Outlet />
       </div>

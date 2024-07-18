@@ -19,7 +19,7 @@ import { QuestionnaireContext } from "@/contexts/QuestionnaireContext.tsx";
 
 function SettingsOverview() {
   const { launch } = useLauncherQuery();
-  const { questionnaireId } = useContext(QuestionnaireContext);
+  const { selectedQuestionnaire } = useContext(QuestionnaireContext);
 
   return (
     <div className="grid gap-6">
@@ -98,7 +98,9 @@ function SettingsOverview() {
               <Input
                 disabled={true}
                 value={
-                  questionnaireId ? `Questionnaire/${questionnaireId}` : "-"
+                  selectedQuestionnaire?.id
+                    ? `Questionnaire/${selectedQuestionnaire.id}`
+                    : "-"
                 }
               />
             </div>

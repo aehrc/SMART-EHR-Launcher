@@ -69,7 +69,7 @@ function App() {
           <QuestionnaireContextProvider>
             <PatientContextProvider>
               <UserContextProvider>
-                <TooltipProvider delayDuration={150}>
+                <TooltipProvider delayDuration={100}>
                   <RouterProvider router={router} />
                 </TooltipProvider>
               </UserContextProvider>

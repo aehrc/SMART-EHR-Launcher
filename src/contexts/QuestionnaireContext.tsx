@@ -1,26 +1,25 @@
 import { createContext, ReactNode, useState } from "react";
+import { Questionnaire } from "fhir/r4";
 
 interface QuestionnaireContextType {
-  questionnaireId: string;
-  setQuestionnaireId: (newQuestionnaireId: string) => unknown;
+  selectedQuestionnaire: Questionnaire | null;
+  setSelectedQuestionnaire: (selected: Questionnaire | null) => unknown;
 }
 
 export const QuestionnaireContext = createContext<QuestionnaireContextType>({
-  questionnaireId: "",
-  setQuestionnaireId: () => void 0,
+  selectedQuestionnaire: null,
+  setSelectedQuestionnaire: () => void 0,
 });
 
-// props types for provider
-type ProviderProps = {
-  children: ReactNode;
-};
+const QuestionnaireContextProvider = (props: { children: ReactNode }) => {
+  const { children } = props;
 
-const QuestionnaireContextProvider = ({ children }: ProviderProps) => {
-  const [id, setId] = useState("AboriginalTorresStraitIslanderHealthCheck");
+  const [selectedQuestionnaire, setSelectedQuestionnaire] =
+    useState<Questionnaire | null>(null);
 
   return (
     <QuestionnaireContext.Provider
-      value={{ questionnaireId: id, setQuestionnaireId: setId }}
+      value={{ selectedQuestionnaire, setSelectedQuestionnaire }}
     >
       {children}
     </QuestionnaireContext.Provider>

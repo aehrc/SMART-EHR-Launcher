@@ -19,7 +19,6 @@ function PatientNavProfile() {
   const { patient, setPatient } = useContext(PatientContext);
 
   const patientId = launch.patient;
-  const encounterId = launch.encounter;
 
   const queryEndpoint =
     getFhirServerBaseUrl() + (patientId ? `/Patient/${patientId}` : "/Patient");
@@ -36,13 +35,6 @@ function PatientNavProfile() {
 
   const newPatient = getPatient(resource);
 
-  let encounterSelected = "";
-  if (encounterId && encounterId !== "AUTO") {
-    encounterSelected = encounterId;
-  } else {
-    encounterSelected = "No encounter selected";
-  }
-
   useEffect(() => {
     if (!newPatient) {
       return;
@@ -53,12 +45,10 @@ function PatientNavProfile() {
   }, [newPatient]);
 
   return (
-    <div className="flex items-center gap-3 h-16 px-4 bg-muted rounded">
+    <div className="flex items-center gap-3 h-16 px-3 bg-muted/80 rounded-lg">
       <div className="flex flex-col items-center text-blue-800">
         <User className="h-5 w-5" />
-        <div className="text-xs font-medium px-2.5 py-0.5 mt-1 rounded bg-blue-100">
-          Patient
-        </div>
+        <div className="text-xs px-1">Patient</div>
       </div>
 
       <div className="border-l border-gray-300 dark:border-gray-600 h-10" />
@@ -75,13 +65,14 @@ function PatientNavProfile() {
             Patient not selected
           </div>
         ) : (
-          <>
+          <div className="flex flex-col gap-0.5">
             <div className="text-sm font-medium">{humanName(patient)}</div>
-            <div className="text-xs font-light text-gray-600">{patient.id}</div>
-            <div className="text-xs text-gray-500 mt-1.5">
-              {encounterSelected}
+            <div className="flex">
+              <div className="text-xs px-1.5 py-0.5 rounded text-blue-800 bg-blue-100">
+                {patient.id}
+              </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
