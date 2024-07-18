@@ -34,7 +34,7 @@ function DataTableBody(props: DataTableBodyProps<any, any>) {
             data-state={row.getIsSelected() && "selected"}
             className={` ${
               selectedData?.id === row.getValue("id")
-                ? getSelectedDataRowColorClass(selectedData)
+                ? getSelectedDataRowColorClass(row.original.resourceType)
                 : ""
             }`}
           >

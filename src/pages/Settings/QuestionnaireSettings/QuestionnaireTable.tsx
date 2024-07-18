@@ -15,13 +15,17 @@
  * limitations under the License.
  */
 
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { QuestionnaireContext } from "@/contexts/QuestionnaireContext.tsx";
 import useFetchQuestionnaires from "@/hooks/useFetchQuestionnaires.ts";
-import { createQuestionnaireTableColumns } from "@/utils/dataTable.tsx";
+import {
+  createQuestionnaireTableColumns,
+  QuestionnaireTableData,
+} from "@/utils/dataTable.tsx";
 import DataTable from "@/components/DataTable.tsx";
 import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 import { useSnackbar } from "notistack";
+import { nanoid } from "nanoid";
 
 function QuestionnaireTable() {
   const { selectedQuestionnaire, setSelectedQuestionnaire } =
@@ -31,6 +35,14 @@ function QuestionnaireTable() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { questionnaires, isInitialLoading } = useFetchQuestionnaires();
+
+  const questionnaireTableData: QuestionnaireTableData[] = useMemo(() => {
+    return questionnaires.map((questionnaire) => ({
+      id: questionnaire.id ?? nanoid(),
+      name: questionnaire.title ?? "Untitled",
+      resourceType: questionnaire.resourceType,
+    }));
+  }, [questionnaires]);
 
   const columns = createQuestionnaireTableColumns(
     selectedQuestionnaire,
@@ -60,8 +72,8 @@ function QuestionnaireTable() {
       setQuery({
         fhir_context: "",
       });
-      enqueueSnackbar(`Questionnaire context set. ID:${newQuestionnaire.id} `, {
-        variant: "success",
+      enqueueSnackbar(`Questionnaire ${newQuestionnaire.id} lacks a url`, {
+        variant: "error",
         autoHideDuration: 3000,
       });
       return;
@@ -86,7 +98,7 @@ function QuestionnaireTable() {
 
   return (
     <DataTable
-      data={questionnaires}
+      data={questionnaireTableData}
       columns={columns}
       isLoading={isInitialLoading}
       selectedData={selectedQuestionnaire}

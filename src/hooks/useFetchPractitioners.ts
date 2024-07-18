@@ -16,50 +16,49 @@
  */
 
 import { useQuery } from "@tanstack/react-query";
-import type { Bundle, Questionnaire } from "fhir/r4";
+import type { Bundle, Practitioner } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
-import { getQuestionnaireServerBaseUrl } from "@/utils/misc.ts";
+import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 
-interface useFetchQuestionnairesReturnParams {
-  questionnaires: Questionnaire[];
+interface useFetchPractitionersReturnParams {
+  practitioners: Practitioner[];
   isInitialLoading: boolean;
 }
 
-function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
-  const numOfSearchEntries = 200;
+function useFetchPractitioners(): useFetchPractitionersReturnParams {
+  const numOfSearchEntries = 500;
 
-  let queryUrl = `/Questionnaire?_count=${numOfSearchEntries}&_sort=-date&`;
+  let queryUrl = `/Practitioner?_count=${numOfSearchEntries}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
-    ["questionnaires" + numOfSearchEntries.toString(), queryUrl],
-    () =>
-      fetchResourceFromEHR(getQuestionnaireServerBaseUrl() + queryUrl, "", "")
+    ["practitioners" + numOfSearchEntries.toString(), queryUrl],
+    () => fetchResourceFromEHR(getFhirServerBaseUrl() + queryUrl, "", "")
   );
 
-  const questionnaires: Questionnaire[] = useMemo(
-    () => getQuestionnaires(bundle),
+  const practitioners: Practitioner[] = useMemo(
+    () => getPractitioners(bundle),
     [bundle]
   );
 
   return {
-    questionnaires,
+    practitioners,
     isInitialLoading,
   };
 }
 
-function getQuestionnaires(bundle: Bundle | undefined): Questionnaire[] {
+function getPractitioners(bundle: Bundle | undefined): Practitioner[] {
   if (!bundle || !bundle.entry || bundle.entry.length === 0) return [];
 
   return bundle.entry
     .filter(
       (entry) =>
         entry.resource?.resourceType &&
-        entry.resource?.resourceType === "Questionnaire"
+        entry.resource?.resourceType === "Practitioner"
     )
     .map(
-      (entry) => entry.resource as Questionnaire // non-questionnaire resources are filtered
+      (entry) => entry.resource as Practitioner // non-practitioner resources are filtered
     );
 }
 
-export default useFetchQuestionnaires;
+export default useFetchPractitioners;

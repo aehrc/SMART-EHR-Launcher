@@ -16,50 +16,46 @@
  */
 
 import { useQuery } from "@tanstack/react-query";
-import type { Bundle, Questionnaire } from "fhir/r4";
+import type { Bundle, Patient } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
-import { getQuestionnaireServerBaseUrl } from "@/utils/misc.ts";
+import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 
-interface useFetchQuestionnairesReturnParams {
-  questionnaires: Questionnaire[];
+interface useFetchPatientsReturnParams {
+  patients: Patient[];
   isInitialLoading: boolean;
 }
 
-function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
-  const numOfSearchEntries = 200;
+function useFetchPatients(): useFetchPatientsReturnParams {
+  const numOfSearchEntries = 500;
 
-  let queryUrl = `/Questionnaire?_count=${numOfSearchEntries}&_sort=-date&`;
+  let queryUrl = `/Patient?_count=${numOfSearchEntries}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
-    ["questionnaires" + numOfSearchEntries.toString(), queryUrl],
-    () =>
-      fetchResourceFromEHR(getQuestionnaireServerBaseUrl() + queryUrl, "", "")
+    ["patients" + numOfSearchEntries.toString(), queryUrl],
+    () => fetchResourceFromEHR(getFhirServerBaseUrl() + queryUrl, "", "")
   );
 
-  const questionnaires: Questionnaire[] = useMemo(
-    () => getQuestionnaires(bundle),
-    [bundle]
-  );
+  const patients: Patient[] = useMemo(() => getPatients(bundle), [bundle]);
 
   return {
-    questionnaires,
+    patients,
     isInitialLoading,
   };
 }
 
-function getQuestionnaires(bundle: Bundle | undefined): Questionnaire[] {
+function getPatients(bundle: Bundle | undefined): Patient[] {
   if (!bundle || !bundle.entry || bundle.entry.length === 0) return [];
 
   return bundle.entry
     .filter(
       (entry) =>
         entry.resource?.resourceType &&
-        entry.resource?.resourceType === "Questionnaire"
+        entry.resource?.resourceType === "Patient"
     )
     .map(
-      (entry) => entry.resource as Questionnaire // non-questionnaire resources are filtered
+      (entry) => entry.resource as Patient // non-patient resources are filtered
     );
 }
 
-export default useFetchQuestionnaires;
+export default useFetchPatients;

@@ -1,4 +1,5 @@
 import { FhirResource } from "fhir/r4";
+import { getSelectedDataIDColorClass } from "@/utils/dataTable.tsx";
 
 interface DataTableToolbarSelectedProps {
   selectedData: FhirResource | null;
@@ -18,7 +19,11 @@ function DataTableToolbarSelected(props: DataTableToolbarSelectedProps) {
   return (
     <div className="text-sm text-muted-foreground">
       Selected ID:{" "}
-      <span className="px-2 py-0.5 rounded bg-green-100 text-green-800">
+      <span
+        className={`px-2 py-0.5 rounded ${getSelectedDataIDColorClass(
+          selectedData.resourceType
+        )}`}
+      >
         {selectedData.id}
       </span>
     </div>

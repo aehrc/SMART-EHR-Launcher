@@ -29,8 +29,8 @@ function SourceFhirServerConfig() {
   const { serverUrl, updateServerUrl } = useSourceFhirServer();
 
   const { query, setQuery } = useLauncherQuery();
-  const { setPatient } = useContext(PatientContext);
-  const { setUser } = useContext(UserContext);
+  const { setSelectedPatient } = useContext(PatientContext);
+  const { setSelectedUser } = useContext(UserContext);
 
   const { token } = useContext(TokenContext);
 
@@ -85,8 +85,8 @@ function SourceFhirServerConfig() {
     console.log(newUser);
 
     updateServerUrl(serverUrlInput);
-    setPatient(newPatient);
-    setUser(newUser);
+    setSelectedPatient(newPatient);
+    setSelectedUser(newUser);
     setQuery({
       ...query,
       patient: newPatient?.id,

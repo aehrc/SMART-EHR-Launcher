@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
+import UserTable from "@/pages/Settings/UserSettings/UserTable.tsx";
 
 function UserSettings() {
   return (
@@ -12,9 +13,11 @@ function UserSettings() {
         <CardHeader>
           <CardTitle>User</CardTitle>
           <CardDescription>
-            Read-only overview of key configurations for the launching
-            application
+            Select the Practitioner to be used as the User launch context
           </CardDescription>
+          <div className="pt-2">
+            <UserTable />
+          </div>
         </CardHeader>
       </Card>
     </div>

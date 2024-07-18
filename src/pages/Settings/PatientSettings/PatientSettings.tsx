@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
+import PatientTable from "@/pages/Settings/PatientSettings/PatientTable.tsx";
 
 function PatientSettings() {
   return (
@@ -12,9 +13,11 @@ function PatientSettings() {
         <CardHeader>
           <CardTitle>Patient</CardTitle>
           <CardDescription>
-            Read-only overview of key configurations for the launching
-            application
+            Select the Patient to be used as the Patient launch context
           </CardDescription>
+          <div className="pt-2">
+            <PatientTable />
+          </div>
         </CardHeader>
       </Card>
     </div>

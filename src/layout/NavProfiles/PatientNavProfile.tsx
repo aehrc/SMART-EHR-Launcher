@@ -16,7 +16,7 @@ function PatientNavProfile() {
   const { serverUrl } = useSourceFhirServer();
 
   const { token } = useContext(TokenContext);
-  const { patient, setPatient } = useContext(PatientContext);
+  const { selectedPatient, setSelectedPatient } = useContext(PatientContext);
 
   const patientId = launch.patient;
 
@@ -40,7 +40,7 @@ function PatientNavProfile() {
       return;
     }
 
-    setPatient(newPatient);
+    setSelectedPatient(newPatient);
     setQuery({ ...query, patient: newPatient.id });
   }, [newPatient]);
 
@@ -48,7 +48,7 @@ function PatientNavProfile() {
     <div className="flex items-center gap-3 h-16 px-3 bg-muted/80 rounded-lg">
       <div className="flex flex-col items-center text-blue-800">
         <User className="h-5 w-5" />
-        <div className="text-xs px-1">Patient</div>
+        <div className="text-xs">Patient</div>
       </div>
 
       <div className="border-l border-gray-300 dark:border-gray-600 h-10" />
@@ -60,16 +60,18 @@ function PatientNavProfile() {
             <Skeleton className="h-2 w-32 bg-gray-200 animate-pulse" />
             <Skeleton className="h-2 w-32 bg-gray-200 animate-pulse" />
           </div>
-        ) : error || !patient ? (
+        ) : error || !selectedPatient ? (
           <div className="text-sm font-medium text-red-500">
             Patient not selected
           </div>
         ) : (
           <div className="flex flex-col gap-0.5">
-            <div className="text-sm font-medium">{humanName(patient)}</div>
+            <div className="text-sm font-medium">
+              {humanName(selectedPatient)}
+            </div>
             <div className="flex">
               <div className="text-xs px-1.5 py-0.5 rounded text-blue-800 bg-blue-100">
-                {patient.id}
+                {selectedPatient.id}
               </div>
             </div>
           </div>
