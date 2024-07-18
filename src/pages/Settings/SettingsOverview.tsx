@@ -25,14 +25,14 @@ function SettingsOverview() {
     <div className="grid gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>General</CardTitle>
+          <CardTitle>Overview</CardTitle>
           <CardDescription>
             Read-only overview of key configurations for the launching
             application
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
+          <div className="grid gap-5">
             <div className="grid gap-2">
               <Label>Source FHIR Server URL</Label>
               <Input disabled={true} value={getFhirServerBaseUrl()} />
