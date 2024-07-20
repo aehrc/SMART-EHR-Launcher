@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { Card } from "@mui/material";
 import useFetchImmunizations from "@/hooks/useFetchImmunizations.ts";
 import { nanoid } from "nanoid";
 import dayjs from "dayjs";
@@ -8,6 +7,7 @@ import {
   ImmunizationTableData,
 } from "@/utils/patientDetails.tsx";
 import {
+  Card,
   CardContent,
   CardDescription,
   CardHeader,

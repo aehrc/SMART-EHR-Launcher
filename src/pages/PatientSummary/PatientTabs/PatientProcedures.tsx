@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { Card } from "@mui/material";
 import useFetchProcedures from "@/hooks/useFetchProcedures.ts";
 import {
   createProcedureTableColumns,
@@ -8,6 +7,7 @@ import {
 import { nanoid } from "nanoid";
 import dayjs from "dayjs";
 import {
+  Card,
   CardContent,
   CardDescription,
   CardHeader,
