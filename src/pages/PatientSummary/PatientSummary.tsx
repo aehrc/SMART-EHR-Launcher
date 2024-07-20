@@ -1,6 +1,5 @@
 import { Box, Card, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import useTitle from "../../hooks/useTitle.ts";
 import { TabContext } from "@mui/lab";
 import { PatientContext } from "../../contexts/PatientContext.tsx";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -13,9 +12,7 @@ import PatientDetailsPanel from "./PatientDetailsPanel.tsx";
 import EmbeddedViewTab from "./EmbeddedViewTab.tsx";
 
 function PatientSummary() {
-  useTitle("Patient Summary");
-
-  const { patient } = useContext(PatientContext);
+  const { selectedPatient } = useContext(PatientContext);
 
   const [tabValue, setTabValue] = useState("1");
   const [embeddedViewLaunched, setEmbeddedViewLaunched] = useState(false);
@@ -26,22 +23,22 @@ function PatientSummary() {
       <TabContext value={tabValue}>
         <Card>
           <Box sx={{ height: 150, width: "100%", p: 4 }}>
-            {patient ? (
+            {selectedPatient ? (
               <Box display="flex" gap={4}>
                 <Box sx={{ py: 0.5 }}>
                   <PersonOutlineOutlinedIcon sx={{ fontSize: 60 }} />
                 </Box>
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {humanName(patient)}
+                    {humanName(selectedPatient)}
                   </Typography>
                   <Typography>
-                    {patient.birthDate
-                      ? moment(patient.birthDate).format("DD/MM/YYYY")
+                    {selectedPatient.birthDate
+                      ? moment(selectedPatient.birthDate).format("DD/MM/YYYY")
                       : "Unknown"}
                   </Typography>
                   <Typography color={grey["700"]}>
-                    {formatAge(patient)} {patient.gender}
+                    {formatAge(selectedPatient)} {selectedPatient.gender}
                   </Typography>
                 </Box>
 
@@ -54,7 +51,7 @@ function PatientSummary() {
           </Box>
           <Box display="flex" padding="0 1.5rem">
             <PatientTabSwitcher
-              patient={patient}
+              patient={selectedPatient}
               onToggleEmbeddedViewVisible={(isShown) => {
                 if (!embeddedViewLaunched) {
                   setEmbeddedViewLaunched(true);
@@ -79,9 +76,9 @@ function PatientSummary() {
             />
           </Box>
         </Card>
-        {patient ? (
+        {selectedPatient ? (
           <PatientDetailsPanel
-            patient={patient}
+            patient={selectedPatient}
             embeddedViewLaunched={embeddedViewLaunched}
             embeddedViewIsVisible={embeddedViewIsVisible}
           />

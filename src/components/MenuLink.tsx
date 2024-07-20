@@ -1,12 +1,13 @@
-interface LinkProps {
+import useActivePage from "@/hooks/useActivePage.ts";
+
+interface MenuLinkProps {
   title: string;
   path: string;
-  activePath: string;
-  handleSwitchActivePage: (newPath: string) => void;
 }
 
-function Link(props: LinkProps) {
-  const { title, path, activePath, handleSwitchActivePage } = props;
+function MenuLink(props: MenuLinkProps) {
+  const { title, path } = props;
+  const { activePath, switchActivePage } = useActivePage();
 
   return (
     <div
@@ -17,11 +18,11 @@ function Link(props: LinkProps) {
                 ? "font-semibold text-primary"
                 : "text-muted-foreground"
             } cursor-pointer`}
-      onClick={() => handleSwitchActivePage(path)}
+      onClick={() => switchActivePage(path)}
     >
       {title}
     </div>
   );
 }
 
-export default Link;
+export default MenuLink;

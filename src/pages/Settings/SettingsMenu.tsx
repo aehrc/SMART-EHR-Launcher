@@ -1,24 +1,11 @@
-import { configItem } from "@/utils/configItem.ts";
-import Link from "@/components/Link.tsx";
+import { configItems } from "@/utils/configItem.tsx";
+import MenuLink from "@/components/MenuLink.tsx";
 
-interface SettingsMenuProps {
-  activePath: string;
-  handleSwitchActivePage: (newPath: string) => void;
-}
-
-function SettingsMenu(props: SettingsMenuProps) {
-  const { activePath, handleSwitchActivePage } = props;
-
+function SettingsMenu() {
   return (
-    <nav className="grid gap-4 text-sm">
-      {configItem.map(({ title, path }) => (
-        <Link
-          key={path}
-          title={title}
-          path={path}
-          activePath={activePath}
-          handleSwitchActivePage={handleSwitchActivePage}
-        />
+    <nav className="grid gap-4">
+      {configItems.map(({ title, path }) => (
+        <MenuLink key={path} title={title} path={path} />
       ))}
     </nav>
   );

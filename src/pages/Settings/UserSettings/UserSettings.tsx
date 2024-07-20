@@ -15,9 +15,7 @@ function UserSettings() {
           <CardDescription>
             Select the Practitioner to be used as the User launch context
           </CardDescription>
-          <div className="pt-2">
-            <UserTable />
-          </div>
+          <UserTable />
         </CardHeader>
       </Card>
     </div>

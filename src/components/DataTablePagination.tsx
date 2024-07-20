@@ -22,8 +22,8 @@ function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
   return (
-    <div className="flex items-center justify-between px-2">
-      <div className="flex-1 text-sm text-muted-foreground">
+    <div className="flex items-center justify-between">
+      <div className="flex-1 text-sm text-muted-foreground pl-1">
         {table.getRowCount()} results found
       </div>
       <div className="flex-1" />

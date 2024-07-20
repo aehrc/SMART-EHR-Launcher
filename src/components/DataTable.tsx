@@ -52,7 +52,7 @@ function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 pt-2">
       <DataTableToolbar table={table} selectedData={selectedData} />
       <div className="rounded-md border">
         <Table>

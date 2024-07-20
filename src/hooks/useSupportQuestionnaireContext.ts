@@ -15,7 +15,7 @@ interface SmartConfiguration {
   capabilities: string[];
 }
 
-export function useUnlockQuestionnaireSettings() {
+export function useSupportQuestionnaireContext() {
   const smartConfigurationEndpoint =
     getFhirServerBaseUrl() + "/.well-known/smart-configuration";
 
@@ -36,4 +36,4 @@ export function useUnlockQuestionnaireSettings() {
   return scopes.includes("launch/questionnaire");
 }
 
-export default useUnlockQuestionnaireSettings;
+export default useSupportQuestionnaireContext;

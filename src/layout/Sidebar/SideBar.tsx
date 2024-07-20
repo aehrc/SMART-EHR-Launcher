@@ -1,23 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
 import { Settings, User } from "lucide-react";
 import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
 import SideBarItem from "@/layout/Sidebar/SideBarItem.tsx";
 import SideBarLogo from "@/layout/Sidebar/SideBarLogo.tsx";
+import useActivePage from "@/hooks/useActivePage.ts";
 
 // root component
 function SideBar() {
-  const navigate = useNavigate();
-
-  const [activePath, setActivePath] = useState(window.location.pathname);
-  const { closeSnackbar } = useSnackbar();
-
-  function handleSwitchActivePage(newPath: string) {
-    setActivePath(newPath);
-    closeSnackbar();
-    navigate(newPath + window.location.search);
-  }
+  const { activePath, switchActivePage } = useActivePage();
 
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -28,7 +17,7 @@ function SideBar() {
             path: "/",
             Icon: <DataSaverOnIcon fontSize="large" />,
           }}
-          onSwitchActivePage={handleSwitchActivePage}
+          onSwitchActivePage={switchActivePage}
         />
 
         <SideBarItem
@@ -38,7 +27,7 @@ function SideBar() {
             Icon: <User />,
           }}
           activePath={activePath}
-          onSwitchActivePage={handleSwitchActivePage}
+          onSwitchActivePage={switchActivePage}
         />
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
@@ -49,7 +38,7 @@ function SideBar() {
             Icon: <Settings />,
           }}
           activePath={activePath}
-          onSwitchActivePage={handleSwitchActivePage}
+          onSwitchActivePage={switchActivePage}
         />
       </nav>
     </aside>

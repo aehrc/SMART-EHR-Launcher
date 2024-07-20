@@ -3,12 +3,17 @@ import { useContext } from "react";
 import { QuestionnaireContext } from "@/contexts/QuestionnaireContext.tsx";
 
 function QuestionnaireNavProfile() {
-  const { selectedQuestionnaire } = useContext(QuestionnaireContext);
+  const { selectedQuestionnaire, questionnaireContextEnabled } =
+    useContext(QuestionnaireContext);
 
   const questionnaireSelected =
     selectedQuestionnaire && selectedQuestionnaire.id
       ? selectedQuestionnaire.id
       : "Not selected";
+
+  if (!questionnaireContextEnabled) {
+    return null;
+  }
 
   return (
     <div className="flex items-center gap-2.5 h-16 px-2.5 bg-muted/80 rounded-lg">

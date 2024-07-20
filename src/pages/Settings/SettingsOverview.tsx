@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
-import LinkForm from "@/components/LinkForm.tsx";
+import FormLink from "@/components/FormLink.tsx";
 import {
   getFhirServerBaseUrl,
   getQuestionnaireServerBaseUrl,
@@ -41,7 +41,7 @@ function SettingsOverview() {
             <div className="grid gap-2">
               <div className="flex justify-between items-center">
                 <Label>Patient ID</Label>
-                <LinkForm
+                <FormLink
                   title="Edit in Patient config"
                   path="/settings/patient"
                 />
@@ -59,7 +59,7 @@ function SettingsOverview() {
             <div className="grid gap-2">
               <div className="flex justify-between items-center">
                 <Label>User ID</Label>
-                <LinkForm title="Edit in User config" path="/settings/user" />
+                <FormLink title="Edit in User config" path="/settings/user" />
               </div>
               <Input
                 disabled={true}
@@ -74,7 +74,7 @@ function SettingsOverview() {
             <div className="grid gap-2">
               <div className="flex justify-between items-center">
                 <Label>Client App URL</Label>
-                <LinkForm
+                <FormLink
                   title="Edit in App Launch config"
                   path="/settings/app-launch"
                 />
@@ -90,7 +90,7 @@ function SettingsOverview() {
             <div className="grid gap-2">
               <div className="flex justify-between items-center">
                 <Label>Questionnaire Context ID (optional)</Label>
-                <LinkForm
+                <FormLink
                   title="Edit in Questionnaire context config"
                   path="/settings/questionnaire"
                 />

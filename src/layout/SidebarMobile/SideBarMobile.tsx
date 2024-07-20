@@ -1,24 +1,13 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
 import { PanelLeft, Settings, User } from "lucide-react";
 import DataSaverOnIcon from "@mui/icons-material/DataSaverOn";
 import SideBarMobileLogo from "@/layout/SidebarMobile/SideBarMobileLogo.tsx";
 import SideBarMobileItem from "@/layout/SidebarMobile/SideBarMobileItem.tsx";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import useActivePage from "@/hooks/useActivePage.ts";
 
 function SideBarMobile() {
-  const navigate = useNavigate();
-
-  const [activePath, setActivePath] = useState(window.location.pathname);
-  const { closeSnackbar } = useSnackbar();
-
-  function handleSwitchActivePage(newPath: string) {
-    setActivePath(newPath);
-    closeSnackbar();
-    navigate(newPath + window.location.search);
-  }
+  const { switchActivePage } = useActivePage();
 
   return (
     <Sheet>
@@ -36,7 +25,7 @@ function SideBarMobile() {
               path: "/",
               Icon: <DataSaverOnIcon fontSize="large" />,
             }}
-            onSwitchActivePage={handleSwitchActivePage}
+            onSwitchActivePage={switchActivePage}
           />
 
           <SideBarMobileItem
@@ -45,8 +34,7 @@ function SideBarMobile() {
               path: "/",
               Icon: <User />,
             }}
-            activeTitle={activePath}
-            onSwitchActivePage={handleSwitchActivePage}
+            onSwitchActivePage={switchActivePage}
           />
           <SideBarMobileItem
             sidebarItem={{
@@ -54,8 +42,7 @@ function SideBarMobile() {
               path: "/settings",
               Icon: <Settings />,
             }}
-            activeTitle={activePath}
-            onSwitchActivePage={handleSwitchActivePage}
+            onSwitchActivePage={switchActivePage}
           />
         </nav>
       </SheetContent>

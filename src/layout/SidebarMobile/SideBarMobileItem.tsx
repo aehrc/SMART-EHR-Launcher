@@ -3,7 +3,6 @@ import { SidebarItem } from "@/utils/sidebarItem.ts";
 
 interface SideBarMobileItemProps {
   sidebarItem: SidebarItem;
-  activeTitle: string;
   onSwitchActivePage: (newPath: string) => void;
 }
 

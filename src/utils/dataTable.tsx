@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Patient, Practitioner, Questionnaire } from "fhir/r4";
+import { Encounter, Patient, Practitioner, Questionnaire } from "fhir/r4";
 import { Button } from "@/components/ui/button.tsx";
 import { MousePointerClick, X } from "lucide-react";
 
@@ -40,7 +40,7 @@ export function createPatientTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`text-xs px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded ${
               selectedPatientId === row.getValue("id")
                 ? getSelectedDataIDColorClass(row.original.resourceType)
                 : "bg-gray-100 text-gray-600"
@@ -138,7 +138,7 @@ export function createUserTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`text-xs px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded ${
               selectedUserId === row.getValue("id")
                 ? getSelectedDataIDColorClass(row.original.resourceType)
                 : "bg-gray-100 text-gray-600"
@@ -171,6 +171,76 @@ export function createUserTableColumns(
   ];
 }
 
+// Encounter functions and types
+export interface EncounterTableData {
+  id: string;
+  patientRef: string;
+  resourceType: string;
+}
+
+export function createEncounterTableColumns(
+  selectedEncounter: Encounter | null,
+  selectedPatient: Patient | null,
+  onButtonClick: (selectedId: string) => void
+): ColumnDef<EncounterTableData>[] {
+  const selectedEncounterId = selectedEncounter?.id ?? "";
+  const selectedPatientId = selectedPatient?.id ?? "";
+
+  return [
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div
+            className={`px-2 py-0.5 rounded ${
+              selectedEncounterId === row.getValue("id")
+                ? "bg-orange-100 text-orange-700"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {row.getValue("id")}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "patientRef",
+      header: "Patient Reference",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div
+            className={`px-2 py-0.5 rounded ${
+              selectedPatientId === row.getValue("id")
+                ? "bg-orange-100 text-orange-700"
+                : "bg-blue-100 text-blue-800"
+            }`}
+          >
+            {row.getValue("patientRef")}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Button
+          variant="ghost"
+          className="flex h-8 w-8 p-0 m-0"
+          onClick={() => onButtonClick(row.getValue("id"))}
+        >
+          {selectedEncounterId === row.getValue("id") ? (
+            <X className="h-4 w-4" />
+          ) : (
+            <MousePointerClick className="h-4 w-4" />
+          )}
+          <span className="sr-only">Set as context</span>
+        </Button>
+      ),
+    },
+  ];
+}
+
 // Questionnaire functions and types
 export interface QuestionnaireTableData {
   id: string;
@@ -186,7 +256,7 @@ export function createQuestionnaireTableColumns(
 
   return [
     {
-      accessorKey: "name", // Use "name" here as the key so that it's filterable in the table - See DataTableToolbar.tsx
+      accessorKey: "name",
       header: "Title",
       cell: ({ row }) => (
         <div
@@ -206,7 +276,7 @@ export function createQuestionnaireTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`text-xs px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded ${
               selectedQuestionnaireId === row.getValue("id")
                 ? getSelectedDataIDColorClass(row.original.resourceType)
                 : "bg-gray-100 text-gray-600"
@@ -261,6 +331,8 @@ export function getSelectedDataRowColorClass(resourceType: string | null) {
   if (!resourceType) {
     return "bg-gray-50 hover:bg-gray-50";
   }
+
+  console.log(resourceType);
 
   switch (resourceType) {
     case "Patient":

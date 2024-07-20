@@ -32,7 +32,7 @@ function DataTableBody(props: DataTableBodyProps<any, any>) {
           <TableRow
             key={row.id}
             data-state={row.getIsSelected() && "selected"}
-            className={` ${
+            className={`${
               selectedData?.id === row.getValue("id")
                 ? getSelectedDataRowColorClass(row.original.resourceType)
                 : ""
