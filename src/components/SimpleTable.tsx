@@ -7,6 +7,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -22,14 +23,18 @@ interface SimpleTableProps<TData, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
   isLoading: boolean;
+  initialSorting?: SortingState;
 }
 
 function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
-  const { data, columns, isLoading } = props;
+  const { data, columns, isLoading, initialSorting } = props;
 
   const table = useReactTable({
     data,
     columns,
+    initialState: {
+      sorting: initialSorting,
+    },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

@@ -1,169 +1,62 @@
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
+import useFetchMedicationRequests from "@/hooks/useFetchMedicationRequests.ts";
+import { nanoid } from "nanoid";
+import dayjs from "dayjs";
+import {
+  createMedicationTableColumns,
+  MedicationTableData,
+} from "@/utils/patientDetails.tsx";
 import {
   Card,
-  Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import { Bundle, MedicationRequest } from "fhir/r4";
-import moment, { Moment } from "moment";
-import TableFeedback from "../../TableFeedback.tsx";
-import { TokenContext } from "../../../contexts/TokenContext.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { getFhirServerBaseUrl } from "../../../utils/misc.ts";
-import { fetchResourceFromEHR } from "../../../api/fhirApi.ts";
-import useSourceFhirServer from "../../../hooks/useSourceFhirServer.ts";
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.tsx";
+import SimpleTable from "@/components/SimpleTable.tsx";
 
-interface Props {
+interface PatientMedicationsProps {
   patientId: string;
 }
 
-const tableHeaders = [
-  { id: "medication", label: "Medication" },
-  { id: "status", label: "Status" },
-  { id: "authored-on", label: "Authored On" },
-];
-
-function PatientMedications(props: Props) {
+function PatientMedications(props: PatientMedicationsProps) {
   const { patientId } = props;
 
-  const { token } = useContext(TokenContext);
+  const { medicationRequests, isInitialLoading } =
+    useFetchMedicationRequests(patientId);
 
-  const { serverUrl } = useSourceFhirServer();
+  const medicationTableData: MedicationTableData[] = useMemo(() => {
+    return medicationRequests.map((entry) => ({
+      id: entry.id ?? nanoid(),
+      medication:
+        entry.medicationCodeableConcept?.coding?.[0].display ??
+        entry.medicationCodeableConcept?.text ??
+        entry.medicationReference?.display ??
+        "",
+      status: entry.status ?? "",
+      authoredOn: entry.authoredOn ? dayjs(entry.authoredOn) : null,
+    }));
+  }, [medicationRequests]);
 
-  const {
-    data: bundle,
-    error,
-    isLoading,
-  } = useQuery<Bundle<MedicationRequest>>(
-    ["medications", serverUrl, patientId],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + `/MedicationRequest?patient=${patientId}`,
-        serverUrl,
-        token ?? ""
-      ),
-    { enabled: token !== null }
-  );
-
-  const medicationRequests: MedicationRequest[] = useMemo(
-    () => bundle?.entry?.map((p) => p.resource!) || [],
-    [bundle]
-  );
-
-  // construct questionnaire list items for data display
-  const medicationListItems: MedicationListItem[] = useMemo(
-    () => getAllergyListItems(medicationRequests),
-    [medicationRequests]
-  );
-
-  const isEmpty = medicationListItems.length === 0;
+  const columns = createMedicationTableColumns();
 
   return (
-    <>
-      <Typography fontSize={18} fontWeight="bold">
-        Medications
-      </Typography>
-      <Divider sx={{ mt: 1, mb: 2 }} />
-
-      <Card>
-        <TableContainer sx={{ minWidth: 600 }}>
-          <Table size="small">
-            <TableHead sx={{ bgcolor: "background.default" }}>
-              <TableRow sx={{ height: 42 }}>
-                {tableHeaders.map((headCell, index) => (
-                  <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
-                    <Typography variant="subtitle2" fontWeight="bold">
-                      {isLoading || isEmpty ? null : headCell.label}
-                    </Typography>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {medicationListItems.map((row) => {
-                const { id, name, status, authoredOn } = row;
-
-                return (
-                  <TableRow key={id} tabIndex={-1}>
-                    <TableCell scope="row" sx={{ pl: 4 }}>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ textTransform: "Capitalize" }}
-                      >
-                        {name}
-                      </Typography>
-                    </TableCell>
-
-                    <TableCell sx={{ pl: 0, textTransform: "capitalize" }}>
-                      {status}
-                    </TableCell>
-                    <TableCell sx={{ pl: 0 }}>{authoredOn}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-            {isEmpty || error || isLoading ? (
-              <TableFeedback
-                isEmpty={isEmpty}
-                loading={isLoading}
-                error={error}
-                resourceNamePlural={"medications"}
-              />
-            ) : null}
-          </Table>
-        </TableContainer>
-      </Card>
-    </>
+    <Card>
+      <CardHeader>
+        <CardTitle>Medications</CardTitle>
+        <CardDescription>
+          Patient's current prescriptions and medication request history
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <SimpleTable
+          data={medicationTableData}
+          columns={columns}
+          isLoading={isInitialLoading}
+        />
+      </CardContent>
+    </Card>
   );
-}
-
-// Helper interfaces and functions
-export interface MedicationListItem {
-  id: string;
-  name: string;
-  status: string;
-  authoredOn: string;
-  authoredOnMoment: Moment | null;
-}
-
-function getAllergyListItems(
-  medications: MedicationRequest[]
-): MedicationListItem[] {
-  if (!medications || medications.length === 0) return [];
-
-  return medications
-    .map((entry, i) => {
-      let authoredOnMoment = null;
-      if (entry.authoredOn) {
-        authoredOnMoment = moment(entry.authoredOn);
-      }
-
-      return {
-        id: entry.id ?? i.toString(),
-        name:
-          entry.medicationCodeableConcept?.text ??
-          entry.medicationCodeableConcept?.coding?.[0].display ??
-          "unknown",
-        status: entry.status ?? "unknown",
-        authoredOn: authoredOnMoment
-          ? authoredOnMoment.format("DD/MM/YYYY")
-          : "unknown",
-        authoredOnMoment: authoredOnMoment,
-      };
-    })
-    .sort((a, b) => {
-      if (a.authoredOnMoment === null || b.authoredOnMoment === null) {
-        return 0;
-      }
-
-      return b.authoredOnMoment.diff(a.authoredOnMoment);
-    });
 }
 
 export default PatientMedications;

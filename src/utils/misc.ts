@@ -11,7 +11,12 @@ import type {
   Practitioner as R4Practitioner,
 } from "fhir/r4";
 
-import moment from "moment";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const RE_YEAR = /\d{4}$/;
 const RE_MONTH_YEAR = /\d{4}-d{2}$/;
@@ -40,16 +45,15 @@ export function formatAge(patient: R2Patient | R3Patient | R4Patient): string {
   // If deceasedDateTime exists, we have a death date so show age as
   // the range between date of birth and date of death.
   if (patient.deceasedDateTime)
-    return moment
-      .duration(moment(patient.deceasedDateTime).diff(moment(dob)))
+    return dayjs
+      .duration(dayjs(patient.deceasedDateTime).diff(dayjs(dob)))
       .humanize();
-  // return moment(deceasedDateTime).diff(moment(dob), 'years') + " (deceased)";
 
-  //fix year or year-month style dates
+  // fix year or year-month style dates
   if (RE_YEAR.test(dob)) dob = dob + "-01";
   if (RE_MONTH_YEAR.test(dob)) dob = dob + "-01";
 
-  return moment(dob)
+  return dayjs(dob)
     .fromNow(true)
     .replace("a ", "1 ")
     .replace(/minutes?/, "min");

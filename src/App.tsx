@@ -15,6 +15,7 @@ import Settings from "@/pages/Settings/Settings.tsx";
 import EncounterContextProvider from "@/contexts/EncounterContext.tsx";
 import { settingsMenuItems } from "@/utils/settingsMenuItem.tsx";
 import PatientSummary from "@/pages/PatientSummary/PatientSummary.tsx";
+import EmbeddedApp from "@/pages/EmbeddedApp/EmbeddedApp.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +26,10 @@ function App() {
         {
           path: "",
           element: <PatientSummary />,
+        },
+        {
+          path: "embedded-app",
+          element: <EmbeddedApp />,
         },
         {
           path: "settings",

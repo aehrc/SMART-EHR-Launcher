@@ -8,6 +8,10 @@ import { Patient } from "fhir/r4";
 import PatientProfile from "@/pages/PatientSummary/PatientTabs/PatientProfile.tsx";
 import PatientProfileLoading from "@/pages/PatientSummary/PatientTabs/PatientProfileLoading.tsx";
 import PatientConditions from "@/pages/PatientSummary/PatientTabs/PatientConditions.tsx";
+import PatientMedications from "@/pages/PatientSummary/PatientTabs/PatientMedications.tsx";
+import PatientAllergies from "@/pages/PatientSummary/PatientTabs/PatientAllergies.tsx";
+import PatientProcedures from "@/pages/PatientSummary/PatientTabs/PatientProcedures.tsx";
+import PatientImmunizations from "@/pages/PatientSummary/PatientTabs/PatientImmunizations.tsx";
 
 interface PatientDetailsProps {
   patient: Patient | null;
@@ -48,6 +52,18 @@ function PatientDetails(props: PatientDetailsProps) {
             </TabsContent>
             <TabsContent value="conditions">
               <PatientConditions patientId={patient.id} />
+            </TabsContent>
+            <TabsContent value="medications">
+              <PatientMedications patientId={patient.id} />
+            </TabsContent>
+            <TabsContent value="allergies">
+              <PatientAllergies patientId={patient.id} />
+            </TabsContent>
+            <TabsContent value="procedures">
+              <PatientProcedures patientId={patient.id} />
+            </TabsContent>
+            <TabsContent value="immunisations">
+              <PatientImmunizations patientId={patient.id} />
             </TabsContent>
           </>
         ) : (

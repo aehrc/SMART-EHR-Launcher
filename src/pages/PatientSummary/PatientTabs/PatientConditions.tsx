@@ -50,6 +50,7 @@ function PatientConditions(props: PatientConditionsProps) {
           data={conditionTableData}
           columns={columns}
           isLoading={isInitialLoading}
+          initialSorting={[{ id: "recordedDate", desc: true }]}
         />
       </CardContent>
     </Card>

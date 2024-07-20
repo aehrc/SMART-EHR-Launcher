@@ -30,7 +30,7 @@ export function createPatientTableColumns(
               : ""
           }`}
         >
-          {row.getValue("name")}
+          {row.getValue("name") ?? ""}
         </div>
       ),
     },
@@ -46,7 +46,7 @@ export function createPatientTableColumns(
                 : "bg-gray-100 text-gray-600"
             }`}
           >
-            {row.getValue("id")}
+            {row.getValue("id") ?? ""}
           </div>
         </div>
       ),
@@ -62,7 +62,7 @@ export function createPatientTableColumns(
               : "text-muted-foreground"
           }`}
         >
-          {row.getValue("gender")}
+          {row.getValue("gender") ?? ""}
         </div>
       ),
     },
@@ -77,7 +77,7 @@ export function createPatientTableColumns(
               : "text-muted-foreground"
           }`}
         >
-          {row.getValue("dob")}
+          {row.getValue("dob") ?? ""}
         </div>
       ),
     },
@@ -128,7 +128,7 @@ export function createUserTableColumns(
               : ""
           }`}
         >
-          {row.getValue("name")}
+          {row.getValue("name") ?? ""}
         </div>
       ),
     },
@@ -144,7 +144,7 @@ export function createUserTableColumns(
                 : "bg-gray-100 text-gray-600"
             }`}
           >
-            {row.getValue("id")}
+            {row.getValue("id") ?? ""}
           </div>
         </div>
       ),
@@ -199,7 +199,7 @@ export function createEncounterTableColumns(
                 : "bg-gray-100 text-gray-600"
             }`}
           >
-            {row.getValue("id")}
+            {row.getValue("id") ?? ""}
           </div>
         </div>
       ),
@@ -216,7 +216,7 @@ export function createEncounterTableColumns(
                 : "bg-blue-100 text-blue-800"
             }`}
           >
-            {row.getValue("patientRef")}
+            {row.getValue("patientRef") ?? ""}
           </div>
         </div>
       ),
@@ -266,7 +266,7 @@ export function createQuestionnaireTableColumns(
               : ""
           }`}
         >
-          {row.getValue("name")}
+          {row.getValue("name") ?? ""}
         </div>
       ),
     },
@@ -282,7 +282,7 @@ export function createQuestionnaireTableColumns(
                 : "bg-gray-100 text-gray-600"
             }`}
           >
-            {row.getValue("id")}
+            {row.getValue("id") ?? ""}
           </div>
         </div>
       ),

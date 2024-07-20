@@ -19,7 +19,7 @@ import { memo } from "react";
 
 const DataTableEmpty = memo(function DataTableEmpty() {
   return (
-    <div className="flex flex-col items-center justify-center p-16 gap-3">
+    <div className="flex flex-col items-center justify-center p-3 gap-2">
       <svg width="120" height="100" viewBox="0 0 184 152" focusable="false">
         <g fill="none" fillRule="evenodd">
           <g transform="translate(24 31.67)">
