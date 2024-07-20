@@ -6,7 +6,7 @@ import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 import { UserContext } from "../../contexts/UserContext.tsx";
-import { getPractitioner } from "../../utils/getResources.ts";
+import { getResource } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { BriefcaseMedical } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
@@ -34,7 +34,7 @@ function UserNavProfile() {
     { enabled: token !== null }
   );
 
-  const newUser = getPractitioner(resource);
+  const newUser = getResource<Practitioner>(resource, "Practitioner");
 
   useEffect(() => {
     if (!newUser) {

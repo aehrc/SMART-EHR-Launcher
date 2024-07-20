@@ -5,13 +5,13 @@ import EncounterSettings from "@/pages/Settings/EncounterSettings/EncounterSetti
 import AppLaunchSettings from "@/pages/Settings/AppLaunchSettings/AppLaunchSettings.tsx";
 import QuestionnaireSettings from "@/pages/Settings/QuestionnaireSettings/QuestionnaireSettings.tsx";
 
-export interface ConfigItem {
+export interface SettingsMenuItem {
   title: string;
   path: string;
   element: JSX.Element;
 }
 
-export const configItems: ConfigItem[] = [
+export const settingsMenuItems: SettingsMenuItem[] = [
   {
     title: "Overview",
     path: "/settings",

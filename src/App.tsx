@@ -13,7 +13,8 @@ import {
 import DashboardLayout from "@/layout/DashboardLayout.tsx";
 import Settings from "@/pages/Settings/Settings.tsx";
 import EncounterContextProvider from "@/contexts/EncounterContext.tsx";
-import { configItems } from "@/utils/configItem.tsx";
+import { settingsMenuItems } from "@/utils/settingsMenuItem.tsx";
+import PatientSummary from "@/pages/PatientSummary/PatientSummary.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -23,12 +24,12 @@ function App() {
       children: [
         {
           path: "",
-          element: <></>,
+          element: <PatientSummary />,
         },
         {
           path: "settings",
           element: <Settings />,
-          children: configItems.map((item) => ({
+          children: settingsMenuItems.map((item) => ({
             path: item.path.replace("/settings", "").slice(1) || "", // Transform the path
             element: item.element,
           })),

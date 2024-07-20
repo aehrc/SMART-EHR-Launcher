@@ -20,6 +20,7 @@ import type { Bundle, Encounter } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getFhirServerBaseUrl } from "@/utils/misc.ts";
+import { getResources } from "@/utils/getResources.ts";
 
 interface useFetchEncountersReturnParams {
   encounters: Encounter[];
@@ -30,7 +31,7 @@ function useFetchEncounters(patientId: string): useFetchEncountersReturnParams {
   const numOfSearchEntries = 500;
 
   // Note: numOfSearchEntries not used in Sparked reference server due to lack of support for _count
-  let queryUrl = `/Encounter?patient=${patientId}`;
+  const queryUrl = `/Encounter?patient=${patientId}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["encounters" + patientId + numOfSearchEntries.toString(), queryUrl],
@@ -39,7 +40,7 @@ function useFetchEncounters(patientId: string): useFetchEncountersReturnParams {
   );
 
   const encounters: Encounter[] = useMemo(
-    () => getEncounters(bundle),
+    () => getResources<Encounter>(bundle, "Encounter"),
     [bundle]
   );
 
@@ -47,20 +48,6 @@ function useFetchEncounters(patientId: string): useFetchEncountersReturnParams {
     encounters,
     isInitialLoading,
   };
-}
-
-function getEncounters(bundle: Bundle | undefined): Encounter[] {
-  if (!bundle || !bundle.entry || bundle.entry.length === 0) return [];
-
-  return bundle.entry
-    .filter(
-      (entry) =>
-        entry.resource?.resourceType &&
-        entry.resource?.resourceType === "Encounter"
-    )
-    .map(
-      (entry) => entry.resource as Encounter // non-encounter resources are filtered
-    );
 }
 
 export default useFetchEncounters;

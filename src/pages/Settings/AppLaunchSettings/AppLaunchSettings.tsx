@@ -43,7 +43,7 @@ function AppLaunchSettings() {
             {/* Pre-configured apps */}
             <AppLaunchAppsSettings />
 
-            <Separator className="my-1" />
+            <Separator className="my-2" />
 
             {/* App Launch Config */}
             <div className="grid gap-2">

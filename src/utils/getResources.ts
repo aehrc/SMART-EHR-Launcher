@@ -1,24 +1,25 @@
-import { Patient, Practitioner } from "fhir/r4";
+import { type Bundle } from "fhir/r4";
 
-export function getPatient(resource: any): Patient | null {
-  let patient: Patient | null = null;
+export function getResource<T>(resource: any, resourceType: string): T | null {
   if (resource) {
-    patient =
-      resource.resourceType === "Patient"
-        ? resource
-        : (resource.entry?.[0]?.resource as Patient);
+    return resource.resourceType === resourceType
+      ? (resource as T)
+      : (resource.entry?.[0]?.resource as T) || null;
   }
-  return patient;
+  return null;
 }
 
-export function getPractitioner(resource: any): Practitioner | null {
-  let newPractitioner: Practitioner | null = null;
-  if (resource) {
-    newPractitioner =
-      resource.resourceType === "Practitioner"
-        ? resource
-        : (resource.entry?.[0]?.resource as Practitioner);
-  }
+export function getResources<T>(
+  bundle: Bundle | undefined,
+  resourceType: string
+): T[] {
+  if (!bundle || !bundle.entry || bundle.entry.length === 0) return [];
 
-  return newPractitioner;
+  return bundle.entry
+    .filter(
+      (entry) =>
+        entry.resource?.resourceType &&
+        entry.resource.resourceType === resourceType
+    )
+    .map((entry) => entry.resource as T);
 }

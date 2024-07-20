@@ -16,36 +16,35 @@
  */
 
 import { useQuery } from "@tanstack/react-query";
-import type { Bundle, Practitioner } from "fhir/r4";
+import type { Bundle, Condition } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { getResources } from "@/utils/getResources.ts";
 
-interface useFetchPractitionersReturnParams {
-  practitioners: Practitioner[];
+interface useFetchConditionsReturnParams {
+  conditions: Condition[];
   isInitialLoading: boolean;
 }
 
-function useFetchPractitioners(): useFetchPractitionersReturnParams {
-  const numOfSearchEntries = 500;
-
-  const queryUrl = `/Practitioner?_count=${numOfSearchEntries}`;
+function useFetchConditions(patientId: string): useFetchConditionsReturnParams {
+  const queryUrl = `/Condition?patient=${patientId}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
-    ["practitioners" + numOfSearchEntries.toString(), queryUrl],
-    () => fetchResourceFromEHR(getFhirServerBaseUrl() + queryUrl, "", "")
+    ["conditions" + patientId, queryUrl],
+    () => fetchResourceFromEHR(getFhirServerBaseUrl() + queryUrl, "", ""),
+    { enabled: patientId !== "" }
   );
 
-  const practitioners: Practitioner[] = useMemo(
-    () => getResources<Practitioner>(bundle, "Practitioner"),
+  const conditions: Condition[] = useMemo(
+    () => getResources<Condition>(bundle, "Condition"),
     [bundle]
   );
 
   return {
-    practitioners,
+    conditions,
     isInitialLoading,
   };
 }
 
-export default useFetchPractitioners;
+export default useFetchConditions;

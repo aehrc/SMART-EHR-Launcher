@@ -20,6 +20,7 @@ import type { Bundle, Patient } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getFhirServerBaseUrl } from "@/utils/misc.ts";
+import { getResources } from "@/utils/getResources.ts";
 
 interface useFetchPatientsReturnParams {
   patients: Patient[];
@@ -29,33 +30,22 @@ interface useFetchPatientsReturnParams {
 function useFetchPatients(): useFetchPatientsReturnParams {
   const numOfSearchEntries = 500;
 
-  let queryUrl = `/Patient?_count=${numOfSearchEntries}`;
+  const queryUrl = `/Patient?_count=${numOfSearchEntries}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["patients" + numOfSearchEntries.toString(), queryUrl],
     () => fetchResourceFromEHR(getFhirServerBaseUrl() + queryUrl, "", "")
   );
 
-  const patients: Patient[] = useMemo(() => getPatients(bundle), [bundle]);
+  const patients: Patient[] = useMemo(
+    () => getResources<Patient>(bundle, "Patient"),
+    [bundle]
+  );
 
   return {
     patients,
     isInitialLoading,
   };
-}
-
-function getPatients(bundle: Bundle | undefined): Patient[] {
-  if (!bundle || !bundle.entry || bundle.entry.length === 0) return [];
-
-  return bundle.entry
-    .filter(
-      (entry) =>
-        entry.resource?.resourceType &&
-        entry.resource?.resourceType === "Patient"
-    )
-    .map(
-      (entry) => entry.resource as Patient // non-patient resources are filtered
-    );
 }
 
 export default useFetchPatients;

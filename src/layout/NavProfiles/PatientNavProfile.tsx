@@ -6,7 +6,7 @@ import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { Bundle, Patient } from "fhir/r4";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
-import { getPatient } from "../../utils/getResources.ts";
+import { getResource } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { User } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
@@ -33,7 +33,7 @@ function PatientNavProfile() {
     { enabled: token !== null }
   );
 
-  const newPatient = getPatient(resource);
+  const newPatient = getResource<Patient>(resource, "Patient");
 
   useEffect(() => {
     if (!newPatient) {

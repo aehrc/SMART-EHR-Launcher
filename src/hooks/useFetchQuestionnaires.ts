@@ -20,6 +20,7 @@ import type { Bundle, Questionnaire } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getQuestionnaireServerBaseUrl } from "@/utils/misc.ts";
+import { getResources } from "@/utils/getResources.ts";
 
 interface useFetchQuestionnairesReturnParams {
   questionnaires: Questionnaire[];
@@ -38,7 +39,7 @@ function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
   );
 
   const questionnaires: Questionnaire[] = useMemo(
-    () => getQuestionnaires(bundle),
+    () => getResources<Questionnaire>(bundle, "Questionnaire"),
     [bundle]
   );
 
@@ -46,20 +47,6 @@ function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
     questionnaires,
     isInitialLoading,
   };
-}
-
-function getQuestionnaires(bundle: Bundle | undefined): Questionnaire[] {
-  if (!bundle || !bundle.entry || bundle.entry.length === 0) return [];
-
-  return bundle.entry
-    .filter(
-      (entry) =>
-        entry.resource?.resourceType &&
-        entry.resource?.resourceType === "Questionnaire"
-    )
-    .map(
-      (entry) => entry.resource as Questionnaire // non-questionnaire resources are filtered
-    );
 }
 
 export default useFetchQuestionnaires;

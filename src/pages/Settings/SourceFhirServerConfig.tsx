@@ -23,7 +23,7 @@ import { enqueueSnackbar } from "notistack";
 import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { Patient, Practitioner } from "fhir/r4";
 import { UserContext } from "../../contexts/UserContext.tsx";
-import { getPatient, getPractitioner } from "../../utils/getResources.ts";
+import { getResource } from "../../utils/getResources.ts";
 
 function SourceFhirServerConfig() {
   const { serverUrl, updateServerUrl } = useSourceFhirServer();
@@ -115,7 +115,7 @@ function SourceFhirServerConfig() {
       return null;
     }
 
-    const newPatient = getPatient(patientResponse);
+    const newPatient = getResource<Patient>(patientResponse, "Patient");
     if (!newPatient) {
       return null;
     }
@@ -147,8 +147,7 @@ function SourceFhirServerConfig() {
       return null;
     }
 
-    console.log(userResponse);
-    const newUser = getPractitioner(userResponse);
+    const newUser = getResource<Practitioner>(userResponse, "Practitioner");
     if (!newUser) {
       return null;
     }
