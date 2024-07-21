@@ -17,10 +17,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { Bundle, Condition } from "fhir/r4";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { getResources } from "@/utils/getResources.ts";
+import { TokenContext } from "@/contexts/TokenContext.tsx";
 
 interface useFetchConditionsReturnParams {
   conditions: Condition[];
@@ -30,9 +31,16 @@ interface useFetchConditionsReturnParams {
 function useFetchConditions(patientId: string): useFetchConditionsReturnParams {
   const queryUrl = `/Condition?patient=${patientId}`;
 
+  const { fhirServerToken } = useContext(TokenContext);
+
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["conditions" + patientId, queryUrl],
-    () => fetchResourceFromEHR(getFhirServerBaseUrl() + queryUrl, "", ""),
+    () =>
+      fetchResourceFromEHR(
+        getFhirServerBaseUrl() + queryUrl,
+        "",
+        fhirServerToken
+      ),
     { enabled: patientId !== "" }
   );
 

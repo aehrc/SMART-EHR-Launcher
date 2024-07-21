@@ -14,6 +14,7 @@ import type {
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { FHIR_SERVER_URL, FORMS_SERVER_URL } from "@/globals.ts";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -98,9 +99,9 @@ export function humanName(human: FHIRPerson, separator = " "): string {
 }
 
 export function getFhirServerBaseUrl() {
-  return `https://fhir.hl7.org.au/aucore/fhir/DEFAULT`;
+  return FHIR_SERVER_URL;
 }
 
 export function getQuestionnaireServerBaseUrl() {
-  return `https://smartforms.csiro.au/api/fhir`;
+  return FORMS_SERVER_URL;
 }

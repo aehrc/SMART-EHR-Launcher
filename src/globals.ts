@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Commonwealth Scientific and Industrial Research
+ * Copyright 2024 Commonwealth Scientific and Industrial Research
  * Organisation (CSIRO) ABN 41 687 119 230.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,20 +15,11 @@
  * limitations under the License.
  */
 
-/// <reference types="vite/client" />
+export const FHIR_SERVER_URL =
+  import.meta.env.VITE_FHIR_SERVER_URL ?? "https://proxy.smartforms.io/fhir";
+export const FHIR_SERVER_TOKEN = import.meta.env.VITE_FHIR_SERVER_TOKEN ?? "";
 
-declare module "*.png";
-declare module "*.svg";
-declare module "*.jpeg";
-declare module "*.jpg";
-
-interface ImportMetaEnv {
-  readonly VITE_FHIR_SERVER_URL: string;
-  readonly VITE_FHIR_SERVER_TOKEN: string;
-  readonly VITE_FORMS_SERVER_URL: string;
-  readonly VITE_FORMS_SERVER_TOKEN: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
-}
+export const FORMS_SERVER_URL =
+  import.meta.env.VITE_FORMS_SERVER_URL ??
+  "https://smartforms.csiro.au/api/fhir";
+export const FORMS_SERVER_TOKEN = import.meta.env.VITE_FORMS_SERVER_TOKEN ?? "";

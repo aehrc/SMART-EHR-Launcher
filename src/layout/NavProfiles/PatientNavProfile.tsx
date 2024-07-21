@@ -15,7 +15,7 @@ function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
   const { serverUrl } = useSourceFhirServer();
 
-  const { token } = useContext(TokenContext);
+  const { fhirServerToken } = useContext(TokenContext);
   const { selectedPatient, setSelectedPatient } = useContext(PatientContext);
 
   const patientId = launch.patient;
@@ -27,10 +27,8 @@ function PatientNavProfile() {
     data: resource,
     error,
     isLoading,
-  } = useQuery<Patient | Bundle>(
-    ["patientProfile", serverUrl, patientId],
-    () => fetchResourceFromEHR(queryEndpoint, serverUrl, token ?? ""),
-    { enabled: token !== null }
+  } = useQuery<Patient | Bundle>(["patientProfile", serverUrl, patientId], () =>
+    fetchResourceFromEHR(queryEndpoint, serverUrl, fhirServerToken)
   );
 
   const newPatient = getResource<Patient>(resource, "Patient");

@@ -1,45 +1,26 @@
 import { createContext, ReactNode } from "react";
+import { FHIR_SERVER_TOKEN, FORMS_SERVER_TOKEN } from "@/globals.ts";
 
 interface TokenContextType {
-  token: string | null;
+  fhirServerToken: string;
+  formsServerToken: string;
 }
 
 export const TokenContext = createContext<TokenContextType>({
-  token: "",
+  fhirServerToken: "",
+  formsServerToken: "",
 });
-
-interface EnvVars {
-  NODE_ENV: string;
-  PICKER_ORIGIN: string;
-  GOOGLE_ANALYTICS_ID: string;
-  FHIR_SERVER_R2: string;
-  FHIR_SERVER_R3: string;
-  FHIR_SERVER_R4: string;
-  ACCESS_TOKEN: string;
-  VERSION: string;
-  COMMIT: string;
-}
 
 const TokenContextProvider = (props: { children: ReactNode }) => {
   const { children } = props;
 
-  // const { data } = useQuery(["env"], () =>
-  //   axios(envEndpoint).then((res) => res.data)
-  // );
-  //
-  // if (data) {
-  //   try {
-  //     const env: EnvVars = JSON.parse(
-  //       data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1)
-  //     );
-  //     token = env.ACCESS_TOKEN;
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-
   return (
-    <TokenContext.Provider value={{ token: "" }}>
+    <TokenContext.Provider
+      value={{
+        fhirServerToken: FHIR_SERVER_TOKEN,
+        formsServerToken: FORMS_SERVER_TOKEN,
+      }}
+    >
       {children}
     </TokenContext.Provider>
   );

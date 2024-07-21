@@ -17,10 +17,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { Bundle, Encounter } from "fhir/r4";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { getResources } from "@/utils/getResources.ts";
+import { TokenContext } from "@/contexts/TokenContext.tsx";
 
 interface useFetchEncountersReturnParams {
   encounters: Encounter[];
@@ -30,12 +31,19 @@ interface useFetchEncountersReturnParams {
 function useFetchEncounters(patientId: string): useFetchEncountersReturnParams {
   const numOfSearchEntries = 500;
 
+  const { fhirServerToken } = useContext(TokenContext);
+
   // Note: numOfSearchEntries not used in Sparked reference server due to lack of support for _count
   const queryUrl = `/Encounter?patient=${patientId}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["encounters" + patientId + numOfSearchEntries.toString(), queryUrl],
-    () => fetchResourceFromEHR(getFhirServerBaseUrl() + queryUrl, "", ""),
+    () =>
+      fetchResourceFromEHR(
+        getFhirServerBaseUrl() + queryUrl,
+        "",
+        fhirServerToken
+      ),
     { enabled: patientId !== "" }
   );
 

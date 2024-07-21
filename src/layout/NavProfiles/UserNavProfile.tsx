@@ -15,7 +15,7 @@ function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
   const { serverUrl } = useSourceFhirServer();
 
-  const { token } = useContext(TokenContext);
+  const { fhirServerToken } = useContext(TokenContext);
   const { selectedUser, setSelectedUser } = useContext(UserContext);
 
   const userId = launch.provider;
@@ -30,8 +30,7 @@ function UserNavProfile() {
     isLoading,
   } = useQuery<Practitioner | Bundle>(
     ["practitionerProfile", serverUrl, userId],
-    () => fetchResourceFromEHR(queryEndpoint, serverUrl, token ?? ""),
-    { enabled: token !== null }
+    () => fetchResourceFromEHR(queryEndpoint, serverUrl, fhirServerToken)
   );
 
   const newUser = getResource<Practitioner>(resource, "Practitioner");
