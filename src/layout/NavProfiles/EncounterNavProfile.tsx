@@ -7,7 +7,7 @@ function EncounterNavProfile() {
   const encounterId = launch.encounter;
 
   let encounterSelected =
-    encounterId && encounterId !== "AUTO" ? encounterId : "Not selected";
+    encounterId && encounterId !== "" ? encounterId : "Not selected";
 
   return (
     <div className="flex items-center gap-2.5 h-16 px-2.5 bg-muted/80 rounded-lg">

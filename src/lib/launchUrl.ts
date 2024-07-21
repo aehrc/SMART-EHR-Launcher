@@ -6,7 +6,7 @@ export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
   launch_type: "provider-ehr",
   patient: "",
   provider: "",
-  encounter: "AUTO",
+  encounter: "",
   skip_login: false,
   skip_auth: false,
   sim_ehr: false,
@@ -68,7 +68,7 @@ export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
   return userLaunchUrl;
 }
 
-export function getAuCoreTestServerLaunchUrl(
+export function getSparkedAuCoreServerLaunchUrl(
   query: LauncherQuery,
   launch: LaunchParams
 ) {
@@ -77,9 +77,9 @@ export function getAuCoreTestServerLaunchUrl(
     JSON.stringify({
       patient: launch.patient,
       practitioner: launch.provider,
+      encounter: launch.encounter,
     })
   );
-  console.log(launchCode);
 
   // FHIR baseUrl for EHR launches
   const iss = getFhirServerBaseUrl();

@@ -1,6 +1,6 @@
 import useLauncherQuery from "../../hooks/useLauncherQuery";
 import { getValidationErrors } from "../../lib/URLValidation";
-import { getAuCoreTestServerLaunchUrl } from "../../lib/launchUrl";
+import { getSparkedAuCoreServerLaunchUrl } from "../../lib/launchUrl";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import {
   Tooltip,
@@ -16,7 +16,7 @@ function LaunchButton() {
 
   const { switchActivePage } = useActivePage();
 
-  const userLaunchUrl = getAuCoreTestServerLaunchUrl(query, launch);
+  const userLaunchUrl = getSparkedAuCoreServerLaunchUrl(query, launch);
 
   const isEmbeddedView = launch.is_embedded_view;
   const appName = query.app_name !== "" ? query.app_name : "SMART app";
