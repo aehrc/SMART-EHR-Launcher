@@ -27,9 +27,11 @@ import { humanName } from "@/utils/misc.ts";
 import { nanoid } from "nanoid";
 import { PatientContext } from "@/contexts/PatientContext.tsx";
 import useFetchPatients from "@/hooks/useFetchPatients.ts";
+import { EncounterContext } from "@/contexts/EncounterContext.tsx";
 
 function PatientTable() {
   const { selectedPatient, setSelectedPatient } = useContext(PatientContext);
+  const { setSelectedEncounter } = useContext(EncounterContext);
   const { setQuery } = useLauncherQuery();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -59,14 +61,17 @@ function PatientTable() {
       setSelectedPatient(null);
       setQuery({
         patient: undefined,
+        encounter: undefined,
       });
       return;
     }
 
     // Set selected patient and set query
     setSelectedPatient(newPatient);
+    setSelectedEncounter(null);
     setQuery({
       patient: newPatient.id,
+      encounter: undefined,
     });
     enqueueSnackbar(`Patient changed to ${humanName(newPatient)} `, {
       variant: "success",
