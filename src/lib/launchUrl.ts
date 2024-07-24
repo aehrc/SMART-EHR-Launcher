@@ -73,13 +73,20 @@ export function getSparkedAuCoreServerLaunchUrl(
   launch: LaunchParams
 ) {
   const { launch_url } = query;
-  const launchCode = base64UrlEncode(
-    JSON.stringify({
-      patient: launch.patient,
-      practitioner: launch.provider,
+
+  let launchContexts: object = {
+    patient: launch.patient,
+    practitioner: launch.provider,
+  };
+
+  if (launch.encounter) {
+    launchContexts = {
+      ...launchContexts,
       encounter: launch.encounter,
-    })
-  );
+    };
+  }
+
+  const launchCode = base64UrlEncode(JSON.stringify(launchContexts));
 
   // FHIR baseUrl for EHR launches
   const iss = getFhirServerBaseUrl();
