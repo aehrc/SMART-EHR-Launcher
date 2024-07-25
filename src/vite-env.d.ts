@@ -24,7 +24,9 @@ declare module "*.jpg";
 
 interface ImportMetaEnv {
   readonly VITE_FHIR_SERVER_URL: string;
-  readonly VITE_FHIR_SERVER_TOKEN: string;
+  readonly VITE_LAUNCH_SCOPE: string;
+  readonly VITE_LAUNCH_CLIENT_ID: string;
+
   readonly VITE_FORMS_SERVER_URL: string;
   readonly VITE_FORMS_SERVER_TOKEN: string;
 }

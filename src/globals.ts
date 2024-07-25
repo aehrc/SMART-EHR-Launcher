@@ -17,7 +17,11 @@
 
 export const FHIR_SERVER_URL =
   import.meta.env.VITE_FHIR_SERVER_URL ?? "https://proxy.smartforms.io/fhir";
-export const FHIR_SERVER_TOKEN = import.meta.env.VITE_FHIR_SERVER_TOKEN ?? "";
+export const LAUNCH_SCOPE =
+  import.meta.env.VITE_LAUNCH_SCOPE ??
+  "fhirUser offline_access openid profile launch/practitioner user/*.rs";
+export const LAUNCH_CLIENT_ID =
+  import.meta.env.VITE_LAUNCH_CLIENT_ID ?? "smartforms-ehr";
 
 export const FORMS_SERVER_URL =
   import.meta.env.VITE_FORMS_SERVER_URL ??

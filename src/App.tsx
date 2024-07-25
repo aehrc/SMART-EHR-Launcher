@@ -10,18 +10,23 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import DashboardLayout from "@/layout/DashboardLayout.tsx";
 import Settings from "@/pages/Settings/Settings.tsx";
 import EncounterContextProvider from "@/contexts/EncounterContext.tsx";
 import { settingsMenuItems } from "@/utils/settingsMenuItem.tsx";
 import PatientSummary from "@/pages/PatientSummary/PatientSummary.tsx";
 import EmbeddedApp from "@/pages/EmbeddedApp/EmbeddedApp.tsx";
+import AuthCallback from "@/pages/AuthCallback/AuthCallback.tsx";
+import Home from "@/layout/Home.tsx";
 
 function App() {
   const router = createBrowserRouter([
     {
+      path: "authcallback",
+      element: <AuthCallback />,
+    },
+    {
       path: "/",
-      element: <DashboardLayout />,
+      element: <Home />,
       children: [
         {
           path: "",

@@ -332,8 +332,6 @@ export function getSelectedDataRowColorClass(resourceType: string | null) {
     return "bg-gray-50 hover:bg-gray-50";
   }
 
-  console.log(resourceType);
-
   switch (resourceType) {
     case "Patient":
       return "bg-blue-50 hover:bg-blue-50";
