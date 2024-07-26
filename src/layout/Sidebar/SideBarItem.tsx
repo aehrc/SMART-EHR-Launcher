@@ -22,7 +22,9 @@ function SideBarItem(props: SideBarItemProps) {
         <div
           onClick={() => onSwitchActivePage(path)}
           className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-            activePath === path ? "text-primary" : "text-muted-foreground"
+            activePath.startsWith(path)
+              ? "text-primary"
+              : "text-muted-foreground"
           } transition-colors cursor-pointer hover:text-secondary-foreground md:h-8 md:w-8`}
         >
           {cloneElement(Icon, { className: "h-5 w-5" })}

@@ -73,7 +73,7 @@ function PatientTable() {
       patient: newPatient.id,
       encounter: undefined,
     });
-    enqueueSnackbar(`Patient changed to ${humanName(newPatient)} `, {
+    enqueueSnackbar(`Patient set to ${humanName(newPatient)} `, {
       variant: "success",
       autoHideDuration: 3000,
     });

@@ -18,6 +18,7 @@ import EmbeddedApp from "@/pages/EmbeddedApp/EmbeddedApp.tsx";
 import AuthCallback from "@/pages/AuthCallback/AuthCallback.tsx";
 import Home from "@/layout/Home.tsx";
 import FhirServerContextProvider from "@/contexts/FhirServerContext.tsx";
+import CloseSnackbar from "@/components/CloseSnackbar.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -54,25 +55,25 @@ function App() {
   ]);
 
   return (
-    <SnackbarProvider maxSnack={1}>
-      <FhirServerContextProvider>
-        <FormsServerContextProvider>
-          <ActivePageContextProvider>
-            <PatientContextProvider>
-              <UserContextProvider>
-                <EncounterContextProvider>
-                  <QuestionnaireContextProvider>
-                    <TooltipProvider delayDuration={100}>
+    <TooltipProvider delayDuration={100}>
+      <SnackbarProvider maxSnack={1} action={CloseSnackbar}>
+        <FhirServerContextProvider>
+          <FormsServerContextProvider>
+            <ActivePageContextProvider>
+              <PatientContextProvider>
+                <UserContextProvider>
+                  <EncounterContextProvider>
+                    <QuestionnaireContextProvider>
                       <RouterProvider router={router} />
-                    </TooltipProvider>
-                  </QuestionnaireContextProvider>
-                </EncounterContextProvider>
-              </UserContextProvider>
-            </PatientContextProvider>
-          </ActivePageContextProvider>
-        </FormsServerContextProvider>
-      </FhirServerContextProvider>
-    </SnackbarProvider>
+                    </QuestionnaireContextProvider>
+                  </EncounterContextProvider>
+                </UserContextProvider>
+              </PatientContextProvider>
+            </ActivePageContextProvider>
+          </FormsServerContextProvider>
+        </FhirServerContextProvider>
+      </SnackbarProvider>
+    </TooltipProvider>
   );
 }
 

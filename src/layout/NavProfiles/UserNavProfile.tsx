@@ -63,7 +63,7 @@ function UserNavProfile() {
             <Skeleton className="h-5 w-32 bg-gray-200 animate-pulse" />
           </div>
         ) : error || !selectedUser ? (
-          <div className="text-sm font-medium text-red-500">
+          <div className="text-sm font-medium text-gray-600">
             User not selected
           </div>
         ) : (

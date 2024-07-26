@@ -59,7 +59,7 @@ function PatientNavProfile() {
             <Skeleton className="h-2 w-32 bg-gray-200 animate-pulse" />
           </div>
         ) : error || !selectedPatient ? (
-          <div className="text-sm font-medium text-red-500">
+          <div className="text-sm font-medium text-gray-600">
             Patient not selected
           </div>
         ) : (

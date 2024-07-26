@@ -22,7 +22,7 @@ function DataTableToolbar<TData>(props: DataTableToolbarProps<TData>) {
           placeholder="Filter results... (client side)"
           value={table.getState().globalFilter ?? ""}
           onChange={(event) => table.setGlobalFilter(event.target.value)}
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[200px] sm:w-[250px] md:w-[300px]"
         />
         {isFiltered && (
           <Button

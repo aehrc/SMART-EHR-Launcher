@@ -79,7 +79,7 @@ function EncounterTable(props: EncounterTableProps) {
     setQuery({
       encounter: newEncounter.id,
     });
-    enqueueSnackbar(`Encounter changed to ${newEncounter.id} `, {
+    enqueueSnackbar(`Encounter set to ${newEncounter.id} `, {
       variant: "success",
       autoHideDuration: 3000,
     });

@@ -65,7 +65,7 @@ function UserTable() {
     setQuery({
       provider: newUser.id,
     });
-    enqueueSnackbar(`User changed to ${humanName(newUser)} `, {
+    enqueueSnackbar(`User set to ${humanName(newUser)} `, {
       variant: "success",
       autoHideDuration: 3000,
     });

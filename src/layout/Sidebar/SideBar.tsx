@@ -5,7 +5,6 @@ import SideBarLogo from "@/layout/Sidebar/SideBarLogo.tsx";
 import useActivePage from "@/hooks/useActivePage.ts";
 import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 
-// root component
 function SideBar() {
   const { activePath, switchActivePage } = useActivePage();
 
@@ -35,7 +34,15 @@ function SideBar() {
           activePath={activePath}
           onSwitchActivePage={switchActivePage}
         />
-
+        <SideBarItem
+          sidebarItem={{
+            title: "Settings",
+            path: "/settings",
+            Icon: <Settings />,
+          }}
+          activePath={activePath}
+          onSwitchActivePage={switchActivePage}
+        />
         {isEmbeddedView ? (
           <SideBarItem
             sidebarItem={{
@@ -47,17 +54,6 @@ function SideBar() {
             onSwitchActivePage={switchActivePage}
           />
         ) : null}
-      </nav>
-      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-        <SideBarItem
-          sidebarItem={{
-            title: "Settings",
-            path: "/settings",
-            Icon: <Settings />,
-          }}
-          activePath={activePath}
-          onSwitchActivePage={switchActivePage}
-        />
       </nav>
     </aside>
   );
