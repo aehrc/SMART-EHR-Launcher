@@ -19,9 +19,8 @@ import { useQuery } from "@tanstack/react-query";
 import type { Bundle, Questionnaire } from "fhir/r4";
 import { useContext, useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
-import { getQuestionnaireServerBaseUrl } from "@/utils/misc.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { TokenContext } from "@/contexts/TokenContext.tsx";
+import { FormsServerContext } from "@/contexts/FormsServerContext.tsx";
 
 interface useFetchQuestionnairesReturnParams {
   questionnaires: Questionnaire[];
@@ -31,18 +30,13 @@ interface useFetchQuestionnairesReturnParams {
 function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
   const numOfSearchEntries = 200;
 
-  const { formsServerToken } = useContext(TokenContext);
+  const { baseUrl, token } = useContext(FormsServerContext);
 
   const queryUrl = `/Questionnaire?_count=${numOfSearchEntries}&_sort=-date&`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["questionnaires" + numOfSearchEntries.toString(), queryUrl],
-    () =>
-      fetchResourceFromEHR(
-        getQuestionnaireServerBaseUrl() + queryUrl,
-        "",
-        formsServerToken
-      )
+    () => fetchResourceFromEHR(baseUrl + queryUrl, token)
   );
 
   const questionnaires: Questionnaire[] = useMemo(

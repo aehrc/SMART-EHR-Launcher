@@ -1,9 +1,9 @@
 import useSmartConfiguration from "@/hooks/useSmartConfiguration.ts";
 import { useContext, useEffect, useMemo } from "react";
-import { TokenContext } from "@/contexts/TokenContext.tsx";
 import { responseIsAccessTokenResponse } from "@/utils/oauth.ts";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 interface useRequestTokenProps {
   grantType: string;
@@ -17,7 +17,7 @@ export function useRequestToken(props: useRequestTokenProps): {
 } {
   const { grantType, code, redirectUri, clientId } = props;
 
-  const { setFhirServerAccessToken } = useContext(TokenContext);
+  const { setAccessTokenResponse } = useContext(FhirServerContext);
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -57,7 +57,7 @@ export function useRequestToken(props: useRequestTokenProps): {
         .then(async (res) => {
           const resBody = await res.json();
           if (responseIsAccessTokenResponse(resBody)) {
-            setFhirServerAccessToken(resBody);
+            setAccessTokenResponse(resBody);
 
             // Retrieve saved search params and navigate
             const paramsString = sessionStorage.getItem("initialSearchParams");
@@ -97,7 +97,7 @@ export function useRequestToken(props: useRequestTokenProps): {
     redirectUri,
     clientId,
     tokenEndpoint,
-    setFhirServerAccessToken,
+    setAccessTokenResponse,
     navigate,
     enqueueSnackbar,
   ]);

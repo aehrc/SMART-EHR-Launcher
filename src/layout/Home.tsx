@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import RedirectToAuthCallback from "@/pages/OAuth/RedirectToAuthCallback.tsx";
-import { TokenContext } from "@/contexts/TokenContext.tsx";
 import DashboardLayout from "@/layout/DashboardLayout.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 function Home() {
-  const { fhirServerToken } = useContext(TokenContext);
+  const { token } = useContext(FhirServerContext);
 
-  if (fhirServerToken === "") {
+  if (token === "") {
     return <RedirectToAuthCallback />;
   }
 

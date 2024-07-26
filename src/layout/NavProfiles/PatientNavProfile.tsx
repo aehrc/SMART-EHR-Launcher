@@ -1,8 +1,7 @@
-import { getFhirServerBaseUrl, humanName } from "../../utils/misc.ts";
+import { humanName } from "../../utils/misc.ts";
 import { useContext, useEffect } from "react";
 import { PatientContext } from "../../contexts/PatientContext.tsx";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { Bundle, Patient } from "fhir/r4";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
@@ -10,25 +9,26 @@ import { getResource } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { User } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
   const { serverUrl } = useSourceFhirServer();
 
-  const { fhirServerToken } = useContext(TokenContext);
+  const { baseUrl, token } = useContext(FhirServerContext);
   const { selectedPatient, setSelectedPatient } = useContext(PatientContext);
 
   const patientId = launch.patient;
 
-  const queryEndpoint =
-    getFhirServerBaseUrl() + (patientId ? `/Patient/${patientId}` : "/Patient");
+  const requestUrl =
+    baseUrl + (patientId ? `/Patient/${patientId}` : "/Patient");
 
   const {
     data: resource,
     error,
     isLoading,
   } = useQuery<Patient | Bundle>(["patientProfile", serverUrl, patientId], () =>
-    fetchResourceFromEHR(queryEndpoint, serverUrl, fhirServerToken)
+    fetchResourceFromEHR(requestUrl, token)
   );
 
   const newPatient = getResource<Patient>(resource, "Patient");

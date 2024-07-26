@@ -19,9 +19,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Bundle, Immunization } from "fhir/r4";
 import { useContext, useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
-import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { TokenContext } from "@/contexts/TokenContext.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 interface useFetchImmunizationsReturnParams {
   immunizations: Immunization[];
@@ -31,18 +30,13 @@ interface useFetchImmunizationsReturnParams {
 function useFetchImmunizations(
   patientId: string
 ): useFetchImmunizationsReturnParams {
-  const { fhirServerToken } = useContext(TokenContext);
+  const { baseUrl, token } = useContext(FhirServerContext);
 
   const queryUrl = `/Immunization?patient=${patientId}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["immunizations" + patientId, queryUrl],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + queryUrl,
-        "",
-        fhirServerToken
-      ),
+    () => fetchResourceFromEHR(baseUrl + queryUrl, token),
     { enabled: patientId !== "" }
   );
 

@@ -15,7 +15,6 @@ export interface SmartConfiguration {
 
 export async function fetchResourceFromEHR(
   requestUrl: string,
-  _sourceFhirServerUrl: string,
   bearerToken: string
 ) {
   const headers: any = {

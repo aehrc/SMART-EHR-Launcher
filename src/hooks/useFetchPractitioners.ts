@@ -19,9 +19,8 @@ import { useQuery } from "@tanstack/react-query";
 import type { Bundle, Practitioner } from "fhir/r4";
 import { useContext, useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
-import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { TokenContext } from "@/contexts/TokenContext.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 interface useFetchPractitionersReturnParams {
   practitioners: Practitioner[];
@@ -31,18 +30,13 @@ interface useFetchPractitionersReturnParams {
 function useFetchPractitioners(): useFetchPractitionersReturnParams {
   const numOfSearchEntries = 500;
 
-  const { fhirServerToken } = useContext(TokenContext);
+  const { baseUrl, token } = useContext(FhirServerContext);
 
   const queryUrl = `/Practitioner?_count=${numOfSearchEntries}`;
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["practitioners" + numOfSearchEntries.toString(), queryUrl],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + queryUrl,
-        "",
-        fhirServerToken
-      )
+    () => fetchResourceFromEHR(baseUrl + queryUrl, token)
   );
 
   const practitioners: Practitioner[] = useMemo(

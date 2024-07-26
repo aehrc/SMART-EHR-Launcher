@@ -1,7 +1,7 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ActivePageContextProvider from "@/contexts/ActivePageContext.tsx";
 import { SnackbarProvider } from "notistack";
-import TokenContextProvider from "@/contexts/TokenContext.tsx";
+import FormsServerContextProvider from "@/contexts/FormsServerContext.tsx";
 import QuestionnaireContextProvider from "@/contexts/QuestionnaireContext.tsx";
 import PatientContextProvider from "@/contexts/PatientContext.tsx";
 import UserContextProvider from "@/contexts/UserContext.tsx";
@@ -17,6 +17,7 @@ import PatientSummary from "@/pages/PatientSummary/PatientSummary.tsx";
 import EmbeddedApp from "@/pages/EmbeddedApp/EmbeddedApp.tsx";
 import AuthCallback from "@/pages/AuthCallback/AuthCallback.tsx";
 import Home from "@/layout/Home.tsx";
+import FhirServerContextProvider from "@/contexts/FhirServerContext.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -54,21 +55,23 @@ function App() {
 
   return (
     <SnackbarProvider maxSnack={1}>
-      <TokenContextProvider>
-        <ActivePageContextProvider>
-          <PatientContextProvider>
-            <UserContextProvider>
-              <EncounterContextProvider>
-                <QuestionnaireContextProvider>
-                  <TooltipProvider delayDuration={100}>
-                    <RouterProvider router={router} />
-                  </TooltipProvider>
-                </QuestionnaireContextProvider>
-              </EncounterContextProvider>
-            </UserContextProvider>
-          </PatientContextProvider>
-        </ActivePageContextProvider>
-      </TokenContextProvider>
+      <FhirServerContextProvider>
+        <FormsServerContextProvider>
+          <ActivePageContextProvider>
+            <PatientContextProvider>
+              <UserContextProvider>
+                <EncounterContextProvider>
+                  <QuestionnaireContextProvider>
+                    <TooltipProvider delayDuration={100}>
+                      <RouterProvider router={router} />
+                    </TooltipProvider>
+                  </QuestionnaireContextProvider>
+                </EncounterContextProvider>
+              </UserContextProvider>
+            </PatientContextProvider>
+          </ActivePageContextProvider>
+        </FormsServerContextProvider>
+      </FhirServerContextProvider>
     </SnackbarProvider>
   );
 }

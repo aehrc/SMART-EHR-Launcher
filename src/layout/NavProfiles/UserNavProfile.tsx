@@ -1,8 +1,7 @@
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { Bundle, Practitioner } from "fhir/r4";
-import { getFhirServerBaseUrl, humanName } from "../../utils/misc.ts";
+import { humanName } from "../../utils/misc.ts";
 import { useContext, useEffect } from "react";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
 import { UserContext } from "../../contexts/UserContext.tsx";
@@ -10,22 +9,24 @@ import { getResource } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { BriefcaseMedical } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
   const { serverUrl } = useSourceFhirServer();
 
-  const { fhirServerAccessToken } = useContext(TokenContext);
+  const { baseUrl, token, fhirUser } = useContext(FhirServerContext);
   const { selectedUser, setSelectedUser } = useContext(UserContext);
 
   let userId = launch.provider ?? "";
-  if (!userId && fhirServerAccessToken?.practitioner) {
-    userId = fhirServerAccessToken?.practitioner;
+
+  // Always set the userId to fhirUser if it is a Practitioner
+  if (fhirUser?.startsWith("Practitioner")) {
+    userId = fhirUser.split("/")[1];
   }
 
-  const queryEndpoint =
-    getFhirServerBaseUrl() +
-    (userId ? `/Practitioner/${userId}` : "/Practitioner");
+  const requestUrl =
+    baseUrl + (userId ? `/Practitioner/${userId}` : "/Practitioner");
 
   const {
     data: resource,
@@ -33,12 +34,7 @@ function UserNavProfile() {
     isLoading,
   } = useQuery<Practitioner | Bundle>(
     ["practitionerProfile", serverUrl, userId],
-    () =>
-      fetchResourceFromEHR(
-        queryEndpoint,
-        serverUrl,
-        fhirServerAccessToken?.access_token ?? ""
-      )
+    () => fetchResourceFromEHR(requestUrl, token)
   );
 
   const newUser = getResource<Practitioner>(resource, "Practitioner");

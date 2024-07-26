@@ -19,9 +19,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Bundle, Procedure } from "fhir/r4";
 import { useContext, useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
-import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { TokenContext } from "@/contexts/TokenContext.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 interface useFetchProceduresReturnParams {
   procedures: Procedure[];
@@ -31,16 +30,11 @@ interface useFetchProceduresReturnParams {
 function useFetchProcedures(patientId: string): useFetchProceduresReturnParams {
   const queryUrl = `/Procedure?patient=${patientId}`;
 
-  const { fhirServerToken } = useContext(TokenContext);
+  const { baseUrl, token } = useContext(FhirServerContext);
 
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["procedures" + patientId, queryUrl],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + queryUrl,
-        "",
-        fhirServerToken
-      ),
+    () => fetchResourceFromEHR(baseUrl + queryUrl, token),
     { enabled: patientId !== "" }
   );
 

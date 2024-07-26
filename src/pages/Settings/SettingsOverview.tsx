@@ -16,10 +16,20 @@ import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 import { Separator } from "@/components/ui/separator.tsx";
 import { useContext } from "react";
 import { QuestionnaireContext } from "@/contexts/QuestionnaireContext.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 
 function SettingsOverview() {
   const { launch } = useLauncherQuery();
   const { selectedQuestionnaire } = useContext(QuestionnaireContext);
+
+  let { fhirUser } = useContext(FhirServerContext);
+
+  // Disabled user switching if fhirUser is Practitioner.
+  // This makes it so that a logged in practitioner User cannot switch users.
+  const userSwitchingDisabled = fhirUser
+    ? fhirUser?.startsWith("Practitioner")
+    : false;
+  fhirUser = fhirUser ? fhirUser.replace("Practitioner/", "") : "";
 
   return (
     <div className="grid gap-6">
@@ -59,7 +69,16 @@ function SettingsOverview() {
             <div className="grid gap-2">
               <div className="flex justify-between items-center">
                 <Label>User ID</Label>
-                <FormLink title="Edit in User config" path="/settings/user" />
+                {userSwitchingDisabled ? (
+                  <div className="text-xs text-muted-foreground">
+                    Logged in as{" "}
+                    <span className="text-xs px-1.5 py-0.5 rounded text-purple-800 bg-purple-100">
+                      {fhirUser}
+                    </span>
+                  </div>
+                ) : (
+                  <FormLink title="Edit in User config" path="/settings/user" />
+                )}
               </div>
               <Input
                 disabled={true}
