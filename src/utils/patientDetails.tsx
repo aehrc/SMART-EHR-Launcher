@@ -1,6 +1,99 @@
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge.tsx";
+import { Observation, ObservationComponent, Period } from "fhir/r4";
+
+// Encounter functions and types
+export interface EncounterTableData {
+  id: string;
+  type: string;
+  class: string;
+  status: string;
+  period: Period | null;
+}
+
+export function createEncounterTableColumns(): ColumnDef<EncounterTableData>[] {
+  return [
+    {
+      accessorKey: "type",
+      header: "Type",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div className="font-medium">{row.getValue("type") ?? "-"}</div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+            {row.getValue("id") ?? "-"}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "class",
+      header: "Class",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div className="capitalize">{row.getValue("class") ?? "-"}</div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) =>
+        row.getValue("status") ? (
+          <Badge variant="outline">{row.getValue("status")}</Badge>
+        ) : (
+          "-"
+        ),
+    },
+    {
+      accessorKey: "period",
+      header: "Period",
+      sortingFn: (a, b) => {
+        const dateOrMax = (date: string | undefined) =>
+          date ? dayjs(date) : dayjs("9999-12-31");
+
+        // Compare start dates first
+        const aStart = dateOrMax(a.original.period?.start);
+        const bStart = dateOrMax(b.original.period?.start);
+
+        if (aStart.isBefore(bStart)) return -1;
+        if (aStart.isAfter(bStart)) return 1;
+
+        // If start dates are equal, compare end dates
+        const aEnd = dateOrMax(a.original.period?.end);
+        const bEnd = dateOrMax(b.original.period?.end);
+
+        if (aEnd.isBefore(bEnd)) return -1;
+        if (aEnd.isAfter(bEnd)) return 1;
+
+        return 0;
+      },
+      cell: ({ row }) => {
+        const { start, end } = row.original.period || {};
+
+        if (start && end) {
+          return `
+              ${dayjs(start).format("DD/MM/YYYY")} - 
+              ${dayjs(end).format("DD/MM/YYYY")}`;
+        } else if (start) {
+          return dayjs(start).format("DD/MM/YYYY");
+        } else if (end) {
+          return `Unknown - ${dayjs(end).format("DD/MM/YYYY")}`;
+        } else {
+          return "-";
+        }
+      },
+    },
+  ];
+}
 
 // Condition functions and types
 export interface ConditionTableData {
@@ -48,7 +141,7 @@ export function createConditionTableColumns(): ColumnDef<ConditionTableData>[] {
       header: "Onset Date",
       cell: ({ row }) => {
         return row.original.onsetDate
-          ? row.original.onsetDate.format("DD-MM-YYYY")
+          ? row.original.onsetDate.format("DD/MM/YYYY")
           : "-";
       },
     },
@@ -67,7 +160,7 @@ export function createConditionTableColumns(): ColumnDef<ConditionTableData>[] {
       },
       cell: ({ row }) => {
         return row.original.recordedDate
-          ? row.original.recordedDate.format("DD-MM-YYYY")
+          ? row.original.recordedDate.format("DD/MM/YYYY")
           : "-";
       },
     },
@@ -126,7 +219,7 @@ export function createMedicationTableColumns(): ColumnDef<MedicationTableData>[]
       },
       cell: ({ row }) => {
         return row.original.authoredOn
-          ? row.original.authoredOn.format("DD-MM-YYYY")
+          ? row.original.authoredOn.format("DD/MM/YYYY")
           : "-";
       },
     },
@@ -199,7 +292,7 @@ export function createAllergyTableColumns(): ColumnDef<AllergyTableData>[] {
       },
       cell: ({ row }) => {
         return row.original.recordedDate
-          ? row.original.recordedDate.format("DD-MM-YYYY")
+          ? row.original.recordedDate.format("DD/MM/YYYY")
           : "-";
       },
     },
@@ -267,7 +360,7 @@ export function createProcedureTableColumns(): ColumnDef<ProcedureTableData>[] {
       },
       cell: ({ row }) => {
         return row.original.performedOn
-          ? row.original.performedOn.format("DD-MM-YYYY")
+          ? row.original.performedOn.format("DD/MM/YYYY")
           : "-";
       },
     },
@@ -336,9 +429,189 @@ export function createImmunizationTableColumns(): ColumnDef<ImmunizationTableDat
       },
       cell: ({ row }) => {
         return row.original.occurrenceDate
-          ? row.original.occurrenceDate.format("DD-MM-YYYY")
+          ? row.original.occurrenceDate.format("DD/MM/YYYY")
           : "-";
       },
     },
   ];
+}
+
+// Observations functions and types
+export interface ObservationTableData {
+  id: string;
+  observation: string;
+  status: string;
+  category: string;
+  valueData: string | number | (string | number)[];
+  effectiveDateTime: Dayjs | null;
+}
+
+export function createObservationTableColumns(): ColumnDef<ObservationTableData>[] {
+  return [
+    {
+      accessorKey: "observation",
+      header: "Observation",
+      cell: ({ row }) => (
+        <div className="flex max-w-64">
+          <div className="font-medium">
+            {row.getValue("observation") ?? "-"}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="flex max-w-64">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-sm">
+            {row.getValue("id") ?? "-"}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) =>
+        row.getValue("status") ? (
+          <Badge variant="outline">{row.getValue("status")}</Badge>
+        ) : (
+          "-"
+        ),
+    },
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) => row.getValue("category") ?? "-",
+    },
+    {
+      accessorKey: "valueData",
+      header: "Value(s)",
+      cell: ({ row }) => {
+        const valueData = row.getValue("valueData") as
+          | string
+          | number
+          | (string | number)[];
+
+        if (Array.isArray(valueData)) {
+          return (
+            <div className="flex flex-col gap-5">
+              {valueData.map((value) => {
+                if (typeof value === "string") {
+                  return (
+                    <div key={value}>
+                      {value.includes(": ") ? (
+                        <div className="min-w-40">
+                          <div className="font-medium">
+                            {value.split(": ")[0] ?? ""}
+                          </div>
+                          <div className="text-muted-foreground">
+                            {value.split(": ")[1] ?? ""}
+                          </div>
+                        </div>
+                      ) : (
+                        <div key={value} className="text-muted-foreground">
+                          {value ?? "-"}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={value} className="text-muted-foreground">
+                    {value ?? "-"}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        }
+
+        return (
+          <div key={valueData} className="text-muted-foreground">
+            {valueData ?? "-"}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "effectiveDateTime",
+      header: "Effective Date Time",
+      sortingFn: (a, b) => {
+        if (
+          a.original.effectiveDateTime === null ||
+          b.original.effectiveDateTime === null
+        ) {
+          return 0;
+        }
+
+        return a.original.effectiveDateTime.diff(b.original.effectiveDateTime);
+      },
+      cell: ({ row }) => {
+        return row.original.effectiveDateTime
+          ? row.original.effectiveDateTime.format("DD/MM/YYYY")
+          : "-";
+      },
+    },
+  ];
+}
+
+export function getObservationValueData(observation: Observation) {
+  const observationValue = getObservationOrComponentValue(observation);
+  if (observationValue !== null) {
+    return observationValue;
+  }
+
+  if (observation.component) {
+    return observation.component
+      .map((component) => {
+        // Get value
+        const componentValue = getObservationOrComponentValue(component);
+        if (componentValue === null) {
+          return null;
+        }
+
+        // Append code display to value if it exists
+        if (component.code) {
+          const componentDisplay =
+            component.code?.coding?.[0].display ?? component.code?.text ?? "";
+          return componentDisplay + ": " + componentValue;
+        }
+
+        // Otherwise, return value only
+        return componentValue;
+      })
+      .filter((value): value is string | number => value !== null);
+  }
+
+  return "";
+}
+
+export function getObservationOrComponentValue(
+  item: Observation | ObservationComponent
+) {
+  if (item.valueQuantity?.value) {
+    // Add unit if it exists
+    if (item.valueQuantity.unit) {
+      return item.valueQuantity.value + " " + item.valueQuantity.unit;
+    }
+
+    return item.valueQuantity.value;
+  }
+
+  if (item.valueCodeableConcept) {
+    return (
+      item.valueCodeableConcept.coding?.[0].display ??
+      item.valueCodeableConcept.text ??
+      ""
+    );
+  }
+
+  if (item.valueString) {
+    return item.valueString;
+  }
+
+  return null;
 }

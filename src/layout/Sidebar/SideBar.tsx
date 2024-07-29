@@ -47,7 +47,7 @@ function SideBar() {
           <SideBarItem
             sidebarItem={{
               title: appName,
-              path: "/embedded-app",
+              path: "/embedded",
               Icon: <AppWindow />,
             }}
             activePath={activePath}

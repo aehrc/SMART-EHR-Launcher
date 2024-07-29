@@ -16,10 +16,6 @@ function Home() {
   const launchUser = launch.provider;
   const launchPatient = launch.patient;
 
-  // const { selectedUser } = useContext(UserContext);
-  // const { selectedPatient } = useContext(PatientContext);
-  console.log(fhirUser);
-
   // Not authenticated, redirect to auth callback
   if (token === "") {
     return <RedirectToAuthCallback />;

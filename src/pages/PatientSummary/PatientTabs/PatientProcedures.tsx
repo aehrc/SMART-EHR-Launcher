@@ -54,7 +54,7 @@ function PatientProcedures(props: PatientProceduresProps) {
       <CardHeader>
         <CardTitle>Procedures</CardTitle>
         <CardDescription>
-          Patient's records of past surgeries and medical procedures.
+          Patient's records of past surgeries and medical procedures
         </CardDescription>
       </CardHeader>
       <CardContent>

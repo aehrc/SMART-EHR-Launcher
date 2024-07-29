@@ -35,7 +35,7 @@ function App() {
           element: <PatientSummary />,
         },
         {
-          path: "embedded-app",
+          path: "embedded",
           element: <EmbeddedApp />,
         },
         {

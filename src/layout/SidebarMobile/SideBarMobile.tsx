@@ -54,7 +54,7 @@ function SideBarMobile() {
             <SideBarMobileItem
               sidebarItem={{
                 title: appName,
-                path: "/embedded-app",
+                path: "/embedded",
                 Icon: <AppWindow />,
               }}
               onSwitchActivePage={switchActivePage}

@@ -12,6 +12,8 @@ import PatientMedications from "@/pages/PatientSummary/PatientTabs/PatientMedica
 import PatientAllergies from "@/pages/PatientSummary/PatientTabs/PatientAllergies.tsx";
 import PatientProcedures from "@/pages/PatientSummary/PatientTabs/PatientProcedures.tsx";
 import PatientImmunizations from "@/pages/PatientSummary/PatientTabs/PatientImmunizations.tsx";
+import PatientEncounters from "@/pages/PatientSummary/PatientTabs/PatientEncounters.tsx";
+import PatientObservations from "@/pages/PatientSummary/PatientTabs/PatientObservations.tsx";
 
 interface PatientDetailsProps {
   patient: Patient | null;
@@ -28,6 +30,9 @@ function PatientDetails(props: PatientDetailsProps) {
             <TabsTrigger value="profile" disabled={!patient}>
               Profile
             </TabsTrigger>
+            <TabsTrigger value="encounters" disabled={!patient}>
+              Encounters
+            </TabsTrigger>
             <TabsTrigger value="conditions" disabled={!patient}>
               Conditions
             </TabsTrigger>
@@ -43,12 +48,18 @@ function PatientDetails(props: PatientDetailsProps) {
             <TabsTrigger value="immunisations" disabled={!patient}>
               Immunisations
             </TabsTrigger>
+            <TabsTrigger value="observations" disabled={!patient}>
+              Observations
+            </TabsTrigger>
           </TabsList>
         </div>
         {patient && patient.id ? (
           <>
             <TabsContent value="profile">
               <PatientProfile patient={patient} />
+            </TabsContent>
+            <TabsContent value="encounters">
+              <PatientEncounters patientId={patient.id} />
             </TabsContent>
             <TabsContent value="conditions">
               <PatientConditions patientId={patient.id} />
@@ -64,6 +75,9 @@ function PatientDetails(props: PatientDetailsProps) {
             </TabsContent>
             <TabsContent value="immunisations">
               <PatientImmunizations patientId={patient.id} />
+            </TabsContent>
+            <TabsContent value="observations">
+              <PatientObservations patientId={patient.id} />
             </TabsContent>
           </>
         ) : (

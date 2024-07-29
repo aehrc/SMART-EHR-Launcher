@@ -29,7 +29,7 @@ function LaunchButton() {
         <Button
           className="text-white bg-blue-500 hover:bg-blue-600"
           disabled={validationErrors.length > 0}
-          onClick={() => switchActivePage("/embedded-app")}
+          onClick={() => switchActivePage("/embedded")}
         >
           View embedded {appName}
         </Button>

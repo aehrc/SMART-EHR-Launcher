@@ -1,5 +1,5 @@
 import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
-import { getUserLaunchUrl } from "@/lib/launchUrl.ts";
+import { getSparkedAuCoreServerLaunchUrl } from "@/lib/launchUrl.ts";
 import { Resizable } from "re-resizable";
 import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
@@ -8,7 +8,7 @@ import { UnfoldHorizontal } from "lucide-react";
 function EmbeddedApp() {
   const { query, launch } = useLauncherQuery();
 
-  const userLaunchUrl = getUserLaunchUrl(query, launch);
+  const userLaunchUrl = getSparkedAuCoreServerLaunchUrl(query, launch);
 
   const appName = query.app_name !== "" ? query.app_name : "SMART app";
 
@@ -59,7 +59,7 @@ function EmbeddedApp() {
               className="border-2 w-full h-full min-w-[675px] min-h-[500px] rounded-lg "
             />
           </Resizable>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground mb-20">
             The iframe is resizable. You can drag the bottom edge to adjust the
             height as needed.
           </div>
