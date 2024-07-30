@@ -6,6 +6,7 @@ import UserNavProfile from "@/layout/NavProfiles/UserNavProfile.tsx";
 import EncounterNavProfile from "@/layout/NavProfiles/EncounterNavProfile.tsx";
 import QuestionnaireNavProfile from "@/layout/NavProfiles/QuestionnaireNavProfile.tsx";
 import Header from "@/components/Header.tsx";
+import CopyButton from "@/components/CopyButton.tsx";
 
 function DashboardLayout() {
   return (
@@ -15,6 +16,13 @@ function DashboardLayout() {
         <Header>
           <SideBarMobile />
           <div className="flex-grow" />
+
+          <span className=" -mr-2">
+            <CopyButton
+              link={window.location.href}
+              tooltipText="Copy EHR link with context"
+            />
+          </span>
           <PatientNavProfile />
           <UserNavProfile />
           <EncounterNavProfile />

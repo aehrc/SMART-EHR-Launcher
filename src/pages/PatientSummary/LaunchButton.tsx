@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tooltip.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import useActivePage from "@/hooks/useActivePage.ts";
+import CopyButton from "@/components/CopyButton.tsx";
 
 function LaunchButton() {
   // The URL to launch the user-specified app
@@ -49,6 +50,10 @@ function LaunchButton() {
 
   return (
     <div className="flex items-center gap-2">
+      <CopyButton
+        link={userLaunchUrl.href}
+        tooltipText="Copy app launch link"
+      />
       <a
         href={userLaunchUrl.href}
         target="_blank"
