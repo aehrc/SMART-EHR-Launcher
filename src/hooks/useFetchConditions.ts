@@ -17,10 +17,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { Bundle, Condition } from "fhir/r4";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
+import useAxios from "@/hooks/useAxios.ts";
 
 interface useFetchConditionsReturnParams {
   conditions: Condition[];
@@ -30,11 +30,10 @@ interface useFetchConditionsReturnParams {
 function useFetchConditions(patientId: string): useFetchConditionsReturnParams {
   const queryUrl = `/Condition?patient=${patientId}`;
 
-  const { baseUrl, token } = useContext(FhirServerContext);
-
+  const axiosInstance = useAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["conditions" + patientId, queryUrl],
-    () => fetchResourceFromEHR(baseUrl + queryUrl, token),
+    () => fetchResourceFromEHR(axiosInstance, queryUrl),
     { enabled: patientId !== "" }
   );
 

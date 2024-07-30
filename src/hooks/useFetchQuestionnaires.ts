@@ -17,10 +17,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { Bundle, Questionnaire } from "fhir/r4";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { FormsServerContext } from "@/contexts/FormsServerContext.tsx";
+import useAxios from "@/hooks/useAxios.ts";
 
 interface useFetchQuestionnairesReturnParams {
   questionnaires: Questionnaire[];
@@ -30,13 +30,12 @@ interface useFetchQuestionnairesReturnParams {
 function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
   const numOfSearchEntries = 200;
 
-  const { baseUrl, token } = useContext(FormsServerContext);
-
   const queryUrl = `/Questionnaire?_count=${numOfSearchEntries}&_sort=-date&`;
 
+  const axiosInstance = useAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["questionnaires" + numOfSearchEntries.toString(), queryUrl],
-    () => fetchResourceFromEHR(baseUrl + queryUrl, token)
+    () => fetchResourceFromEHR(axiosInstance, queryUrl)
   );
 
   const questionnaires: Questionnaire[] = useMemo(

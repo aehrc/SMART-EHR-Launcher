@@ -10,12 +10,13 @@ import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { BriefcaseMedical } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
+import useAxios from "@/hooks/useAxios.ts";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
   const { serverUrl } = useSourceFhirServer();
 
-  const { baseUrl, token, fhirUser } = useContext(FhirServerContext);
+  const { fhirUser } = useContext(FhirServerContext);
   const { selectedUser, setSelectedUser } = useContext(UserContext);
 
   let userId = launch.provider ?? "";
@@ -25,16 +26,16 @@ function UserNavProfile() {
     userId = fhirUser.split("/")[1];
   }
 
-  const requestUrl =
-    baseUrl + (userId ? `/Practitioner/${userId}` : "/Practitioner");
+  const queryUrl = userId ? `/Practitioner/${userId}` : "/Practitioner";
 
+  const axiosInstance = useAxios();
   const {
     data: resource,
     error,
     isLoading,
   } = useQuery<Practitioner | Bundle>(
     ["practitionerProfile", serverUrl, userId],
-    () => fetchResourceFromEHR(requestUrl, token)
+    () => fetchResourceFromEHR(axiosInstance, queryUrl)
   );
 
   const newUser = getResource<Practitioner>(resource, "Practitioner");

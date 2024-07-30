@@ -1,4 +1,4 @@
-export interface AccessTokenResponse {
+export interface TokenResponse {
   access_token: string;
   token_type: string;
   expires_in: number;
@@ -8,9 +8,9 @@ export interface AccessTokenResponse {
   refresh_token?: string;
 }
 
-export function responseIsAccessTokenResponse(
+export function responseIsTokenResponse(
   response: any
-): response is AccessTokenResponse {
+): response is TokenResponse {
   return (
     response.access_token !== undefined &&
     response.token_type !== undefined &&

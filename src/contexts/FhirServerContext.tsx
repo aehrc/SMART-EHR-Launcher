@@ -1,40 +1,51 @@
 import { createContext, ReactNode, useState } from "react";
-import { AccessTokenResponse, IsValidIdToken } from "@/utils/oauth.ts";
+import { IsValidIdToken, TokenResponse } from "@/utils/oauth.ts";
 import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { jwtDecode } from "jwt-decode";
 
 interface FhirServerContextType {
   baseUrl: string;
-  accessTokenResponse: AccessTokenResponse | null;
-  token: string;
+  tokenEndpoint: string;
+  tokenResponse: TokenResponse | null;
+  accessToken: string;
+  refreshToken: string;
   fhirUser: string | null;
-  setAccessTokenResponse: (accessTokenResponse: AccessTokenResponse) => void;
+  setTokenEndpoint: (token_endpoint: string) => void;
+  setTokenResponse: (accessTokenResponse: TokenResponse) => void;
 }
 
 export const FhirServerContext = createContext<FhirServerContextType>({
   baseUrl: "",
-  accessTokenResponse: null,
-  token: "",
+  tokenEndpoint: "",
+  tokenResponse: null,
+  accessToken: "",
+  refreshToken: "",
   fhirUser: null,
-  setAccessTokenResponse: () => void 0,
+  setTokenEndpoint: () => void 0,
+  setTokenResponse: () => void 0,
 });
 
 const FhirServerContextProvider = (props: { children: ReactNode }) => {
   const { children } = props;
 
-  const [accessTokenResponse, setAccessTokenResponse] =
-    useState<AccessTokenResponse | null>(null);
+  const [tokenEndpoint, setTokenEndpoint] = useState<string | null>(null);
+  const [tokenResponse, setTokenResponse] = useState<TokenResponse | null>(
+    null
+  );
   const [fhirUser, setFhirUser] = useState<string | null>(null);
 
   return (
     <FhirServerContext.Provider
       value={{
         baseUrl: getFhirServerBaseUrl(),
-        accessTokenResponse,
-        token: accessTokenResponse?.access_token ?? "",
+        tokenEndpoint: tokenEndpoint ?? "",
+        tokenResponse: tokenResponse,
+        accessToken: tokenResponse?.access_token ?? "",
+        refreshToken: tokenResponse?.refresh_token ?? "",
         fhirUser,
-        setAccessTokenResponse: (accessTokenResponse) => {
-          setAccessTokenResponse(accessTokenResponse);
+        setTokenEndpoint: (token_endpoint) => setTokenEndpoint(token_endpoint),
+        setTokenResponse: (accessTokenResponse) => {
+          setTokenResponse(accessTokenResponse);
 
           const decodedIdToken = jwtDecode(accessTokenResponse.id_token);
           if (IsValidIdToken(decodedIdToken)) {

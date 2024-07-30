@@ -9,26 +9,25 @@ import { getResource } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { User } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
-import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
+import useAxios from "@/hooks/useAxios.ts";
 
 function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
   const { serverUrl } = useSourceFhirServer();
 
-  const { baseUrl, token } = useContext(FhirServerContext);
   const { selectedPatient, setSelectedPatient } = useContext(PatientContext);
 
   const patientId = launch.patient;
 
-  const requestUrl =
-    baseUrl + (patientId ? `/Patient/${patientId}` : "/Patient");
+  const queryUrl = patientId ? `/Patient/${patientId}` : "/Patient";
 
+  const axiosInstance = useAxios();
   const {
     data: resource,
     error,
     isLoading,
   } = useQuery<Patient | Bundle>(["patientProfile", serverUrl, patientId], () =>
-    fetchResourceFromEHR(requestUrl, token)
+    fetchResourceFromEHR(axiosInstance, queryUrl)
   );
 
   const newPatient = getResource<Patient>(resource, "Patient");

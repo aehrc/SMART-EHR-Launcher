@@ -8,7 +8,7 @@ import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 import useLoadResources from "@/hooks/useLoadResources.ts";
 
 function Home() {
-  const { token, fhirUser } = useContext(FhirServerContext);
+  const { accessToken, fhirUser } = useContext(FhirServerContext);
 
   useLoadResources();
 
@@ -17,7 +17,7 @@ function Home() {
   const launchPatient = launch.patient;
 
   // Not authenticated, redirect to auth callback
-  if (token === "") {
+  if (accessToken === "") {
     return <RedirectToAuthCallback />;
   }
 

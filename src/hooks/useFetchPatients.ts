@@ -17,10 +17,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { Bundle, Patient } from "fhir/r4";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
+import useAxios from "@/hooks/useAxios.ts";
 
 interface useFetchPatientsReturnParams {
   patients: Patient[];
@@ -28,15 +28,14 @@ interface useFetchPatientsReturnParams {
 }
 
 function useFetchPatients(): useFetchPatientsReturnParams {
-  const { baseUrl, token } = useContext(FhirServerContext);
-
   const numOfSearchEntries = 500;
 
   const queryUrl = `/Patient?_count=${numOfSearchEntries}`;
 
+  const axiosInstance = useAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["patients" + numOfSearchEntries.toString(), queryUrl],
-    () => fetchResourceFromEHR(baseUrl + queryUrl, token)
+    () => fetchResourceFromEHR(axiosInstance, queryUrl)
   );
 
   const patients: Patient[] = useMemo(

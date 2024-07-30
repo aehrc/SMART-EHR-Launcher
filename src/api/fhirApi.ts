@@ -1,4 +1,5 @@
 import { QUERY_HEADERS } from "../utils/misc.ts";
+import { AxiosInstance } from "axios";
 
 export interface SmartConfiguration {
   issuer: string;
@@ -14,26 +15,12 @@ export interface SmartConfiguration {
 }
 
 export async function fetchResourceFromEHR(
-  requestUrl: string,
-  bearerToken: string
+  axiosInstance: AxiosInstance,
+  requestUrl: string
 ) {
-  const headers: any = {
-    ...QUERY_HEADERS,
-  };
-
-  if (bearerToken) {
-    headers["Authorization"] = `${bearerToken}`;
-  }
-
-  const response = await fetch(requestUrl, {
-    headers: headers,
+  const { data } = await axiosInstance.get(requestUrl, {
+    headers: QUERY_HEADERS,
   });
 
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error when performing ${requestUrl}. Status: ${response.status}`
-    );
-  }
-
-  return response.json();
+  return data;
 }

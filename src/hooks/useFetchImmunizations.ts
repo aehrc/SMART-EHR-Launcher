@@ -17,10 +17,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Bundle, Immunization } from "fhir/r4";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
+import useAxios from "@/hooks/useAxios.ts";
 
 interface useFetchImmunizationsReturnParams {
   immunizations: Immunization[];
@@ -30,13 +30,12 @@ interface useFetchImmunizationsReturnParams {
 function useFetchImmunizations(
   patientId: string
 ): useFetchImmunizationsReturnParams {
-  const { baseUrl, token } = useContext(FhirServerContext);
-
   const queryUrl = `/Immunization?patient=${patientId}`;
 
+  const axiosInstance = useAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["immunizations" + patientId, queryUrl],
-    () => fetchResourceFromEHR(baseUrl + queryUrl, token),
+    () => fetchResourceFromEHR(axiosInstance, queryUrl),
     { enabled: patientId !== "" }
   );
 
