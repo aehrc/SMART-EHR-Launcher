@@ -26,6 +26,10 @@ const QuestionnaireContextProvider = (props: { children: ReactNode }) => {
   const [selectedQuestionnaire, setSelectedQuestionnaire] =
     useState<Questionnaire | null>(null);
 
+  if (isSupported && isSupported !== questionnaireContextEnabled) {
+    setQuestionnaireContextEnabled(isSupported);
+  }
+
   return (
     <QuestionnaireContext.Provider
       value={{
