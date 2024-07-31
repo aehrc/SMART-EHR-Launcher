@@ -10,7 +10,7 @@ import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { BriefcaseMedical } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
-import useAxios from "@/hooks/useAxios.ts";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -28,7 +28,7 @@ function UserNavProfile() {
 
   const queryUrl = userId ? `/Practitioner/${userId}` : "/Practitioner";
 
-  const axiosInstance = useAxios();
+  const axiosInstance = useFhirServerAxios();
   const {
     data: resource,
     error,

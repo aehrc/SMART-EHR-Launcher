@@ -20,7 +20,7 @@ import { Bundle, Observation } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import useAxios from "@/hooks/useAxios.ts";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 interface useFetchObservationsReturnParams {
   observations: Observation[];
@@ -32,7 +32,7 @@ function useFetchObservations(
 ): useFetchObservationsReturnParams {
   const queryUrl = `/Observation?patient=${patientId}`;
 
-  const axiosInstance = useAxios();
+  const axiosInstance = useFhirServerAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["observations" + patientId, queryUrl],
     () => fetchResourceFromEHR(axiosInstance, queryUrl),

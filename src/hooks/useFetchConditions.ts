@@ -20,7 +20,7 @@ import type { Bundle, Condition } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import useAxios from "@/hooks/useAxios.ts";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 interface useFetchConditionsReturnParams {
   conditions: Condition[];
@@ -30,7 +30,7 @@ interface useFetchConditionsReturnParams {
 function useFetchConditions(patientId: string): useFetchConditionsReturnParams {
   const queryUrl = `/Condition?patient=${patientId}`;
 
-  const axiosInstance = useAxios();
+  const axiosInstance = useFhirServerAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["conditions" + patientId, queryUrl],
     () => fetchResourceFromEHR(axiosInstance, queryUrl),

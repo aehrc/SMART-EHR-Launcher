@@ -9,7 +9,7 @@ import { getResource } from "../../utils/getResources.ts";
 import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
 import { User } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton.tsx";
-import useAxios from "@/hooks/useAxios.ts";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -21,7 +21,7 @@ function PatientNavProfile() {
 
   const queryUrl = patientId ? `/Patient/${patientId}` : "/Patient";
 
-  const axiosInstance = useAxios();
+  const axiosInstance = useFhirServerAxios();
   const {
     data: resource,
     error,

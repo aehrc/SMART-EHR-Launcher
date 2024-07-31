@@ -20,7 +20,7 @@ import type { Bundle, Encounter } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import useAxios from "@/hooks/useAxios.ts";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 interface useFetchEncountersReturnParams {
   encounters: Encounter[];
@@ -33,7 +33,7 @@ function useFetchEncounters(patientId: string): useFetchEncountersReturnParams {
   // Note: numOfSearchEntries not used in Sparked reference server due to lack of support for _count
   const queryUrl = `/Encounter?patient=${patientId}`;
 
-  const axiosInstance = useAxios();
+  const axiosInstance = useFhirServerAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["encounters" + patientId + numOfSearchEntries.toString(), queryUrl],
     () => fetchResourceFromEHR(axiosInstance, queryUrl),

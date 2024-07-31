@@ -20,7 +20,7 @@ import { Bundle, MedicationRequest } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import useAxios from "@/hooks/useAxios.ts";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 interface useFetchMedicationRequestsReturnParams {
   medicationRequests: MedicationRequest[];
@@ -32,7 +32,7 @@ function useFetchMedicationRequests(
 ): useFetchMedicationRequestsReturnParams {
   const queryUrl = `/MedicationRequest?patient=${patientId}`;
 
-  const axiosInstance = useAxios();
+  const axiosInstance = useFhirServerAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["medicationRequests" + patientId, queryUrl],
     () => fetchResourceFromEHR(axiosInstance, queryUrl),
