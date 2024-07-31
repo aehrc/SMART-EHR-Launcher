@@ -7,13 +7,6 @@ function useLoadResources() {
   const { serverUrl } = useSourceFhirServer();
 
   useEffect(() => {
-    // Define initial questionnaire context in FhirContext
-    const questionnaireFhirContext = {
-      role: "questionnaire-render-on-launch",
-      canonical: "http://www.health.gov.au/assessments/mbs/715|0.1.0-assembled",
-      type: "Questionnaire",
-    };
-
     setQuery({
       ...query,
       launch_url: query.launch_url || "https://smartforms.csiro.au/launch",
@@ -24,7 +17,7 @@ function useLoadResources() {
         "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
       redirect_uris: launch.redirect_uris || "https://smartforms.csiro.au",
       validation: "1",
-      fhir_context: `${JSON.stringify(questionnaireFhirContext)}`,
+      fhir_context: launch.fhir_context || "",
       source_fhir_server: launch.source_fhir_server || serverUrl,
       is_embedded_view: launch.is_embedded_view || false,
     });

@@ -8,10 +8,11 @@ import { FhirResource } from "fhir/r4";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   selectedData: FhirResource | null;
+  onClearSelectedData?: () => void;
 }
 
 function DataTableToolbar<TData>(props: DataTableToolbarProps<TData>) {
-  const { table, selectedData } = props;
+  const { table, selectedData, onClearSelectedData } = props;
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -36,7 +37,10 @@ function DataTableToolbar<TData>(props: DataTableToolbarProps<TData>) {
           </Button>
         )}
       </div>
-      <DataTableToolbarSelected selectedData={selectedData} />
+      <DataTableToolbarSelected
+        selectedData={selectedData}
+        onClearSelectedData={onClearSelectedData}
+      />
     </div>
   );
 }

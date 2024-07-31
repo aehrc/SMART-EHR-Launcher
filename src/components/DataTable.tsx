@@ -28,10 +28,11 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   isLoading: boolean;
   selectedData: FhirResource | null;
+  onClearSelectedData?: () => void;
 }
 
 function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
-  const { data, columns, isLoading, selectedData } = props;
+  const { data, columns, isLoading, selectedData, onClearSelectedData } = props;
 
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -53,7 +54,11 @@ function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
 
   return (
     <div className="space-y-2 pt-2">
-      <DataTableToolbar table={table} selectedData={selectedData} />
+      <DataTableToolbar
+        table={table}
+        selectedData={selectedData}
+        onClearSelectedData={onClearSelectedData}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

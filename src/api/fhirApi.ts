@@ -18,6 +18,10 @@ export async function fetchResourceFromEHR(
   axiosInstance: AxiosInstance,
   requestUrl: string
 ) {
+  if (requestUrl.includes("|")) {
+    requestUrl = requestUrl.replace("|", "&version=");
+  }
+
   const { data } = await axiosInstance.get(requestUrl, {
     headers: QUERY_HEADERS,
   });

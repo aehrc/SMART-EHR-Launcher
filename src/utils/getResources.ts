@@ -23,3 +23,18 @@ export function getResources<T>(
     )
     .map((entry) => entry.resource as T);
 }
+
+export function getFirstResource<T>(
+  bundle: Bundle | undefined,
+  resourceType: string
+): T | null {
+  if (!bundle || !bundle.entry || bundle.entry.length === 0) return null;
+
+  const resource = bundle.entry.find(
+    (entry) =>
+      entry.resource?.resourceType &&
+      entry.resource.resourceType === resourceType
+  )?.resource as T | undefined;
+
+  return resource ?? null;
+}

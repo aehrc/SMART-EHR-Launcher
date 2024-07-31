@@ -82,7 +82,7 @@ function QuestionnaireTable() {
     // Set selected questionnaire and set query
     const questionnaireFhirContext = {
       role: "questionnaire-render-on-launch",
-      canonical: newQuestionnaire.url,
+      canonical: `${newQuestionnaire.url}|${newQuestionnaire.version}`,
       type: "Questionnaire",
     };
 
@@ -102,6 +102,7 @@ function QuestionnaireTable() {
       columns={columns}
       isLoading={isInitialLoading}
       selectedData={selectedQuestionnaire}
+      onClearSelectedData={() => handleSetQuestionnaireContext("")}
     />
   );
 }

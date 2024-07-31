@@ -91,6 +91,7 @@ function EncounterTable(props: EncounterTableProps) {
       columns={columns}
       isLoading={isInitialLoading}
       selectedData={selectedEncounter}
+      onClearSelectedData={() => handleSetEncounterContext("")}
     />
   );
 }
