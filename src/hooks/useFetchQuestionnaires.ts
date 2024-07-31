@@ -20,7 +20,7 @@ import type { Bundle, Questionnaire } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
-import useAxios from "@/hooks/useAxios.ts";
+import useFormsServerAxios from "@/hooks/useFormsServerAxios.ts";
 
 interface useFetchQuestionnairesReturnParams {
   questionnaires: Questionnaire[];
@@ -32,7 +32,7 @@ function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
 
   const queryUrl = `/Questionnaire?_count=${numOfSearchEntries}&_sort=-date&`;
 
-  const axiosInstance = useAxios();
+  const axiosInstance = useFormsServerAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
     ["questionnaires" + numOfSearchEntries.toString(), queryUrl],
     () => fetchResourceFromEHR(axiosInstance, queryUrl)

@@ -3,12 +3,12 @@ import { FORMS_SERVER_TOKEN, FORMS_SERVER_URL } from "@/globals.ts";
 
 interface FormsServerContextType {
   baseUrl: string;
-  token: string;
+  accessToken: string;
 }
 
 export const FormsServerContext = createContext<FormsServerContextType>({
   baseUrl: "",
-  token: "",
+  accessToken: "",
 });
 
 const FormsServerContextProvider = (props: { children: ReactNode }) => {
@@ -18,7 +18,7 @@ const FormsServerContextProvider = (props: { children: ReactNode }) => {
     <FormsServerContext.Provider
       value={{
         baseUrl: FORMS_SERVER_URL,
-        token: FORMS_SERVER_TOKEN,
+        accessToken: FORMS_SERVER_TOKEN,
       }}
     >
       {children}
