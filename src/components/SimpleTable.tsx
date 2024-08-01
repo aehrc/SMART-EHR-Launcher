@@ -32,9 +32,11 @@ function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
+    rowCount: 1,
     initialState: {
       sorting: initialSorting,
     },
+    manualPagination: true, // To show all rows within one page
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
