@@ -1,15 +1,15 @@
 import useValidateCodeAndState from "@/hooks/useValidateCodeAndState.ts";
-import { LAUNCH_CLIENT_ID, LAUNCH_SCOPE } from "@/globals.ts";
+import { OAUTH_CLIENT_ID, OAUTH_GRANT_TYPE, OAUTH_SCOPE } from "@/globals.ts";
 import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { Button } from "@/components/ui/button.tsx";
-import useRequestToken from "@/hooks/useRequestToken.ts";
+import useRequestTokenCode from "@/hooks/useRequestTokenCode.ts";
 import useAuthorize from "@/hooks/useAuthorize.ts";
 
 const responseType = "code";
-const clientId = LAUNCH_CLIENT_ID;
-const scope = LAUNCH_SCOPE;
+const clientId = OAUTH_CLIENT_ID;
+const scope = OAUTH_SCOPE;
 const aud = getFhirServerBaseUrl();
-const grantType = "authorization_code";
+const grantType = OAUTH_GRANT_TYPE;
 
 function AuthCallback() {
   const { protocol, host } = window.location;
@@ -30,7 +30,7 @@ function AuthCallback() {
   });
 
   // Perform token() if authorisation is complete i.e. code and state are valid
-  const { tokenStatus } = useRequestToken({
+  const { tokenStatus } = useRequestTokenCode({
     grantType,
     code,
     redirectUri,

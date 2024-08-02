@@ -12,7 +12,7 @@ interface useRequestTokenProps {
   clientId: string;
 }
 
-export function useRequestToken(props: useRequestTokenProps): {
+export function useRequestTokenCode(props: useRequestTokenProps): {
   tokenStatus: "loading" | "error";
 } {
   const { grantType, code, redirectUri, clientId } = props;
@@ -112,4 +112,4 @@ export function useRequestToken(props: useRequestTokenProps): {
   return { tokenStatus: "loading" };
 }
 
-export default useRequestToken;
+export default useRequestTokenCode;

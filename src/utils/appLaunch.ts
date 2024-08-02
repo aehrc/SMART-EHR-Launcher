@@ -1,3 +1,4 @@
+// List of SMART apps should be registered in your server, otherwise you will get an error when launching
 export const preconfiguredApps = [
   {
     app_name: "Health Check Assessment",
