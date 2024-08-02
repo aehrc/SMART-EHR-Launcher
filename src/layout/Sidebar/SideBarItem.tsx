@@ -17,7 +17,7 @@ function SideBarItem(props: SideBarItemProps) {
   const { title, path, Icon } = sidebarItem;
 
   const pathIsActive =
-    activePath === "/" ? activePath.startsWith(path) : activePath === path;
+    path === "/" ? activePath === path : activePath.startsWith(path);
 
   return (
     <Tooltip>
