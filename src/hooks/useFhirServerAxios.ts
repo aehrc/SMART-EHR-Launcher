@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useContext } from "react";
 import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
-import { LAUNCH_CLIENT_ID } from "@/globals.ts";
+import { OAUTH_CLIENT_ID } from "@/globals.ts";
 import { responseIsTokenResponse, TokenResponse } from "@/utils/oauth.ts";
 
 async function refreshAccessToken(
@@ -14,7 +14,7 @@ async function refreshAccessToken(
     body: new URLSearchParams({
       grant_type: "refresh_token",
       refresh_token: refreshToken,
-      client_id: LAUNCH_CLIENT_ID,
+      client_id: OAUTH_CLIENT_ID,
     }),
   });
 
@@ -51,19 +51,22 @@ function useAxios() {
         const decodedToken = jwtDecode(accessToken);
 
         // Convert decodedToken.exp to milliseconds
-        if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
-          try {
-            const newTokenResponse = await refreshAccessToken(
-              tokenEndpoint,
-              refreshToken
-            );
+        if (decodedToken.exp) {
+          const expiresInMinus10Minutes = decodedToken.exp * 1000 - 600000;
+          if (expiresInMinus10Minutes < Date.now()) {
+            try {
+              const newTokenResponse = await refreshAccessToken(
+                tokenEndpoint,
+                refreshToken
+              );
 
-            if (newTokenResponse) {
-              setTokenResponse(newTokenResponse);
-              config.headers.Authorization = `Bearer ${newTokenResponse.access_token}`;
+              if (newTokenResponse) {
+                setTokenResponse(newTokenResponse);
+                config.headers.Authorization = `Bearer ${newTokenResponse.access_token}`;
+              }
+            } catch (error) {
+              console.error("Failed to refresh token", error);
             }
-          } catch (error) {
-            console.error("Failed to refresh token", error);
           }
         }
 
