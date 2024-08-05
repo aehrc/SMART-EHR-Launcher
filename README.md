@@ -62,7 +62,7 @@ See the .env file for comments on the environment configuration.
 
 #### Below is the configuration for the Smart Forms proxy server:
 ```
-VITE_FHIR_SERVER_URL=https://proxy.smartforms.io/fhir
+VITE_FHIR_SERVER_URL=https://proxy.smartforms.io/v/r4/fhir
 VITE_AUTH_REQUIRED=false
 VITE_LAUNCH_PARAM_CONFIG=proxy
 VITE_FORMS_SERVER_URL=https://smartforms.csiro.au/api/fhir
@@ -123,5 +123,6 @@ docker run -p 8080:80 -e FHIR_SERVER_R4=<Insert FHIR server base URL> aehrc/smar
 Visit `http:localhost:8080/v/r4/fhir` to see your proxied FHIR server.
 
 It is recommended to use this [environment configuration](#below-is-the-configuration-for-the-smart-forms-proxy-server) when using the proxy service.
+Remember to set `VITE_FHIR_SERVER_URL` to the proxy server's base URL, not the source FHIR server's!
 
 Note: This proxy service is only tested on open servers so far, and it is not guaranteed to work with servers that require authorisation.
