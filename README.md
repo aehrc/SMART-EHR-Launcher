@@ -10,7 +10,7 @@ It is a single-page application (SPA) built in React and Typescript, and was boo
 This instance uses the proxy service from https://github.com/aehrc/smart-launcher-v2 which enables SMART App Launch functionality on top of a vanilla FHIR server.
 This instance is mainly used for demonstrating the pre-population of clinical data into the [Smart Forms](https://github.com/aehrc/smart-forms) Questionnaire renderer.
 
-See [below](#using-the-smart-app-launch-proxy-service) for details on using the proxy service.
+See the [Using the Smart App Launch Proxy service](#using-the-smart-app-launch-proxy-service) section for details on using the proxy service.
 
 #### Sparked AU Core reference server demo - https://sparked-au-core.d4zp11mxdi99k.amplifyapp.com
 
