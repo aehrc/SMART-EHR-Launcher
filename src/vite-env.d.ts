@@ -27,7 +27,10 @@ interface ImportMetaEnv {
   readonly VITE_FHIR_SERVER_URL: string;
 
   // Determine if authorization is required
-  readonly VITE_AUTH_REQUIRED: boolean;
+  readonly VITE_AUTH_REQUIRED: string;
+
+  // Launch parameter configuration
+  readonly VITE_LAUNCH_PARAM_CONFIG: "default" | "proxy";
 
   // OAuth configuration - only authorization_code is implemented
   // If our server doesn't support authorization_code and you want to use your oauth mechanism, you can write your own Auth component and put it in src/layout/Home.tsx

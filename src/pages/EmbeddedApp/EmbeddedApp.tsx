@@ -1,5 +1,5 @@
 import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
-import { getSparkedAuCoreServerLaunchUrl } from "@/lib/launchUrl.ts";
+import { getLaunchUrl } from "@/lib/launchUrl.ts";
 import { Resizable } from "re-resizable";
 import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
@@ -8,7 +8,7 @@ import { UnfoldHorizontal } from "lucide-react";
 function EmbeddedApp() {
   const { query, launch } = useLauncherQuery();
 
-  const userLaunchUrl = getSparkedAuCoreServerLaunchUrl(query, launch);
+  const launchUrl = getLaunchUrl(query, launch);
 
   const appName = query.app_name !== "" ? query.app_name : "SMART app";
 
@@ -55,7 +55,7 @@ function EmbeddedApp() {
             }}
           >
             <iframe
-              src={userLaunchUrl.href}
+              src={launchUrl.href}
               className="border-2 w-full h-full min-w-[675px] min-h-[500px] rounded-lg "
             />
           </Resizable>

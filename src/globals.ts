@@ -17,10 +17,15 @@
 
 // Source FHIR server
 export const FHIR_SERVER_URL =
-  import.meta.env.VITE_FHIR_SERVER_URL ?? "https://proxy.smartforms.io/fhir";
+  import.meta.env.VITE_FHIR_SERVER_URL ??
+  "https://proxy.smartforms.io/v/r4/fhir";
 
 // Determine if authorization is required
-export const AUTH_REQUIRED = import.meta.env.VITE_AUTH_REQUIRED ?? false;
+export const AUTH_REQUIRED = import.meta.env.VITE_AUTH_REQUIRED === "true";
+
+// Launch parameter configuration
+export const LAUNCH_PARAM_CONFIG =
+  import.meta.env.VITE_LAUNCH_PARAM_CONFIG ?? "proxy";
 
 // OAuth configuration - only authorization_code is implemented
 // If our server doesn't support authorization_code and you want to use your oauth mechanism, you can write your own Auth component and put it in src/layout/Home.tsx

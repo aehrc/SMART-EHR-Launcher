@@ -1,6 +1,6 @@
 import useLauncherQuery from "../../hooks/useLauncherQuery";
 import { getValidationErrors } from "../../lib/URLValidation";
-import { getSparkedAuCoreServerLaunchUrl } from "../../lib/launchUrl";
+import { getLaunchUrl } from "../../lib/launchUrl";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import {
   Tooltip,
@@ -17,7 +17,7 @@ function LaunchButton() {
 
   const { switchActivePage } = useActivePage();
 
-  const userLaunchUrl = getSparkedAuCoreServerLaunchUrl(query, launch);
+  const launchUrl = getLaunchUrl(query, launch);
 
   const isEmbeddedView = launch.is_embedded_view;
   const appName = query.app_name !== "" ? query.app_name : "SMART app";
@@ -50,12 +50,9 @@ function LaunchButton() {
 
   return (
     <div className="flex items-center gap-2">
-      <CopyButton
-        link={userLaunchUrl.href}
-        tooltipText="Copy app launch link"
-      />
+      <CopyButton link={launchUrl.href} tooltipText="Copy app launch link" />
       <a
-        href={userLaunchUrl.href}
+        href={launchUrl.href}
         target="_blank"
         rel="noopener noreferrer"
         className={`${

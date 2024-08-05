@@ -1,6 +1,7 @@
 import { base64UrlEncode, encode, LaunchParams } from "./codec.ts";
 import { LauncherQuery } from "../hooks/useLauncherQuery.ts";
 import { getFhirServerBaseUrl } from "../utils/misc.ts";
+import { LAUNCH_PARAM_CONFIG } from "@/globals.ts";
 
 export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
   launch_type: "provider-ehr",
@@ -18,8 +19,17 @@ export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
   pkce: "auto",
 };
 
-// Dont use this for AU Core Test Server
-export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
+const launchConfig = LAUNCH_PARAM_CONFIG;
+
+export function getLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
+  if (launchConfig === "proxy") {
+    return getProxyLaunchUrl(query, launch);
+  }
+
+  return getDefaultLaunchUrl(query, launch);
+}
+
+function getProxyLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
   const { launch_type, sim_ehr } = launch;
   const { launch_url } = query;
 
@@ -68,10 +78,7 @@ export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
   return userLaunchUrl;
 }
 
-export function getSparkedAuCoreServerLaunchUrl(
-  query: LauncherQuery,
-  launch: LaunchParams
-) {
+function getDefaultLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
   const { launch_url } = query;
 
   let launchContexts: object = {
