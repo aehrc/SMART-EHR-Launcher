@@ -19,7 +19,7 @@ function Home() {
 
   // Use AUTH_REQUIRED to determine if authorisation is required. If not authenticated, redirect to AuthCallback
   // If no grant type is set, app assumes no auth is needed and proceeds to user/patient selection
-  if (AUTH_REQUIRED && accessToken === "") {
+  if (AUTH_REQUIRED === true && accessToken === "") {
     if (OAUTH_GRANT_TYPE === "authorization_code") {
       return <RedirectToAuthCallback />;
     }
