@@ -20,7 +20,7 @@ function PatientCard(props: PatientCardProps) {
         <CardDescription>Patient Summary</CardDescription>
         {patient ? (
           <div className="flex items-center">
-            <div className="flex flex-1 items-center py-3 gap-6">
+            <div className="flex flex-1 items-center py-2.5 gap-6">
               <User className="h-16 w-16 p-3 rounded-full bg-blue-100 text-blue-800" />
               <div className="flex flex-col gap-0.5">
                 <div className="text-2xl font-semibold">{patientName}</div>

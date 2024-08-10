@@ -7,6 +7,7 @@ import EncounterNavProfile from "@/layout/NavProfiles/EncounterNavProfile.tsx";
 import QuestionnaireNavProfile from "@/layout/NavProfiles/QuestionnaireNavProfile.tsx";
 import Header from "@/components/Header.tsx";
 import CopyButton from "@/components/CopyButton.tsx";
+import Footer from "@/components/ui/Footer.tsx";
 
 function DashboardLayout() {
   return (
@@ -30,6 +31,8 @@ function DashboardLayout() {
         </Header>
         <Outlet />
       </div>
+      <div className="flex-1" />
+      <Footer />
     </div>
   );
 }
