@@ -1,6 +1,7 @@
 import Header from "@/components/Header.tsx";
 import UserNavProfile from "@/layout/NavProfiles/UserNavProfile.tsx";
 import PatientSettings from "@/pages/Settings/PatientSettings/PatientSettings.tsx";
+import Footer from "@/components/ui/Footer.tsx";
 
 function InitialPatientSelection() {
   return (
@@ -16,6 +17,8 @@ function InitialPatientSelection() {
           </div>
         </main>
       </div>
+      <div className="flex-1" />
+      <Footer />
     </div>
   );
 }
