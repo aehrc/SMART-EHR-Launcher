@@ -1,5 +1,6 @@
 import Header from "@/components/Header.tsx";
 import UserSettings from "@/pages/Settings/UserSettings/UserSettings.tsx";
+import Footer from "@/components/ui/Footer.tsx";
 
 function InitialUserSelection() {
   return (
@@ -14,6 +15,8 @@ function InitialUserSelection() {
           </div>
         </main>
       </div>
+      <div className="flex-1" />
+      <Footer />
     </div>
   );
 }
