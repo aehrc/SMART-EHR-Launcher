@@ -26,16 +26,35 @@ function PatientMedications(props: PatientMedicationsProps) {
     useFetchMedicationRequests(patientId);
 
   const medicationTableData: MedicationTableData[] = useMemo(() => {
-    return medicationRequests.map((entry) => ({
-      id: entry.id ?? nanoid(),
-      medication:
+    return medicationRequests.map((entry) => {
+      let medicationText =
         entry.medicationCodeableConcept?.coding?.[0].display ??
         entry.medicationCodeableConcept?.text ??
+        entry.medicationCodeableConcept?.coding?.[0].code ??
         entry.medicationReference?.display ??
-        "",
-      status: entry.status ?? "",
-      authoredOn: entry.authoredOn ? dayjs(entry.authoredOn) : null,
-    }));
+        "*";
+
+      if (
+        entry.medicationCodeableConcept?.coding?.[0].system ===
+        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      ) {
+        medicationText = "*" + medicationText.toLowerCase();
+      }
+
+      return {
+        id: entry.id ?? nanoid(),
+        medication: medicationText,
+        status: entry.status ?? "",
+        authoredOn: entry.authoredOn
+          ? dayjs(entry.authoredOn)
+          : entry._authoredOn?.extension?.find(
+              (ext) =>
+                ext.url ===
+                  "http://hl7.org/fhir/StructureDefinition/data-absent-reason" &&
+                !!ext.valueCode
+            )?.valueCode ?? null,
+      };
+    });
   }, [medicationRequests]);
 
   const columns = createMedicationTableColumns();

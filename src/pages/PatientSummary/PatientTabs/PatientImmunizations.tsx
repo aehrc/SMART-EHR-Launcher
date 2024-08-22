@@ -25,15 +25,29 @@ function PatientImmunizations(props: Props) {
   const { immunizations, isInitialLoading } = useFetchImmunizations(patientId);
 
   const immunizationTableData: ImmunizationTableData[] = useMemo(() => {
-    return immunizations.map((entry) => ({
-      id: entry.id ?? nanoid(),
-      immunization:
-        entry.vaccineCode?.coding?.[0].display ?? entry.vaccineCode?.text ?? "",
-      status: entry.status ?? "",
-      occurrenceDate: entry.occurrenceDateTime
-        ? dayjs(entry.occurrenceDateTime)
-        : null,
-    }));
+    return immunizations.map((entry) => {
+      let immunizationText =
+        entry.vaccineCode?.coding?.[0].display ??
+        entry.vaccineCode?.text ??
+        entry.vaccineCode?.coding?.[0].code ??
+        "*";
+
+      if (
+        entry.vaccineCode?.coding?.[0].system ===
+        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      ) {
+        immunizationText = "*" + immunizationText.toLowerCase();
+      }
+
+      return {
+        id: entry.id ?? nanoid(),
+        immunization: immunizationText,
+        status: entry.status ?? "",
+        occurrenceDate: entry.occurrenceDateTime
+          ? dayjs(entry.occurrenceDateTime)
+          : null,
+      };
+    });
   }, [immunizations]);
 
   const columns = createImmunizationTableColumns();

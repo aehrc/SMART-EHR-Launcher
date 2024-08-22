@@ -26,6 +26,19 @@ function PatientProcedures(props: PatientProceduresProps) {
 
   const procedureTableData: ProcedureTableData[] = useMemo(() => {
     return procedures.map((entry) => {
+      let procedureText =
+        entry.code?.coding?.[0].display ??
+        entry.code?.text ??
+        entry.code?.coding?.[0].code ??
+        "*";
+
+      if (
+        entry.code?.coding?.[0].system ===
+        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      ) {
+        procedureText = "*" + procedureText.toLowerCase();
+      }
+
       const performedPeriodStart = entry.performedPeriod?.start
         ? dayjs(entry.performedPeriod.start)
         : null;
@@ -36,7 +49,7 @@ function PatientProcedures(props: PatientProceduresProps) {
 
       return {
         id: entry.id ?? nanoid(),
-        procedure: entry.code?.coding?.[0].display ?? entry.code?.text ?? "",
+        procedure: procedureText,
         status: entry.status ?? "",
         reason:
           entry.reasonCode?.[0].coding?.[0].display ??

@@ -26,19 +26,49 @@ function PatientObservations(props: PatientObservationsProps) {
   const { observations, isInitialLoading } = useFetchObservations(patientId);
 
   const observationTableData: ObservationTableData[] = useMemo(() => {
-    return observations.map((entry) => ({
-      id: entry.id ?? nanoid(),
-      observation: entry.code.coding?.[0].display ?? entry.code.text ?? "",
-      status: entry.status ?? "",
-      category:
+    return observations.map((entry) => {
+      let observationText =
+        entry.code.coding?.[0].display ??
+        entry.code.text ??
+        entry.code.coding?.[0].code ??
+        "*";
+
+      if (
+        entry.code.coding?.[0].system ===
+        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      ) {
+        observationText = "*" + observationText.toLowerCase();
+      }
+
+      let categoryText =
         entry.category?.[0].coding?.[0].display ??
         entry.category?.[0].text ??
-        "",
-      valueData: getObservationValueData(entry),
-      effectiveDateTime: entry.effectiveDateTime
-        ? dayjs(entry.effectiveDateTime)
-        : null,
-    }));
+        entry.category?.[0].coding?.[0].code ??
+        "*";
+
+      if (
+        entry.category?.[0].coding?.[0].system ===
+        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      ) {
+        categoryText = "*" + categoryText.toLowerCase();
+      }
+
+      return {
+        id: entry.id ?? nanoid(),
+        observation: observationText,
+        status: entry.status ?? "",
+        category: categoryText,
+        valueData: getObservationValueData(entry),
+        effectiveDateTime: entry.effectiveDateTime
+          ? dayjs(entry.effectiveDateTime)
+          : entry._effectiveDateTime?.extension?.find(
+              (ext) =>
+                ext.url ===
+                  "http://hl7.org/fhir/StructureDefinition/data-absent-reason" &&
+                !!ext.valueCode
+            )?.valueCode ?? null,
+      };
+    });
   }, [observations]);
 
   const columns = createObservationTableColumns();

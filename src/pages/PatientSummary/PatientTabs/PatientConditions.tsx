@@ -23,16 +23,31 @@ function PatientConditions(props: PatientConditionsProps) {
   const { conditions, isInitialLoading } = useFetchConditions(patientId);
 
   const conditionTableData: ConditionTableData[] = useMemo(() => {
-    return conditions.map((entry) => ({
-      id: entry.id ?? nanoid(),
-      condition: entry.code?.coding?.[0].display ?? entry.code?.text ?? "",
-      clinicalStatus:
-        entry.clinicalStatus?.coding?.[0].display ??
-        entry.clinicalStatus?.text ??
-        "",
-      onsetDate: entry.onsetDateTime ? dayjs(entry.onsetDateTime) : null,
-      recordedDate: entry.recordedDate ? dayjs(entry.recordedDate) : null,
-    }));
+    return conditions.map((entry) => {
+      let conditionText =
+        entry.code?.coding?.[0].display ??
+        entry.code?.text ??
+        entry.code?.coding?.[0].code ??
+        "*";
+
+      if (
+        entry.code?.coding?.[0].system ===
+        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      ) {
+        conditionText = "*" + conditionText.toLowerCase();
+      }
+
+      return {
+        id: entry.id ?? nanoid(),
+        condition: conditionText,
+        clinicalStatus:
+          entry.clinicalStatus?.coding?.[0].display ??
+          entry.clinicalStatus?.text ??
+          "",
+        onsetDate: entry.onsetDateTime ? dayjs(entry.onsetDateTime) : null,
+        recordedDate: entry.recordedDate ? dayjs(entry.recordedDate) : null,
+      };
+    });
   }, [conditions]);
 
   const columns = createConditionTableColumns();
