@@ -12,7 +12,23 @@ interface PatientCardProps {
 function PatientCard(props: PatientCardProps) {
   const { patient } = props;
 
-  const { patientName, patientAge, patientDob } = usePatientDetails(patient);
+  let { patientName, patientGender, patientAge, patientDob } =
+    usePatientDetails(patient);
+
+  if (patientName.startsWith("*") || patientName === "") {
+    patientName = "Name not specified";
+  }
+
+  if (patientAge.startsWith("*") || patientAge === "") {
+    patientAge = "";
+  }
+
+  if (patientDob.startsWith("*") || patientDob === "") {
+    patientDob = "";
+  }
+  if (patientGender.startsWith("*") || patientGender === "") {
+    patientGender = "";
+  }
 
   return (
     <Card>
@@ -26,7 +42,7 @@ function PatientCard(props: PatientCardProps) {
                 <div className="text-2xl font-semibold">{patientName}</div>
                 <div className="text-md">{patientDob}</div>
                 <div className="text-sm text-muted-foreground">
-                  {patientAge} {patient.gender}
+                  {patientAge} {patientGender.toLowerCase()}
                 </div>
               </div>
             </div>

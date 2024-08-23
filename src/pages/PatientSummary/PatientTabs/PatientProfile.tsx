@@ -15,8 +15,13 @@ interface PatientProfileProps {
 function PatientProfile(props: PatientProfileProps) {
   const { patient } = props;
 
-  const { patientName, patientGender, patientAge, patientDob } =
-    usePatientDetails(patient);
+  const {
+    patientName,
+    patientGender,
+    patientAge,
+    patientDob,
+    patientSexAtBirth,
+  } = usePatientDetails(patient);
 
   return (
     <Card>
@@ -47,6 +52,14 @@ function PatientProfile(props: PatientProfileProps) {
             <div className="text-muted-foreground w-4/5">{patientGender}</div>
           </div>
 
+          {patientSexAtBirth ? (
+            <div className="flex gap-2">
+              <div className="font-medium w-1/5">Sex at Birth</div>
+              <div className="text-muted-foreground w-4/5">
+                {patientSexAtBirth}
+              </div>
+            </div>
+          ) : null}
           <div className="flex gap-2">
             <div className="font-medium w-1/5">Age</div>
             <div className="text-muted-foreground w-4/5">{patientAge}</div>

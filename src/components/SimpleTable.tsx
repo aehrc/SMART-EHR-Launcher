@@ -75,7 +75,7 @@ function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
         </TableBody>
       </Table>
       <div className="text-xs text-muted-foreground">
-        <b>{table.getRowCount()}</b> results found
+        <b>{table.getFilteredRowModel().rows.length}</b> results found
       </div>
     </div>
   );

@@ -172,7 +172,7 @@ export interface MedicationTableData {
   id: string;
   medication: string;
   status: string;
-  authoredOn: Dayjs | null;
+  authoredOn: Dayjs | string | null;
 }
 
 export function createMedicationTableColumns(): ColumnDef<MedicationTableData>[] {
@@ -211,13 +211,22 @@ export function createMedicationTableColumns(): ColumnDef<MedicationTableData>[]
       accessorKey: "authoredOn",
       header: "Authored On",
       sortingFn: (a, b) => {
-        if (a.original.authoredOn === null || b.original.authoredOn === null) {
+        if (
+          a.original.authoredOn === null ||
+          b.original.authoredOn === null ||
+          typeof a.original.authoredOn === "string" ||
+          typeof b.original.authoredOn === "string"
+        ) {
           return 0;
         }
 
         return a.original.authoredOn.diff(b.original.authoredOn);
       },
       cell: ({ row }) => {
+        if (typeof row.original.authoredOn === "string") {
+          return "*" + row.original.authoredOn;
+        }
+
         return row.original.authoredOn
           ? row.original.authoredOn.format("DD/MM/YYYY")
           : "-";
@@ -230,6 +239,7 @@ export function createMedicationTableColumns(): ColumnDef<MedicationTableData>[]
 export interface AllergyTableData {
   id: string;
   allergy: string;
+  verificationStatus: string;
   category: string;
   criticality: string;
   recordedDate: Dayjs | null;
@@ -258,14 +268,20 @@ export function createAllergyTableColumns(): ColumnDef<AllergyTableData>[] {
       ),
     },
     {
-      accessorKey: "category",
-      header: "Category",
+      accessorKey: "verificationStatus",
+      header: "Verification Status",
       cell: ({ row }) =>
-        row.getValue("category") ? (
-          <Badge variant="outline">{row.getValue("category")}</Badge>
+        row.getValue("verificationStatus") ? (
+          <Badge variant="outline">{row.getValue("verificationStatus")}</Badge>
         ) : (
           "-"
         ),
+    },
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) =>
+        row.getValue("category") ? row.getValue("category") : "-",
     },
     {
       accessorKey: "criticality",
@@ -343,7 +359,8 @@ export function createProcedureTableColumns(): ColumnDef<ProcedureTableData>[] {
     {
       accessorKey: "reason",
       header: "Reason",
-      cell: ({ row }) => row.getValue("reason") ?? "-",
+      cell: ({ row }) =>
+        row.getValue("reason") ? row.getValue("reason") : "-",
     },
     {
       accessorKey: "performedOn",
@@ -412,7 +429,8 @@ export function createImmunizationTableColumns(): ColumnDef<ImmunizationTableDat
     {
       accessorKey: "reason",
       header: "Reason",
-      cell: ({ row }) => row.getValue("reason") ?? "-",
+      cell: ({ row }) =>
+        row.getValue("reason") ? row.getValue("reason") : "-",
     },
     {
       accessorKey: "occurrenceDate",
@@ -443,7 +461,7 @@ export interface ObservationTableData {
   status: string;
   category: string;
   valueData: string | number | (string | number)[];
-  effectiveDateTime: Dayjs | null;
+  effectiveDateTime: Dayjs | string | null;
 }
 
 export function createObservationTableColumns(): ColumnDef<ObservationTableData>[] {
@@ -542,7 +560,9 @@ export function createObservationTableColumns(): ColumnDef<ObservationTableData>
       sortingFn: (a, b) => {
         if (
           a.original.effectiveDateTime === null ||
-          b.original.effectiveDateTime === null
+          b.original.effectiveDateTime === null ||
+          typeof a.original.effectiveDateTime === "string" ||
+          typeof b.original.effectiveDateTime === "string"
         ) {
           return 0;
         }
@@ -550,6 +570,10 @@ export function createObservationTableColumns(): ColumnDef<ObservationTableData>
         return a.original.effectiveDateTime.diff(b.original.effectiveDateTime);
       },
       cell: ({ row }) => {
+        if (typeof row.original.effectiveDateTime === "string") {
+          return row.original.effectiveDateTime;
+        }
+
         return row.original.effectiveDateTime
           ? row.original.effectiveDateTime.format("DD/MM/YYYY")
           : "-";
@@ -592,25 +616,54 @@ export function getObservationValueData(observation: Observation) {
 export function getObservationOrComponentValue(
   item: Observation | ObservationComponent
 ) {
-  if (item.valueQuantity?.value) {
+  if (item.valueQuantity) {
     // Add unit if it exists
     if (item.valueQuantity.unit) {
       return item.valueQuantity.value + " " + item.valueQuantity.unit;
     }
 
-    return item.valueQuantity.value;
+    if (item.valueQuantity.value) {
+      return item.valueQuantity.value;
+    }
+
+    const dataAbsentReason = item.valueQuantity.extension?.find(
+      (ext) =>
+        ext.url === "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+    )?.valueCode;
+    if (dataAbsentReason) {
+      return "*" + dataAbsentReason;
+    }
+
+    return "*";
   }
 
   if (item.valueCodeableConcept) {
-    return (
+    const valueText =
       item.valueCodeableConcept.coding?.[0].display ??
       item.valueCodeableConcept.text ??
-      ""
-    );
+      item.valueCodeableConcept.coding?.[0].code ??
+      "";
+
+    if (
+      item.valueCodeableConcept.coding?.[0].system ===
+      "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+    ) {
+      return "*" + valueText.toLowerCase();
+    }
+
+    return valueText;
   }
 
   if (item.valueString) {
     return item.valueString;
+  }
+
+  if (item.dataAbsentReason) {
+    const dataAbsentReason =
+      item.dataAbsentReason.coding?.[0].code ??
+      item.dataAbsentReason.text ??
+      "";
+    return "*" + dataAbsentReason;
   }
 
   return null;

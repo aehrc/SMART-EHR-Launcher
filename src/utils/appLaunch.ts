@@ -75,4 +75,12 @@ export const preconfiguredApps = [
     redirect_uris: "https://main.d2gc21b6xr8ukx.amplifyapp.com/",
     is_embedded_view: false,
   },
+  {
+    app_name: "Beda EMR",
+    launch_url: "https://emr.au-core.beda.software/launch",
+    client_id: "beda-emr",
+    scope: "",
+    redirect_uris: "https://emr.au-core.beda.software/",
+    is_embedded_view: false,
+  },
 ];
