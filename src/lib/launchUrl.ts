@@ -1,12 +1,13 @@
-import { encode, LaunchParams } from "./codec.ts";
-import { getFhirServerBaseUrl } from "./utils.ts";
+import { base64UrlEncode, encode, LaunchParams } from "./codec.ts";
 import { LauncherQuery } from "../hooks/useLauncherQuery.ts";
+import { getFhirServerBaseUrl } from "../utils/misc.ts";
+import { LAUNCH_PARAM_CONFIG } from "@/globals.ts";
 
 export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
   launch_type: "provider-ehr",
   patient: "",
   provider: "",
-  encounter: "AUTO",
+  encounter: "",
   skip_login: false,
   skip_auth: false,
   sim_ehr: false,
@@ -18,7 +19,17 @@ export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
   pkce: "auto",
 };
 
-export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
+const launchConfig = LAUNCH_PARAM_CONFIG;
+
+export function getLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
+  if (launchConfig === "proxy") {
+    return getProxyLaunchUrl(query, launch);
+  }
+
+  return getDefaultLaunchUrl(query, launch);
+}
+
+function getProxyLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
   const { launch_type, sim_ehr } = launch;
   const { launch_url } = query;
 
@@ -41,6 +52,7 @@ export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
     client_type: launch.client_type,
     pkce: launch.pkce,
     fhir_context: launch.fhir_context,
+    source_fhir_server: launch.source_fhir_server,
     is_embedded_view: launch.is_embedded_view,
   });
 
@@ -62,6 +74,38 @@ export function getUserLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
       origin
     );
   }
+
+  return userLaunchUrl;
+}
+
+function getDefaultLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
+  const { launch_url } = query;
+
+  let launchContexts: object = {
+    patient: launch.patient,
+    practitioner: launch.provider,
+  };
+
+  if (launch.encounter) {
+    launchContexts = {
+      ...launchContexts,
+      encounter: launch.encounter,
+    };
+  }
+
+  const launchCode = base64UrlEncode(JSON.stringify(launchContexts));
+
+  // FHIR baseUrl for EHR launches
+  const iss = getFhirServerBaseUrl();
+
+  let userLaunchUrl: URL | undefined;
+  try {
+    userLaunchUrl = new URL(launch_url || "", origin);
+  } catch {
+    userLaunchUrl = new URL("/", origin);
+  }
+  userLaunchUrl.searchParams.set("iss", iss);
+  userLaunchUrl.searchParams.set("launch", launchCode);
 
   return userLaunchUrl;
 }

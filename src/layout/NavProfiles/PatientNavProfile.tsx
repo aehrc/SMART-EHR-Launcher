@@ -1,111 +1,80 @@
-import { Box, Typography } from "@mui/material";
-import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
-import { Bundle, Patient } from "fhir/r4";
-import { formatAge, getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { grey } from "@mui/material/colors";
+import { humanName } from "../../utils/misc.ts";
 import { useContext, useEffect } from "react";
 import { PatientContext } from "../../contexts/PatientContext.tsx";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
+import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { useQuery } from "@tanstack/react-query";
+import { Bundle, Patient } from "fhir/r4";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
+import { getResource } from "../../utils/getResources.ts";
+import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
+import { User } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton.tsx";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 function PatientNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
-  const { setPatient } = useContext(PatientContext);
+  const { serverUrl } = useSourceFhirServer();
 
-  const { token } = useContext(TokenContext);
+  const { selectedPatient, setSelectedPatient } = useContext(PatientContext);
 
   const patientId = launch.patient;
-  const encounterId = launch.encounter;
 
-  const queryEndpoint =
-    getFhirServerBaseUrl() + (patientId ? `/Patient/${patientId}` : "/Patient");
+  const queryUrl = patientId ? `/Patient/${patientId}` : "/Patient";
 
+  const axiosInstance = useFhirServerAxios();
   const {
     data: resource,
     error,
     isLoading,
-  } = useQuery<Patient | Bundle>(
-    ["patientProfile", patientId],
-    () => fetchResourceFromEHR(queryEndpoint, token ?? ""),
-    { enabled: !!token }
+  } = useQuery<Patient | Bundle>(["patientProfile", serverUrl, patientId], () =>
+    fetchResourceFromEHR(axiosInstance, queryUrl)
   );
 
-  let patient: Patient | null = null;
-  if (resource) {
-    patient =
-      resource.resourceType === "Patient"
-        ? resource
-        : (resource.entry?.[0]?.resource as Patient);
-  }
+  const newPatient = getResource<Patient>(resource, "Patient");
 
   useEffect(() => {
-    // Define initial questionnaire context in FhirContext
-    const questionnaireFhirContext = {
-      role: "questionnaire-render-on-launch",
-      canonical: "http://www.health.gov.au/assessments/mbs/715|0.1.0-assembled",
-      type: "Questionnaire",
-    };
-
-    setQuery({
-      ...query,
-      fhir_context: `${JSON.stringify(questionnaireFhirContext)}`,
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!patient) {
+    if (!newPatient) {
       return;
     }
 
-    setPatient(patient);
-
-    setQuery({
-      ...query,
-      patient: patient.id,
-      launch_url: query.launch_url || "https://smartforms.csiro.au/launch",
-      app_name: query.app_name || "Health Check Assessment",
-      client_id: launch.client_id || "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      scope:
-        launch.scope ||
-        "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
-      redirect_uris: launch.redirect_uris || "https://smartforms.csiro.au",
-      validation: "1",
-      is_embedded_view: launch.is_embedded_view || false,
-    });
-  }, [patient]);
-
-  let encounterSelected = "";
-  if (encounterId && encounterId !== "AUTO") {
-    encounterSelected = encounterId;
-  } else {
-    encounterSelected = "No encounter selected";
-  }
+    setSelectedPatient(newPatient);
+    setQuery({ ...query, patient: newPatient.id });
+  }, [newPatient]);
 
   return (
-    <Box display="flex" alignItems="center" gap={1.5}>
-      <PersonOutlineOutlinedIcon sx={{ fontSize: 30, color: "primary.main" }} />
-      <Box fontSize={16} fontWeight="bold" color="primary.main">
+    <div className="flex items-center gap-3 h-16 px-3 bg-muted/80 rounded-lg">
+      <div className="flex flex-col items-center text-blue-800">
+        <User className="h-5 w-5" />
+        <div className="text-xs">Patient</div>
+      </div>
+
+      <div className="border-l border-gray-300 dark:border-gray-600 h-10" />
+
+      <div className="text-gray-600">
         {isLoading ? (
-          "Loading patient..."
-        ) : error || !patient ? (
-          "Patient not selected"
+          <div className="space-y-1">
+            <Skeleton className="h-5 w-32 bg-gray-200 animate-pulse" />
+            <Skeleton className="h-2 w-32 bg-gray-200 animate-pulse" />
+            <Skeleton className="h-2 w-32 bg-gray-200 animate-pulse" />
+          </div>
+        ) : error || !selectedPatient ? (
+          <div className="text-sm font-medium text-gray-600">
+            Patient not selected
+          </div>
         ) : (
-          <>
-            <Typography fontSize={16} fontWeight="bold" color="primary.main">
-              {humanName(patient)}
-            </Typography>
-            <Typography fontSize={12} color={grey["500"]}>
-              {formatAge(patient)} {patient.gender}
-            </Typography>
-            <Typography fontSize={12} fontWeight="bold" color={grey["500"]}>
-              {encounterSelected}
-            </Typography>
-          </>
+          <div className="flex flex-col gap-0.5">
+            <div className="text-sm font-medium">
+              {humanName(selectedPatient)}
+            </div>
+            <div className="flex">
+              <div className="text-xs px-1.5 py-0.5 rounded text-blue-800 bg-blue-100">
+                {selectedPatient.id}
+              </div>
+            </div>
+          </div>
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }
 

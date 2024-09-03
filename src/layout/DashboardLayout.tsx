@@ -1,43 +1,39 @@
-import { Box, styled } from "@mui/material";
-import { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
-import DashboardNavbar from "./DashboardNavbar.tsx";
-import DashboardSidebar from "./DashboardSideBar.tsx";
+import SideBar from "@/layout/Sidebar/SideBar.tsx";
+import SideBarMobile from "@/layout/SidebarMobile/SideBarMobile.tsx";
+import PatientNavProfile from "@/layout/NavProfiles/PatientNavProfile.tsx";
+import UserNavProfile from "@/layout/NavProfiles/UserNavProfile.tsx";
+import EncounterNavProfile from "@/layout/NavProfiles/EncounterNavProfile.tsx";
+import QuestionnaireNavProfile from "@/layout/NavProfiles/QuestionnaireNavProfile.tsx";
+import Header from "@/components/Header.tsx";
+import CopyButton from "@/components/CopyButton.tsx";
+import Footer from "@/components/ui/Footer.tsx";
 
-// styled components
-
-export const LayoutRoot = styled(Box)({
-  display: "flex",
-  minHeight: "100%",
-  overflowY: "scroll",
-});
-
-const Wrapper = styled(Box)({
-  width: `calc(100% - 80px)`,
-  maxWidth: 1400,
-  margin: "auto",
-  paddingLeft: 80,
-  height: "100vh",
-});
-
-interface Props {
-  children?: ReactNode;
-}
-
-function DashboardLayout(props: Props) {
-  const { children } = props;
-
+function DashboardLayout() {
   return (
-    <LayoutRoot>
-      <DashboardSidebar />
+    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <SideBar />
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+        <Header>
+          <SideBarMobile />
+          <div className="flex-grow" />
 
-      <Wrapper>
-        <DashboardNavbar />
-        <Box pt={2} pb={4}>
-          {children || <Outlet />}
-        </Box>
-      </Wrapper>
-    </LayoutRoot>
+          <span className=" -mr-2">
+            <CopyButton
+              link={window.location.href}
+              tooltipText="Copy EHR link with context"
+            />
+          </span>
+          <PatientNavProfile />
+          <UserNavProfile />
+          <EncounterNavProfile />
+          <QuestionnaireNavProfile />
+        </Header>
+        <Outlet />
+      </div>
+      <div className="flex-1" />
+      <Footer />
+    </div>
   );
 }
 

@@ -1,170 +1,82 @@
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
+import useFetchAllergyIntolerances from "@/hooks/useFetchAllergyIntolerances.ts";
+import {
+  AllergyTableData,
+  createAllergyTableColumns,
+} from "@/utils/patientDetails.tsx";
+import { nanoid } from "nanoid";
+import dayjs from "dayjs";
 import {
   Card,
-  Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import { AllergyIntolerance, Bundle } from "fhir/r4";
-import moment, { Moment } from "moment";
-import TableFeedback from "../../TableFeedback.tsx";
-import { TokenContext } from "../../../contexts/TokenContext.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { getFhirServerBaseUrl } from "../../../lib/utils.ts";
-import { fetchResourceFromEHR } from "../../../api/fhirApi.ts";
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.tsx";
+import SimpleTable from "@/components/SimpleTable.tsx";
 
-const tableHeaders = [
-  { id: "allergy", label: "Allergy" },
-  { id: "category", label: "Category" },
-  { id: "criticality", label: "Criticality" },
-  { id: "recorded-date", label: "Recorded Date" },
-];
-
-interface Props {
+interface PatientAllergiesProps {
   patientId: string;
 }
 
-function PatientAllergies(props: Props) {
+function PatientAllergies(props: PatientAllergiesProps) {
   const { patientId } = props;
 
-  const { token } = useContext(TokenContext);
+  const { allergyIntolerances, isInitialLoading } =
+    useFetchAllergyIntolerances(patientId);
 
-  const {
-    data: bundle,
-    error,
-    isLoading,
-  } = useQuery<Bundle<AllergyIntolerance>>(
-    ["allergies", patientId],
-    () =>
-      fetchResourceFromEHR(
-        getFhirServerBaseUrl() + `/AllergyIntolerance?patient=${patientId}`,
-        token ?? ""
-      ),
-    { enabled: !!token }
-  );
+  const allergyTableData: AllergyTableData[] = useMemo(() => {
+    return allergyIntolerances.map((entry) => {
+      let allergyText =
+        entry.code?.coding?.[0].display ??
+        entry.code?.text ??
+        entry.code?.coding?.[0].code ??
+        "*";
 
-  const allergies: AllergyIntolerance[] = useMemo(
-    () => bundle?.entry?.map((p) => p.resource!) || [],
-    [bundle]
-  );
-
-  // construct questionnaire list items for data display
-  const allergyListItems: AllergyListItem[] = useMemo(
-    () => getAllergyListItems(allergies),
-    [allergies]
-  );
-
-  const isEmpty = allergyListItems.length === 0;
-
-  return (
-    <>
-      <Typography fontSize={18} fontWeight="bold">
-        Allergies
-      </Typography>
-      <Divider sx={{ mt: 1, mb: 2 }} />
-      <Card>
-        <TableContainer sx={{ minWidth: 600 }}>
-          <Table>
-            <TableHead sx={{ bgcolor: "background.default" }}>
-              <TableRow sx={{ height: 56 }}>
-                {tableHeaders.map((headCell, index) => (
-                  <TableCell key={headCell.id} sx={{ pl: index === 0 ? 4 : 0 }}>
-                    <Typography variant="subtitle2">
-                      {isLoading || isEmpty ? null : headCell.label}
-                    </Typography>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allergyListItems.map((row) => {
-                const { id, name, category, criticality, recordedDate } = row;
-
-                return (
-                  <TableRow key={id} tabIndex={-1}>
-                    <TableCell scope="row" sx={{ pl: 4 }}>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ textTransform: "Capitalize" }}
-                      >
-                        {name}
-                      </Typography>
-                    </TableCell>
-
-                    <TableCell sx={{ pl: 0, textTransform: "capitalize" }}>
-                      {category}
-                    </TableCell>
-                    <TableCell sx={{ pl: 0 }}>{criticality}</TableCell>
-                    <TableCell sx={{ pl: 0 }}>{recordedDate}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-            {isEmpty || error || isLoading ? (
-              <TableFeedback
-                isEmpty={isEmpty}
-                loading={isLoading}
-                error={error}
-                resourceNamePlural={"allergies"}
-              />
-            ) : null}
-          </Table>
-        </TableContainer>
-      </Card>
-    </>
-  );
-}
-
-// Helper interfaces and functions
-export interface AllergyListItem {
-  id: string;
-  name: string;
-  category: string;
-  criticality: string;
-  recordedDate: string;
-  recordedDateMoment: Moment | null;
-}
-
-function getAllergyListItems(
-  allergies: AllergyIntolerance[]
-): AllergyListItem[] {
-  if (!allergies || allergies.length === 0) return [];
-
-  return allergies
-    .map((entry, i) => {
-      let category = "unknown";
-      if (entry.category && entry.category.length > 0) {
-        category = entry.category[0];
+      if (
+        entry.code?.coding?.[0].system ===
+        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+      ) {
+        allergyText = "*" + allergyText.toLowerCase();
       }
 
-      let recordedDateMoment = null;
-      if (entry.recordedDate) {
-        recordedDateMoment = moment(entry.recordedDate);
-      }
+      const verificationStatusText =
+        entry.verificationStatus?.coding?.[0].display ??
+        entry.verificationStatus?.text ??
+        entry.verificationStatus?.coding?.[0].code ??
+        "";
 
       return {
-        id: entry.id ?? i.toString(),
-        name: entry.code?.text ?? entry.code?.coding?.[0].display ?? "unknown",
-        category: category,
-        criticality: entry.criticality ?? "unknown",
-        recordedDate: recordedDateMoment
-          ? recordedDateMoment.format("DD/MM/YYYY")
-          : "unknown",
-        recordedDateMoment: recordedDateMoment,
+        id: entry.id ?? nanoid(),
+        allergy: allergyText,
+        verificationStatus: verificationStatusText.toLowerCase(),
+        category: entry.category?.[0] ?? "",
+        criticality: entry.criticality ?? "",
+        recordedDate: entry.recordedDate ? dayjs(entry.recordedDate) : null,
       };
-    })
-    .sort((a, b) => {
-      if (a.recordedDateMoment === null || b.recordedDateMoment === null) {
-        return 0;
-      }
-
-      return b.recordedDateMoment.diff(a.recordedDateMoment);
     });
+  }, [allergyIntolerances]);
+
+  const columns = createAllergyTableColumns();
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Allergies</CardTitle>
+        <CardDescription>
+          Patient's documented allergic reactions and sensitivities
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <SimpleTable
+          data={allergyTableData}
+          columns={columns}
+          isLoading={isInitialLoading}
+          initialSorting={[{ id: "recordedDate", desc: true }]}
+        />
+      </CardContent>
+    </Card>
+  );
 }
 
 export default PatientAllergies;

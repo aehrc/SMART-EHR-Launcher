@@ -1,34 +1,50 @@
-import { theme } from "./Theme";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import ActivePageContextProvider from "@/contexts/ActivePageContext.tsx";
+import { SnackbarProvider } from "notistack";
+import FormsServerContextProvider from "@/contexts/FormsServerContext.tsx";
+import QuestionnaireContextProvider from "@/contexts/QuestionnaireContext.tsx";
+import PatientContextProvider from "@/contexts/PatientContext.tsx";
+import UserContextProvider from "@/contexts/UserContext.tsx";
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import Configuration from "./pages/Configuration/Configuration";
-import PatientSummary from "./pages/PatientSummary/PatientSummary";
-import PatientContextProvider from "./contexts/PatientContext";
-import DashboardLayout from "./layout/DashboardLayout";
-import { SnackbarProvider } from "notistack";
-import TitleContextProvider from "./contexts/TitleContext";
-import TokenContextProvider from "./contexts/TokenContext";
-import QuestionnaireContextProvider from "./contexts/QuestionnaireContext.tsx";
+import Settings from "@/pages/Settings/Settings.tsx";
+import EncounterContextProvider from "@/contexts/EncounterContext.tsx";
+import { settingsMenuItems } from "@/utils/settingsMenuItem.tsx";
+import PatientSummary from "@/pages/PatientSummary/PatientSummary.tsx";
+import EmbeddedApp from "@/pages/EmbeddedApp/EmbeddedApp.tsx";
+import AuthCallback from "@/pages/AuthCallback/AuthCallback.tsx";
+import Home from "@/layout/Home.tsx";
+import FhirServerContextProvider from "@/contexts/FhirServerContext.tsx";
+import CloseSnackbar from "@/components/CloseSnackbar.tsx";
 
 function App() {
-  const appTheme = theme();
-
   const router = createBrowserRouter([
     {
+      path: "authcallback",
+      element: <AuthCallback />,
+    },
+    {
       path: "/",
-      element: <DashboardLayout />,
+      element: <Home />,
       children: [
         {
           path: "",
           element: <PatientSummary />,
         },
         {
-          path: "configuration",
-          element: <Configuration />,
+          path: "embedded",
+          element: <EmbeddedApp />,
+        },
+        {
+          path: "settings",
+          element: <Settings />,
+          children: settingsMenuItems.map((item) => ({
+            path: item.path.replace("/settings", "").slice(1) || "", // Transform the path
+            element: item.element,
+          })),
         },
       ],
     },
@@ -39,20 +55,25 @@ function App() {
   ]);
 
   return (
-    <ThemeProvider theme={appTheme}>
-      <SnackbarProvider maxSnack={1}>
-        <TokenContextProvider>
-          <TitleContextProvider>
-            <QuestionnaireContextProvider>
+    <TooltipProvider delayDuration={100}>
+      <SnackbarProvider maxSnack={1} action={CloseSnackbar}>
+        <FhirServerContextProvider>
+          <FormsServerContextProvider>
+            <ActivePageContextProvider>
               <PatientContextProvider>
-                <CssBaseline />
-                <RouterProvider router={router} />
+                <UserContextProvider>
+                  <EncounterContextProvider>
+                    <QuestionnaireContextProvider>
+                      <RouterProvider router={router} />
+                    </QuestionnaireContextProvider>
+                  </EncounterContextProvider>
+                </UserContextProvider>
               </PatientContextProvider>
-            </QuestionnaireContextProvider>
-          </TitleContextProvider>
-        </TokenContextProvider>
+            </ActivePageContextProvider>
+          </FormsServerContextProvider>
+        </FhirServerContextProvider>
       </SnackbarProvider>
-    </ThemeProvider>
+    </TooltipProvider>
   );
 }
 

@@ -52,6 +52,7 @@ export interface LaunchParams {
   pkce?: PKCEValidation;
   client_type?: SMARTClientType;
   fhir_context?: string; // non-patient, provider and encounter resources go here
+  source_fhir_server?: string; // custom "Source-Fhir-Server" header
   is_embedded_view?: boolean; // custom embedded view
 }
 
@@ -124,7 +125,7 @@ export function encode(params: LaunchParams, ignoreErrors = false): string {
     launchTypeIndex,
     params.patient || "",
     params.provider || "",
-    params.encounter || "AUTO",
+    params.encounter || "",
     params.skip_login ? 1 : 0,
     params.skip_auth ? 1 : 0,
     params.sim_ehr && !params.launch_type.includes("standalone") ? 1 : 0,
@@ -138,6 +139,7 @@ export function encode(params: LaunchParams, ignoreErrors = false): string {
     clientTypes.indexOf(params.client_type || "public"),
     PKCEValidationTypes.indexOf(params.pkce || "auto"),
     params.fhir_context || "",
+    params.source_fhir_server || "",
     params.is_embedded_view || false,
   ];
 
@@ -178,7 +180,8 @@ export function decode(launch: string): LaunchParams {
     client_type: clientTypes[arr[14]],
     pkce: PKCEValidationTypes[arr[15]],
     fhir_context: typeof arr[16] === "string" ? arr[16] : undefined,
-    is_embedded_view: arr[17] || false,
+    source_fhir_server: arr[17] || "",
+    is_embedded_view: arr[18] || false,
   };
 }
 
@@ -236,7 +239,7 @@ function decodeLegacy(object: Record<string, string>): LaunchParams {
     launch_type,
     patient: object.b || "",
     provider: object.e || "",
-    encounter: object.c || object.g === "1" ? "MANUAL" : "AUTO",
+    encounter: object.c || "",
     skip_login: object.i === "1",
     skip_auth: object.j === "1",
     sim_ehr: object.f === "1",

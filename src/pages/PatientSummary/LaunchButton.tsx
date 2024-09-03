@@ -1,60 +1,80 @@
-import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
-import { Box, Button, Tooltip } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { getValidationErrors } from "../../lib/URLValidation.tsx";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
-import { getUserLaunchUrl } from "../../lib/launchUrl.ts";
+import useLauncherQuery from "../../hooks/useLauncherQuery";
+import { getValidationErrors } from "../../lib/URLValidation";
+import { getLaunchUrl } from "../../lib/launchUrl";
+import { ArrowRight, CircleAlert } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import useActivePage from "@/hooks/useActivePage.ts";
+import CopyButton from "@/components/CopyButton.tsx";
 
 function LaunchButton() {
   // The URL to launch the user-specified app
   const { query, launch } = useLauncherQuery();
 
-  const userLaunchUrl = getUserLaunchUrl(query, launch);
+  const { switchActivePage } = useActivePage();
+
+  const launchUrl = getLaunchUrl(query, launch);
 
   const isEmbeddedView = launch.is_embedded_view;
-  const appName = query.app_name;
+  const appName = query.app_name !== "" ? query.app_name : "SMART app";
 
   const validationErrors = getValidationErrors(launch, query);
 
   if (isEmbeddedView) {
-    return null;
-  }
-
-  let questionnaireContextUrl = "";
-  try {
-    if (launch.fhir_context) {
-      const questionnaireContext = JSON.parse(launch.fhir_context);
-      questionnaireContextUrl = questionnaireContext.canonical;
-    }
-  } catch (e) {
-    console.error(e);
+    return (
+      <div className="flex items-center gap-2">
+        <Button
+          className="text-white bg-blue-500 hover:bg-blue-600"
+          disabled={validationErrors.length > 0}
+          onClick={() => switchActivePage("/embedded")}
+        >
+          View embedded {appName}
+        </Button>
+        {validationErrors.length > 0 && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <CircleAlert className="text-red-700" />
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              Invalid app launch URL
+            </TooltipContent>
+          </Tooltip>
+        )}
+      </div>
+    );
   }
 
   return (
-    <Box display="flex" alignItems="center" gap={1}>
-      <Button
-        href={userLaunchUrl.href}
-        variant="contained"
+    <div className="flex items-center gap-2">
+      <CopyButton link={launchUrl.href} tooltipText="Copy app launch link" />
+      <a
+        href={launchUrl.href}
         target="_blank"
-        disabled={validationErrors.length > 0}
-        endIcon={<ArrowForwardIcon />}
+        rel="noopener noreferrer"
+        className={`${
+          validationErrors.length > 0 ? "pointer-events-none" : ""
+        }`}
       >
-        Launch {appName}
-      </Button>
-      {questionnaireContextUrl !== "" ? (
-        <Tooltip
-          title={`Questionnaire context set: ${questionnaireContextUrl}`}
+        <Button
+          className="text-white bg-blue-500 hover:bg-blue-600"
+          disabled={validationErrors.length > 0}
         >
-          <ArticleOutlinedIcon color="info" />
+          Launch {appName} <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </a>
+      {validationErrors.length > 0 && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <CircleAlert className="text-red-700" />
+          </TooltipTrigger>
+          <TooltipContent side="bottom">Invalid app launch URL</TooltipContent>
         </Tooltip>
-      ) : null}
-      {validationErrors.length > 0 ? (
-        <Tooltip title={"Invalid app launch URL"}>
-          <ErrorOutlineIcon color="error" />
-        </Tooltip>
-      ) : null}
-    </Box>
+      )}
+    </div>
   );
 }
 

@@ -1,61 +1,84 @@
-import { Box, Typography } from "@mui/material";
 import useLauncherQuery from "../../hooks/useLauncherQuery.ts";
 import { Bundle, Practitioner } from "fhir/r4";
-import { getFhirServerBaseUrl, humanName } from "../../lib/utils.ts";
-import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
+import { humanName } from "../../utils/misc.ts";
 import { useContext, useEffect } from "react";
-import { TokenContext } from "../../contexts/TokenContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { fetchResourceFromEHR } from "../../api/fhirApi.ts";
+import { UserContext } from "../../contexts/UserContext.tsx";
+import { getResource } from "../../utils/getResources.ts";
+import useSourceFhirServer from "../../hooks/useSourceFhirServer.ts";
+import { BriefcaseMedical } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
 function UserNavProfile() {
   const { query, launch, setQuery } = useLauncherQuery();
+  const { serverUrl } = useSourceFhirServer();
 
-  const { token } = useContext(TokenContext);
+  const { fhirUser } = useContext(FhirServerContext);
+  const { selectedUser, setSelectedUser } = useContext(UserContext);
 
-  const userId = launch.provider;
+  let userId = launch.provider ?? "";
 
-  const queryEndpoint =
-    getFhirServerBaseUrl() +
-    (userId ? `/Practitioner/${userId}` : "/Practitioner");
+  // Always set the userId to fhirUser if it is a Practitioner
+  if (fhirUser?.startsWith("Practitioner")) {
+    userId = fhirUser.split("/")[1];
+  }
 
+  const queryUrl = userId ? `/Practitioner/${userId}` : "/Practitioner";
+
+  const axiosInstance = useFhirServerAxios();
   const {
     data: resource,
     error,
     isLoading,
   } = useQuery<Practitioner | Bundle>(
-    ["practitionerProfile", userId],
-    () => fetchResourceFromEHR(queryEndpoint, token ?? ""),
-    { enabled: !!token }
+    ["practitionerProfile", serverUrl, userId],
+    () => fetchResourceFromEHR(axiosInstance, queryUrl)
   );
 
-  let user: Practitioner | null = null;
-  if (resource) {
-    user =
-      resource.resourceType === "Practitioner"
-        ? resource
-        : (resource.entry?.[0]?.resource as Practitioner);
-  }
+  const newUser = getResource<Practitioner>(resource, "Practitioner");
 
   useEffect(() => {
-    if (!user) {
+    if (!newUser) {
       return;
     }
 
-    setQuery({ ...query, provider: user.id });
-  }, [user]);
+    setSelectedUser(newUser);
+    setQuery({ ...query, provider: newUser.id });
+  }, [newUser]);
 
   return (
-    <Box display="flex" alignItems="center" gap={1.5}>
-      <MedicalInformationOutlinedIcon sx={{ fontSize: 30, color: "#2d6da5" }} />
-      <Typography fontSize={16} fontWeight="bold" color="primary.main">
-        {isLoading
-          ? "Loading user..."
-          : error || !user
-          ? "User not selected"
-          : humanName(user)}
-      </Typography>
-    </Box>
+    <div className="flex items-center gap-3 h-16 px-3 bg-muted/80 rounded-lg">
+      <div className="flex flex-col items-center text-purple-800">
+        <BriefcaseMedical className="h-5 w-5" />
+        <div className="text-xs">User</div>
+      </div>
+
+      <div className="border-l border-gray-300 dark:border-gray-600 h-10" />
+
+      <div className="text-gray-600">
+        {isLoading ? (
+          <div>
+            <Skeleton className="h-5 w-32 bg-gray-200 animate-pulse" />
+          </div>
+        ) : error || !selectedUser ? (
+          <div className="text-sm font-medium text-gray-600">
+            User not selected
+          </div>
+        ) : (
+          <>
+            <div className="text-sm font-medium">{humanName(selectedUser)}</div>
+            <div className="flex">
+              <div className="text-xs px-1.5 py-0.5 rounded text-purple-800 bg-purple-100">
+                {selectedUser.id}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 

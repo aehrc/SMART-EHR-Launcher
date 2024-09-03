@@ -1,26 +1,45 @@
 import { createContext, ReactNode, useState } from "react";
+import { Questionnaire } from "fhir/r4";
+import useSupportQuestionnaireContext from "@/hooks/useSupportQuestionnaireContext.ts";
 
 interface QuestionnaireContextType {
-  questionnaireId: string;
-  setQuestionnaireId: (newQuestionnaireId: string) => unknown;
+  selectedQuestionnaire: Questionnaire | null;
+  questionnaireContextEnabled: boolean;
+  setSelectedQuestionnaire: (selected: Questionnaire | null) => unknown;
+  onEnableQuestionnaireContext: () => unknown;
 }
 
 export const QuestionnaireContext = createContext<QuestionnaireContextType>({
-  questionnaireId: "",
-  setQuestionnaireId: () => void 0,
+  selectedQuestionnaire: null,
+  questionnaireContextEnabled: false,
+  setSelectedQuestionnaire: () => void 0,
+  onEnableQuestionnaireContext: () => void 0,
 });
 
-// props types for provider
-type ProviderProps = {
-  children: ReactNode;
-};
+const QuestionnaireContextProvider = (props: { children: ReactNode }) => {
+  const { children } = props;
 
-const QuestionnaireContextProvider = ({ children }: ProviderProps) => {
-  const [id, setId] = useState("AboriginalTorresStraitIslanderHealthCheck");
+  const isSupported = useSupportQuestionnaireContext();
+
+  const [questionnaireContextEnabled, setQuestionnaireContextEnabled] =
+    useState(isSupported);
+  const [selectedQuestionnaire, setSelectedQuestionnaire] =
+    useState<Questionnaire | null>(null);
+
+  if (isSupported && isSupported !== questionnaireContextEnabled) {
+    setQuestionnaireContextEnabled(isSupported);
+  }
 
   return (
     <QuestionnaireContext.Provider
-      value={{ questionnaireId: id, setQuestionnaireId: setId }}
+      value={{
+        selectedQuestionnaire,
+        questionnaireContextEnabled,
+        setSelectedQuestionnaire,
+        onEnableQuestionnaireContext: () => {
+          setQuestionnaireContextEnabled(true);
+        },
+      }}
     >
       {children}
     </QuestionnaireContext.Provider>
