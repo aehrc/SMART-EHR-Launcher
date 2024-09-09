@@ -80,9 +80,13 @@ function QuestionnaireTable() {
     }
 
     // Set selected questionnaire and set query
+    let questionnaireCanonical = newQuestionnaire.url;
+    if (newQuestionnaire.version) {
+      questionnaireCanonical += `|${newQuestionnaire.version}`;
+    }
     const questionnaireFhirContext = {
       role: "questionnaire-render-on-launch",
-      canonical: `${newQuestionnaire.url}|${newQuestionnaire.version}`,
+      canonical: questionnaireCanonical,
       type: "Questionnaire",
     };
 
