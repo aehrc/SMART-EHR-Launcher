@@ -67,6 +67,15 @@ export const preconfiguredApps = [
     is_embedded_view: false,
   },
   {
+    app_name: "CVD Risk Calculator Demo",
+    launch_url: "https://main.dlnanw1r5u3dw.amplifyapp.com/launch",
+    client_id: "aus-cvd-risk",
+    scope:
+      "fhirUser online_access openid profile launch patient/Patient.rs patient/Condition.rs patient/Observation.rs patient/Encounter.rs patient/QuestionnaireResponse.crus",
+    redirect_uris: "https://main.dlnanw1r5u3dw.amplifyapp.com/",
+    is_embedded_view: false,
+  },
+  {
     app_name: "SMART on FHIR Problem List Demo",
     launch_url: "https://main.d2gc21b6xr8ukx.amplifyapp.com/launch",
     client_id: "a5403f19-3b1c-4f19-b298-cc42e8c3a9c0",
