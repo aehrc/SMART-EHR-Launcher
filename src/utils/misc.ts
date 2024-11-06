@@ -95,6 +95,11 @@ export function humanName(human: FHIRPerson, separator = " "): string {
     out += ", " + name.suffix;
   }
 
+  // Use name.text if no other name parts are available
+  if (out === "No Name Listed" && name.text) {
+    return name.text;
+  }
+
   return out;
 }
 
