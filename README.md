@@ -5,7 +5,7 @@ An open-source EHR simulator dashboard testing tool to launch SMART on FHIR apps
 It is a single-page application (SPA) built in React and Typescript, and was bootstrapped with [Vite](https://vitejs.dev/).
 
 ## Live Demos
-#### Smart Forms proxy server - https://dev.ehr.smartforms.io
+#### Smart Forms proxy server - https://ehr.smartforms.io
 
 This instance uses the proxy service from https://github.com/aehrc/smart-launcher-v2 which enables SMART App Launch functionality on top of a vanilla FHIR server.
 This instance is mainly used for demonstrating the pre-population of clinical data into the [Smart Forms](https://github.com/aehrc/smart-forms) Questionnaire renderer.
@@ -108,7 +108,7 @@ Launch URL
 The Smart App Launch Proxy service define its own fairly comprehensive launch parameter configuration as a base64-encoded JSON array.
 The Smart Forms proxy server uses this configuration. If you are planning to use this proxy service, you need to use set `VITE_LAUNCH_PARAM_CONFIG` as `proxy`.
 
-Visit https://dev.ehr.smartforms.io and copy the app launch link to view an example of this configuration.
+Visit https://ehr.smartforms.io and copy the app launch link to view an example of this configuration.
 
 
 ## Using the Smart App Launch Proxy service
