@@ -1,5 +1,6 @@
 import { QUERY_HEADERS } from "../utils/misc.ts";
 import { AxiosInstance } from "axios";
+import { transformUrlWithVersion } from "@/utils/url.ts";
 
 export interface SmartConfiguration {
   issuer: string;
@@ -18,11 +19,11 @@ export async function fetchResourceFromEHR(
   axiosInstance: AxiosInstance,
   requestUrl: string
 ) {
-  if (requestUrl.includes("|")) {
-    requestUrl = requestUrl.replace("|", "&version=");
-  }
+  const baseUrl = axiosInstance.defaults.baseURL || "";
 
-  const { data } = await axiosInstance.get(requestUrl, {
+  const transformedUrl = transformUrlWithVersion(baseUrl, requestUrl);
+
+  const { data } = await axiosInstance.get(transformedUrl, {
     headers: QUERY_HEADERS,
   });
 
