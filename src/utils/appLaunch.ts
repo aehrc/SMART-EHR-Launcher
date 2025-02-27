@@ -67,11 +67,11 @@ export const preconfiguredApps = [
     is_embedded_view: false,
   },
   {
-    app_name: "AusCVDRisk Calculator Demo",
+    app_name: "AusCVDRisk-i Calculator Demo",
     launch_url: "https://main.dlnanw1r5u3dw.amplifyapp.com/launch",
     client_id: "aus-cvd-risk-i",
     scope:
-      "launch openid fhirUser online_access patient/Patient.r patient/Encounter.r patient/Condition.s patient/Observation.cs patient/Medication.r patient/MedicationRequest.s patient/MedicationStatement.s",
+      "launch openid fhirUser online_access patient/Patient.r patient/Encounter.r patient/Condition.s patient/Observation.cs patient/Medication.r patient/MedicationRequest.s",
     redirect_uris: "https://main.dlnanw1r5u3dw.amplifyapp.com/",
     is_embedded_view: false,
   },
