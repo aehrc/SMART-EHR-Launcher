@@ -48,28 +48,36 @@ function useAxios() {
   axiosInstance.interceptors.request.use(
     async (config) => {
       if (accessToken) {
-        const decodedToken = jwtDecode(accessToken);
+        // Access token looks like a JWT - decode and get expiration time
+        if (accessToken.includes(".")) {
+          try {
+            const decodedToken = jwtDecode(accessToken);
 
-        // Convert decodedToken.exp to milliseconds
-        if (decodedToken.exp) {
-          const expiresInMinus10Minutes = decodedToken.exp * 1000 - 600000;
-          if (expiresInMinus10Minutes < Date.now()) {
-            try {
-              const newTokenResponse = await refreshAccessToken(
-                tokenEndpoint,
-                refreshToken
-              );
+            // Convert decodedToken.exp to milliseconds
+            if (decodedToken.exp) {
+              const expiresInMinus10Minutes = decodedToken.exp * 1000 - 600000;
+              if (expiresInMinus10Minutes < Date.now()) {
+                try {
+                  const newTokenResponse = await refreshAccessToken(
+                    tokenEndpoint,
+                    refreshToken
+                  );
 
-              if (newTokenResponse) {
-                setTokenResponse(newTokenResponse);
-                config.headers.Authorization = `Bearer ${newTokenResponse.access_token}`;
+                  if (newTokenResponse) {
+                    setTokenResponse(newTokenResponse);
+                    config.headers.Authorization = `Bearer ${newTokenResponse.access_token}`;
+                  }
+                } catch (error) {
+                  console.error("Failed to refresh token", error);
+                }
               }
-            } catch (error) {
-              console.error("Failed to refresh token", error);
             }
+          } catch (error) {
+            console.warn("Failed to decode access token", error);
           }
         }
 
+        // FIXME NOTE, by skipping this we won't be able to refresh the token because we don't know the expiration time
         // Reuse existing token
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
