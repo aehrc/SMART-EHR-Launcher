@@ -21,6 +21,7 @@ export const DEFAULT_LAUNCH_PARAMS: LaunchParams = {
 
 const launchConfig = LAUNCH_PARAM_CONFIG;
 
+// AidBox does not use this function to get the launch URL, it uses the useAidboxFetchLaunchUri hook
 export function getLaunchUrl(query: LauncherQuery, launch: LaunchParams) {
   if (launchConfig === "proxy") {
     return getProxyLaunchUrl(query, launch);

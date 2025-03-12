@@ -1,7 +1,6 @@
 import useLauncherQuery from "../../hooks/useLauncherQuery";
 import { getValidationErrors } from "../../lib/URLValidation";
-import { getLaunchUrl } from "../../lib/launchUrl";
-import { ArrowRight, CircleAlert } from "lucide-react";
+import { ArrowRight, CircleAlert, Loader2, RefreshCcw } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -10,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import useActivePage from "@/hooks/useActivePage.ts";
 import CopyButton from "@/components/CopyButton.tsx";
+import useAidboxFetchLaunchUri from "@/hooks/useAidboxFetchLaunchUri.ts";
 
 function LaunchButton() {
   // The URL to launch the user-specified app
@@ -17,7 +17,7 @@ function LaunchButton() {
 
   const { switchActivePage } = useActivePage();
 
-  const launchUrl = getLaunchUrl(query, launch);
+  let { launchUri, isInitialLoading } = useAidboxFetchLaunchUri();
 
   const isEmbeddedView = launch.is_embedded_view;
   const appName = query.app_name !== "" ? query.app_name : "SMART app";
@@ -48,24 +48,44 @@ function LaunchButton() {
     );
   }
 
+  const buttonIsDisabled =
+    validationErrors.length > 0 || isInitialLoading || !launchUri;
+
   return (
     <div className="flex items-center gap-2">
-      <CopyButton link={launchUrl.href} tooltipText="Copy app launch link" />
-      <a
-        href={launchUrl.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${
-          validationErrors.length > 0 ? "pointer-events-none" : ""
-        }`}
-      >
-        <Button
-          className="text-white bg-blue-500 hover:bg-blue-600"
-          disabled={validationErrors.length > 0}
+      {isInitialLoading ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <RefreshCcw className="text-muted-foreground h-4 w-4" />
+          </TooltipTrigger>
+          <TooltipContent side="left">Fetching launch URI...</TooltipContent>
+        </Tooltip>
+      ) : null}
+
+      {launchUri && !buttonIsDisabled ? (
+        <CopyButton link={launchUri} tooltipText="Copy app launch link" />
+      ) : null}
+      <div className={buttonIsDisabled ? "cursor-not-allowed" : ""}>
+        <a
+          href={launchUri ?? ""}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonIsDisabled ? "pointer-events-none" : ""}
         >
-          Launch {appName} <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </a>
+          <Button
+            className="text-white bg-blue-500 hover:bg-blue-600"
+            disabled={buttonIsDisabled}
+          >
+            Launch {appName}{" "}
+            {isInitialLoading ? (
+              <Loader2 className="animate-spin ml-2 h-4 w-4" />
+            ) : (
+              <ArrowRight className="ml-2 h-4 w-4" />
+            )}
+          </Button>
+        </a>
+      </div>
+
       {validationErrors.length > 0 && (
         <Tooltip>
           <TooltipTrigger asChild>

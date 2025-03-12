@@ -10,6 +10,7 @@ interface FhirServerContextType {
   accessToken: string;
   refreshToken: string;
   fhirUser: string | null;
+  sub: string | null;
   setTokenEndpoint: (token_endpoint: string) => void;
   setTokenResponse: (accessTokenResponse: TokenResponse) => void;
 }
@@ -21,6 +22,7 @@ export const FhirServerContext = createContext<FhirServerContextType>({
   accessToken: "",
   refreshToken: "",
   fhirUser: null,
+  sub: null,
   setTokenEndpoint: () => void 0,
   setTokenResponse: () => void 0,
 });
@@ -33,6 +35,7 @@ const FhirServerContextProvider = (props: { children: ReactNode }) => {
     null
   );
   const [fhirUser, setFhirUser] = useState<string | null>(null);
+  const [sub, setSub] = useState<string | null>(null);
 
   return (
     <FhirServerContext.Provider
@@ -42,7 +45,8 @@ const FhirServerContextProvider = (props: { children: ReactNode }) => {
         tokenResponse: tokenResponse,
         accessToken: tokenResponse?.access_token ?? "",
         refreshToken: tokenResponse?.refresh_token ?? "",
-        fhirUser,
+        fhirUser: fhirUser,
+        sub: sub,
         setTokenEndpoint: (token_endpoint) => setTokenEndpoint(token_endpoint),
         setTokenResponse: (accessTokenResponse) => {
           setTokenResponse(accessTokenResponse);
@@ -50,6 +54,7 @@ const FhirServerContextProvider = (props: { children: ReactNode }) => {
           const decodedIdToken = jwtDecode(accessTokenResponse.id_token);
           if (IsValidIdToken(decodedIdToken)) {
             setFhirUser(getResourceIdentifier(decodedIdToken.fhirUser));
+            setSub(decodedIdToken.sub);
           }
         },
       }}
