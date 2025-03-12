@@ -654,6 +654,20 @@ export function getObservationOrComponentValue(
     return valueText;
   }
 
+  if (item.valueRange) {
+    let valueRangeLowText = item.valueRange.low?.value ?? "*";
+    if (item.valueRange.low?.unit) {
+      valueRangeLowText += " " + item.valueRange.low.unit;
+    }
+
+    let valueRangeHighText = item.valueRange.high?.value ?? "*";
+    if (item.valueRange.high?.unit) {
+      valueRangeHighText += " " + item.valueRange.high.unit;
+    }
+
+    return `${valueRangeLowText} - ${valueRangeHighText}`;
+  }
+
   if (item.valueString) {
     return item.valueString;
   }
