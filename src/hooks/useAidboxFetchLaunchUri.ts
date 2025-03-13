@@ -25,11 +25,11 @@ function useAidboxFetchLaunchUri(): useAidboxFetchLaunchUriReturnParams {
     practitioner: launch.provider,
   };
 
-  const launchContextKey = JSON.stringify(launchContext);
+  const launchString = JSON.stringify(launch);
 
   const axiosInstance = useFhirServerAxios();
   const { data: response, isInitialLoading } = useQuery<Bundle>(
-    ["launchUri" + clientId + launchContextKey, "rpc"],
+    ["launchUri" + clientId + launchString, "rpc"],
     () =>
       fetchAidboxLaunchUri(axiosInstance, sub ?? "", clientId, launchContext),
     { enabled: typeof sub === "string" }
