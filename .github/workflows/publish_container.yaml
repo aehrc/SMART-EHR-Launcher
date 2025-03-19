@@ -34,7 +34,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           # list of Docker images to build
-          images: ghcr.io/${{ github.repository }}/my-app
+          images: ghcr.io/${{ github.repository }}/smart-launcher-v2
           # generate Docker tags based on Git refs
           tags: |
             type=ref,event=branch
