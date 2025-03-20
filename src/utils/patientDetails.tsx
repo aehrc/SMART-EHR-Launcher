@@ -617,13 +617,20 @@ export function getObservationOrComponentValue(
   item: Observation | ObservationComponent
 ) {
   if (item.valueQuantity) {
-    // Add unit if it exists
-    if (item.valueQuantity.unit) {
-      return item.valueQuantity.value + " " + item.valueQuantity.unit;
+    let valueQuantityText = item.valueQuantity.value ?? "";
+    if (item.valueQuantity.comparator) {
+      valueQuantityText =
+        item.valueQuantity.comparator + " " + valueQuantityText;
     }
 
-    if (item.valueQuantity.value) {
-      return item.valueQuantity.value;
+    // Add unit if it exists
+    if (item.valueQuantity.unit) {
+      valueQuantityText = valueQuantityText + " " + item.valueQuantity.unit;
+    }
+
+    // If valueQuantityText is available at this point, return it
+    if (valueQuantityText) {
+      return valueQuantityText;
     }
 
     const dataAbsentReason = item.valueQuantity.extension?.find(
