@@ -2,11 +2,11 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches:
-      - 7-docker-package # or your main branch
-#    paths:
-#      - 'Dockerfile' # Trigger only if Dockerfile is modified
-#      - 'src/**' # Trigger if anything in the src folder is changed.
+    branches-ignore:
+      - main
+    paths:
+      - 'Dockerfile' # Trigger only if Dockerfile is modified
+      - 'src/**' # Trigger if anything in the src folder is changed.
 
 jobs:
   build_and_push:
