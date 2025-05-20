@@ -11,7 +11,7 @@ function UserMenuLink(props: UserMenuLinkProps) {
   const { title, path } = props;
   const { activePath, switchActivePage } = useActivePage();
 
-  let { fhirUser } = useContext(FhirServerContext);
+  const { fhirUser } = useContext(FhirServerContext);
 
   // Disabled user menu link if fhirUser is Practitioner.
   // This makes it so that a logged in practitioner User cannot switch users

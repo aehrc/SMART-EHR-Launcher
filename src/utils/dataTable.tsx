@@ -307,6 +307,58 @@ export function createQuestionnaireTableColumns(
   ];
 }
 
+// Preset functions and types
+interface LaunchContextIds {
+  patient: string;
+  practitioner: string;
+  encounter?: string;
+  questionnaire?: string;
+}
+
+export interface PresetTableData {
+  id: string;
+  description: string;
+  contextIds: LaunchContextIds;
+}
+
+export function createPresetTableColumns(
+  onButtonClick: (selectedId: string) => void
+): ColumnDef<QuestionnaireTableData>[] {
+  return [
+    {
+      accessorKey: "description",
+      header: "Description",
+      cell: ({ row }) => (
+        <div className="text-sm">{row.getValue("description") ?? ""}</div>
+      ),
+    },
+    {
+      accessorKey: "contextIds",
+      header: "Context IDs",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+            {row.getValue("contextIds") ?? ""}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Button
+          variant="ghost"
+          className="flex h-8 w-8 p-0 m-0"
+          onClick={() => onButtonClick(row.getValue("id"))}
+        >
+          <MousePointerClick className="h-4 w-4" />
+          <span className="sr-only">Select preset</span>
+        </Button>
+      ),
+    },
+  ];
+}
+
 // General functions
 export function getSelectedDataIDColorClass(resourceType: string | null) {
   if (!resourceType) {

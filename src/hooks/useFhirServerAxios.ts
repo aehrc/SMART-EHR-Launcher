@@ -32,7 +32,7 @@ async function refreshAccessToken(
   return null;
 }
 
-function useAxios() {
+function useFhirServerAxios() {
   const {
     baseUrl,
     tokenEndpoint,
@@ -83,4 +83,4 @@ function useAxios() {
   return axiosInstance;
 }
 
-export default useAxios;
+export default useFhirServerAxios;

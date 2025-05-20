@@ -4,6 +4,7 @@ import UserSettings from "@/pages/Settings/UserSettings/UserSettings.tsx";
 import EncounterSettings from "@/pages/Settings/EncounterSettings/EncounterSettings.tsx";
 import AppLaunchSettings from "@/pages/Settings/AppLaunchSettings/AppLaunchSettings.tsx";
 import QuestionnaireSettings from "@/pages/Settings/QuestionnaireSettings/QuestionnaireSettings.tsx";
+import Presets from "@/pages/Settings/Presets/Presets.tsx";
 
 export interface SettingsMenuItem {
   title: string;
@@ -33,13 +34,18 @@ export const settingsMenuItems: SettingsMenuItem[] = [
     element: <EncounterSettings />,
   },
   {
-    title: "App Launch",
-    path: "/settings/app-launch",
-    element: <AppLaunchSettings />,
-  },
-  {
     title: "Questionnaire Context",
     path: "/settings/questionnaire",
     element: <QuestionnaireSettings />,
+  },
+  {
+    title: "Presets",
+    path: "/settings/presets",
+    element: <Presets />,
+  },
+  {
+    title: "App Launch",
+    path: "/settings/app-launch",
+    element: <AppLaunchSettings />,
   },
 ];
