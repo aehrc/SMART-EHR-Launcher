@@ -1,3 +1,20 @@
+/*
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
+ * Organisation (CSIRO) ABN 41 687 119 230.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {
   Tabs,
   TabsContent,
@@ -8,7 +25,7 @@ import { Patient } from "fhir/r4";
 import PatientProfile from "@/pages/PatientSummary/PatientTabs/PatientProfile.tsx";
 import PatientProfileLoading from "@/pages/PatientSummary/PatientTabs/PatientProfileLoading.tsx";
 import PatientConditions from "@/pages/PatientSummary/PatientTabs/PatientConditions.tsx";
-import PatientMedications from "@/pages/PatientSummary/PatientTabs/PatientMedications.tsx";
+import PatientMedicationRequests from "@/pages/PatientSummary/PatientTabs/PatientMedicationRequests.tsx";
 import PatientAllergies from "@/pages/PatientSummary/PatientTabs/PatientAllergies.tsx";
 import PatientProcedures from "@/pages/PatientSummary/PatientTabs/PatientProcedures.tsx";
 import PatientImmunizations from "@/pages/PatientSummary/PatientTabs/PatientImmunizations.tsx";
@@ -36,8 +53,8 @@ function PatientDetails(props: PatientDetailsProps) {
             <TabsTrigger value="conditions" disabled={!patient}>
               Conditions
             </TabsTrigger>
-            <TabsTrigger value="medications" disabled={!patient}>
-              Medications
+            <TabsTrigger value="medicationRequests" disabled={!patient}>
+              Medication Requests
             </TabsTrigger>
             <TabsTrigger value="allergies" disabled={!patient}>
               Allergies
@@ -64,8 +81,8 @@ function PatientDetails(props: PatientDetailsProps) {
             <TabsContent value="conditions">
               <PatientConditions patientId={patient.id} />
             </TabsContent>
-            <TabsContent value="medications">
-              <PatientMedications patientId={patient.id} />
+            <TabsContent value="medicationRequests">
+              <PatientMedicationRequests patientId={patient.id} />
             </TabsContent>
             <TabsContent value="allergies">
               <PatientAllergies patientId={patient.id} />

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Commonwealth Scientific and Industrial Research
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
  * Organisation (CSIRO) ABN 41 687 119 230.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,14 +21,16 @@ import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
 import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
+import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchPatientsReturnParams {
   patients: Patient[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
 function useFetchPatients(): useFetchPatientsReturnParams {
-  const numOfSearchEntries = 500;
+  const numOfSearchEntries = NUM_OF_RESOURCES_TO_FETCH;
 
   const queryUrl = `/Patient?_count=${numOfSearchEntries}`;
 
@@ -45,6 +47,7 @@ function useFetchPatients(): useFetchPatientsReturnParams {
 
   return {
     patients,
+    queryUrl,
     isInitialLoading,
   };
 }

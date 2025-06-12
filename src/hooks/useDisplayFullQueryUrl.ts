@@ -15,23 +15,13 @@
  * limitations under the License.
  */
 
-import { memo, useEffect, useState } from "react";
-import { Progress } from "@/components/ui/progress.tsx";
+import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
 
-const DataTableLoading = memo(function DataTableLoading() {
-  const [progress, setProgress] = useState(15);
+function useDisplayFullQueryUrl(queryUrl: string) {
+  const axiosInstance = useFhirServerAxios();
+  const baseUrl = axiosInstance.defaults.baseURL || "";
 
-  useEffect(() => {
-    const timer = setTimeout(() => setProgress(65), 500);
-    return () => clearTimeout(timer);
-  }, []);
+  return baseUrl + queryUrl;
+}
 
-  return (
-    <div className="flex flex-col items-center justify-center p-16 gap-5">
-      <div className="text-muted-foreground">Loading results...</div>
-      <Progress value={progress} className="w-[60%]" />
-    </div>
-  );
-});
-
-export default DataTableLoading;
+export default useDisplayFullQueryUrl;

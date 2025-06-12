@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Commonwealth Scientific and Industrial Research
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
  * Organisation (CSIRO) ABN 41 687 119 230.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,20 +21,24 @@ import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
 import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
+import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchImmunizationsReturnParams {
   immunizations: Immunization[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
 function useFetchImmunizations(
   patientId: string
 ): useFetchImmunizationsReturnParams {
-  const queryUrl = `/Immunization?patient=${patientId}`;
+  const numOfSearchEntries = NUM_OF_RESOURCES_TO_FETCH;
+
+  const queryUrl = `/Immunization?patient=${patientId}&_count=${numOfSearchEntries}&_sort=-date`;
 
   const axiosInstance = useFhirServerAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
-    ["immunizations" + patientId, queryUrl],
+    ["immunizations" + patientId + numOfSearchEntries.toString(), queryUrl],
     () => fetchResourceFromEHR(axiosInstance, queryUrl),
     { enabled: patientId !== "" }
   );
@@ -46,6 +50,7 @@ function useFetchImmunizations(
 
   return {
     immunizations,
+    queryUrl,
     isInitialLoading,
   };
 }

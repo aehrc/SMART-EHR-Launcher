@@ -1,3 +1,20 @@
+/*
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
+ * Organisation (CSIRO) ABN 41 687 119 230.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import dayjs, { Dayjs } from "dayjs";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge.tsx";
@@ -168,14 +185,14 @@ export function createConditionTableColumns(): ColumnDef<ConditionTableData>[] {
 }
 
 // MedicationRequest functions and types
-export interface MedicationTableData {
+export interface MedicationRequestTableData {
   id: string;
   medication: string;
   status: string;
   authoredOn: Dayjs | string | null;
 }
 
-export function createMedicationTableColumns(): ColumnDef<MedicationTableData>[] {
+export function createMedicationRequestTableColumns(): ColumnDef<MedicationRequestTableData>[] {
   return [
     {
       accessorKey: "medication",
@@ -617,13 +634,20 @@ export function getObservationOrComponentValue(
   item: Observation | ObservationComponent
 ) {
   if (item.valueQuantity) {
-    // Add unit if it exists
-    if (item.valueQuantity.unit) {
-      return item.valueQuantity.value + " " + item.valueQuantity.unit;
+    let valueQuantityText = item.valueQuantity.value ?? "";
+    if (item.valueQuantity.comparator) {
+      valueQuantityText =
+        item.valueQuantity.comparator + " " + valueQuantityText;
     }
 
-    if (item.valueQuantity.value) {
-      return item.valueQuantity.value;
+    // Add unit if it exists
+    if (item.valueQuantity.unit) {
+      valueQuantityText = valueQuantityText + " " + item.valueQuantity.unit;
+    }
+
+    // If valueQuantityText is available at this point, return it
+    if (valueQuantityText) {
+      return valueQuantityText;
     }
 
     const dataAbsentReason = item.valueQuantity.extension?.find(

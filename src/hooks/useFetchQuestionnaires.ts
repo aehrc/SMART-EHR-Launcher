@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Commonwealth Scientific and Industrial Research
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
  * Organisation (CSIRO) ABN 41 687 119 230.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ import useFormsServerAxios from "@/hooks/useFormsServerAxios.ts";
 
 interface useFetchQuestionnairesReturnParams {
   questionnaires: Questionnaire[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -45,6 +46,7 @@ function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
 
   return {
     questionnaires,
+    queryUrl,
     isInitialLoading,
   };
 }

@@ -1,3 +1,20 @@
+/*
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
+ * Organisation (CSIRO) ABN 41 687 119 230.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {
   ColumnDef,
   flexRender,
@@ -18,16 +35,18 @@ import {
   TableRow,
 } from "@/components/ui/table.tsx";
 import SimpleTableBody from "@/components/SimpleTableBody.tsx";
+import useDisplayFullQueryUrl from "@/hooks/useDisplayFullQueryUrl.ts";
 
 interface SimpleTableProps<TData, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
+  queryUrl: string;
   isLoading: boolean;
   initialSorting?: SortingState;
 }
 
 function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
-  const { data, columns, isLoading, initialSorting } = props;
+  const { data, columns, queryUrl, isLoading, initialSorting } = props;
 
   const table = useReactTable({
     data,
@@ -45,6 +64,8 @@ function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  const fullRequestUrl = useDisplayFullQueryUrl(queryUrl);
+
   return (
     <div className="space-y-6">
       <Table>
@@ -54,12 +75,23 @@ function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {header.isPlaceholder ? null : (
+                      <div
+                        className="flex items-center gap-x-1 cursor-pointer"
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        <span>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </span>
+                        {{
+                          asc: "↑",
+                          desc: "↓",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    )}
                   </TableHead>
                 );
               })}
@@ -74,8 +106,19 @@ function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
           />
         </TableBody>
       </Table>
-      <div className="text-xs text-muted-foreground">
-        <b>{table.getFilteredRowModel().rows.length}</b> results found
+      <div className="text-xs text-muted-foreground flex items-center justify-between">
+        <span>
+          <b>{table.getFilteredRowModel().rows.length}</b> results found
+        </span>
+        <a
+          href={fullRequestUrl}
+          title={fullRequestUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          View request in new tab
+        </a>
       </div>
     </div>
   );
