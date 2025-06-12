@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchMedicationRequestsReturnParams {
   medicationRequests: MedicationRequest[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -52,6 +53,7 @@ function useFetchMedicationRequests(
 
   return {
     medicationRequests,
+    queryUrl,
     isInitialLoading,
   };
 }

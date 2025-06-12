@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchProceduresReturnParams {
   procedures: Procedure[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -47,6 +48,7 @@ function useFetchProcedures(patientId: string): useFetchProceduresReturnParams {
 
   return {
     procedures,
+    queryUrl,
     isInitialLoading,
   };
 }

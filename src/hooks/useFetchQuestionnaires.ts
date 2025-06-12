@@ -24,6 +24,7 @@ import useFormsServerAxios from "@/hooks/useFormsServerAxios.ts";
 
 interface useFetchQuestionnairesReturnParams {
   questionnaires: Questionnaire[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -45,6 +46,7 @@ function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
 
   return {
     questionnaires,
+    queryUrl,
     isInitialLoading,
   };
 }

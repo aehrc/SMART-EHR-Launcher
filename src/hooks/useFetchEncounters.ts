@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchEncountersReturnParams {
   encounters: Encounter[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -48,6 +49,7 @@ function useFetchEncounters(patientId: string): useFetchEncountersReturnParams {
 
   return {
     encounters,
+    queryUrl,
     isInitialLoading,
   };
 }

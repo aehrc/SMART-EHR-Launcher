@@ -35,16 +35,18 @@ import {
   TableRow,
 } from "@/components/ui/table.tsx";
 import SimpleTableBody from "@/components/SimpleTableBody.tsx";
+import useDisplayFullQueryUrl from "@/hooks/useDisplayFullQueryUrl.ts";
 
 interface SimpleTableProps<TData, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
+  queryUrl: string;
   isLoading: boolean;
   initialSorting?: SortingState;
 }
 
 function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
-  const { data, columns, isLoading, initialSorting } = props;
+  const { data, columns, queryUrl, isLoading, initialSorting } = props;
 
   const table = useReactTable({
     data,
@@ -61,6 +63,8 @@ function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+
+  const fullRequestUrl = useDisplayFullQueryUrl(queryUrl);
 
   return (
     <div className="space-y-6">
@@ -106,9 +110,15 @@ function SimpleTable<TData, TValue>(props: SimpleTableProps<TData, TValue>) {
         <span>
           <b>{table.getFilteredRowModel().rows.length}</b> results found
         </span>
-        <span>
-          <b>{table.getFilteredRowModel().rows.length}</b> results found
-        </span>
+        <a
+          href={fullRequestUrl}
+          title={fullRequestUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          View request in new tab
+        </a>
       </div>
     </div>
   );

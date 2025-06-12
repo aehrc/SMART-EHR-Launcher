@@ -39,7 +39,7 @@ interface PatientMedicationRequestsProps {
 function PatientMedicationRequests(props: PatientMedicationRequestsProps) {
   const { patientId } = props;
 
-  const { medicationRequests, isInitialLoading } =
+  const { medicationRequests, queryUrl, isInitialLoading } =
     useFetchMedicationRequests(patientId);
 
   const medicationRequestTableData: MedicationRequestTableData[] =
@@ -89,6 +89,7 @@ function PatientMedicationRequests(props: PatientMedicationRequestsProps) {
         <SimpleTable
           data={medicationRequestTableData}
           columns={columns}
+          queryUrl={queryUrl}
           isLoading={isInitialLoading}
           initialSorting={[{ id: "authoredOn", desc: true }]}
         />

@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchPractitionersReturnParams {
   practitioners: Practitioner[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -46,6 +47,7 @@ function useFetchPractitioners(): useFetchPractitionersReturnParams {
 
   return {
     practitioners,
+    queryUrl,
     isInitialLoading,
   };
 }
