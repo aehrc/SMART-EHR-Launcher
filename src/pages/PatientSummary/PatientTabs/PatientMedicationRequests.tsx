@@ -20,8 +20,8 @@ import useFetchMedicationRequests from "@/hooks/useFetchMedicationRequests.ts";
 import { nanoid } from "nanoid";
 import dayjs from "dayjs";
 import {
-  createMedicationTableColumns,
-  MedicationTableData,
+  createMedicationRequestTableColumns,
+  MedicationRequestTableData,
 } from "@/utils/patientDetails.tsx";
 import {
   Card,
@@ -32,49 +32,50 @@ import {
 } from "@/components/ui/card.tsx";
 import SimpleTable from "@/components/SimpleTable.tsx";
 
-interface PatientMedicationsProps {
+interface PatientMedicationRequestsProps {
   patientId: string;
 }
 
-function PatientMedications(props: PatientMedicationsProps) {
+function PatientMedicationRequests(props: PatientMedicationRequestsProps) {
   const { patientId } = props;
 
   const { medicationRequests, isInitialLoading } =
     useFetchMedicationRequests(patientId);
 
-  const medicationTableData: MedicationTableData[] = useMemo(() => {
-    return medicationRequests.map((entry) => {
-      let medicationText =
-        entry.medicationCodeableConcept?.coding?.[0].display ??
-        entry.medicationCodeableConcept?.text ??
-        entry.medicationCodeableConcept?.coding?.[0].code ??
-        entry.medicationReference?.display ??
-        "*";
+  const medicationRequestTableData: MedicationRequestTableData[] =
+    useMemo(() => {
+      return medicationRequests.map((entry) => {
+        let medicationText =
+          entry.medicationCodeableConcept?.coding?.[0].display ??
+          entry.medicationCodeableConcept?.text ??
+          entry.medicationCodeableConcept?.coding?.[0].code ??
+          entry.medicationReference?.display ??
+          "*";
 
-      if (
-        entry.medicationCodeableConcept?.coding?.[0].system ===
-        "http://terminology.hl7.org/CodeSystem/data-absent-reason"
-      ) {
-        medicationText = "*" + medicationText.toLowerCase();
-      }
+        if (
+          entry.medicationCodeableConcept?.coding?.[0].system ===
+          "http://terminology.hl7.org/CodeSystem/data-absent-reason"
+        ) {
+          medicationText = "*" + medicationText.toLowerCase();
+        }
 
-      return {
-        id: entry.id ?? nanoid(),
-        medication: medicationText,
-        status: entry.status ?? "",
-        authoredOn: entry.authoredOn
-          ? dayjs(entry.authoredOn)
-          : entry._authoredOn?.extension?.find(
-              (ext) =>
-                ext.url ===
-                  "http://hl7.org/fhir/StructureDefinition/data-absent-reason" &&
-                !!ext.valueCode
-            )?.valueCode ?? null,
-      };
-    });
-  }, [medicationRequests]);
+        return {
+          id: entry.id ?? nanoid(),
+          medication: medicationText,
+          status: entry.status ?? "",
+          authoredOn: entry.authoredOn
+            ? dayjs(entry.authoredOn)
+            : entry._authoredOn?.extension?.find(
+                (ext) =>
+                  ext.url ===
+                    "http://hl7.org/fhir/StructureDefinition/data-absent-reason" &&
+                  !!ext.valueCode
+              )?.valueCode ?? null,
+        };
+      });
+    }, [medicationRequests]);
 
-  const columns = createMedicationTableColumns();
+  const columns = createMedicationRequestTableColumns();
 
   return (
     <Card>
@@ -86,13 +87,14 @@ function PatientMedications(props: PatientMedicationsProps) {
       </CardHeader>
       <CardContent>
         <SimpleTable
-          data={medicationTableData}
+          data={medicationRequestTableData}
           columns={columns}
           isLoading={isInitialLoading}
+          initialSorting={[{ id: "authoredOn", desc: true }]}
         />
       </CardContent>
     </Card>
   );
 }
 
-export default PatientMedications;
+export default PatientMedicationRequests;

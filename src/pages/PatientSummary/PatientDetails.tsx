@@ -25,7 +25,7 @@ import { Patient } from "fhir/r4";
 import PatientProfile from "@/pages/PatientSummary/PatientTabs/PatientProfile.tsx";
 import PatientProfileLoading from "@/pages/PatientSummary/PatientTabs/PatientProfileLoading.tsx";
 import PatientConditions from "@/pages/PatientSummary/PatientTabs/PatientConditions.tsx";
-import PatientMedications from "@/pages/PatientSummary/PatientTabs/PatientMedications.tsx";
+import PatientMedicationRequests from "@/pages/PatientSummary/PatientTabs/PatientMedicationRequests.tsx";
 import PatientAllergies from "@/pages/PatientSummary/PatientTabs/PatientAllergies.tsx";
 import PatientProcedures from "@/pages/PatientSummary/PatientTabs/PatientProcedures.tsx";
 import PatientImmunizations from "@/pages/PatientSummary/PatientTabs/PatientImmunizations.tsx";
@@ -53,7 +53,7 @@ function PatientDetails(props: PatientDetailsProps) {
             <TabsTrigger value="conditions" disabled={!patient}>
               Conditions
             </TabsTrigger>
-            <TabsTrigger value="medications" disabled={!patient}>
+            <TabsTrigger value="medicationRequests" disabled={!patient}>
               Medication Requests
             </TabsTrigger>
             <TabsTrigger value="allergies" disabled={!patient}>
@@ -81,8 +81,8 @@ function PatientDetails(props: PatientDetailsProps) {
             <TabsContent value="conditions">
               <PatientConditions patientId={patient.id} />
             </TabsContent>
-            <TabsContent value="medications">
-              <PatientMedications patientId={patient.id} />
+            <TabsContent value="medicationRequests">
+              <PatientMedicationRequests patientId={patient.id} />
             </TabsContent>
             <TabsContent value="allergies">
               <PatientAllergies patientId={patient.id} />
