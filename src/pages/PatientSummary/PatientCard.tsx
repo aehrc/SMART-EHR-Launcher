@@ -50,7 +50,7 @@ function PatientCard(props: PatientCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardDescription>Patient Details</CardDescription>
+        <CardDescription>Patient Health Information</CardDescription>
         {patient ? (
           <div className="flex items-center">
             <div className="flex flex-1 items-center py-2.5 gap-6">

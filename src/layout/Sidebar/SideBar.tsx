@@ -44,7 +44,7 @@ function SideBar() {
 
         <SideBarItem
           sidebarItem={{
-            title: "Patient Details",
+            title: "Patient Health Information",
             path: "/",
             Icon: <User />,
           }}

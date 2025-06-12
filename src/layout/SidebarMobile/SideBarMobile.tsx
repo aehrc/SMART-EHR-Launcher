@@ -53,7 +53,7 @@ function SideBarMobile() {
 
           <SideBarMobileItem
             sidebarItem={{
-              title: "Patient Details",
+              title: "Patient Health Information",
               path: "/",
               Icon: <User />,
             }}
