@@ -39,3 +39,6 @@ export const FORMS_SERVER_URL =
   import.meta.env.VITE_FORMS_SERVER_URL ??
   "https://smartforms.csiro.au/api/fhir";
 export const FORMS_SERVER_TOKEN = import.meta.env.VITE_FORMS_SERVER_TOKEN ?? "";
+
+// Non-environment variables, but still global constants
+export const NUM_OF_RESOURCES_TO_FETCH = 500;
