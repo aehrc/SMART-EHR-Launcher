@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchConditionsReturnParams {
   conditions: Condition[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -47,6 +48,7 @@ function useFetchConditions(patientId: string): useFetchConditionsReturnParams {
 
   return {
     conditions,
+    queryUrl,
     isInitialLoading,
   };
 }

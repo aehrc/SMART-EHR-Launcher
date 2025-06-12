@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchAllergyIntolerancesReturnParams {
   allergyIntolerances: AllergyIntolerance[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -52,6 +53,7 @@ function useFetchAllergyIntolerances(
 
   return {
     allergyIntolerances,
+    queryUrl,
     isInitialLoading,
   };
 }

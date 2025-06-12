@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchImmunizationsReturnParams {
   immunizations: Immunization[];
+  queryUrl: string;
   isInitialLoading: boolean;
 }
 
@@ -49,6 +50,7 @@ function useFetchImmunizations(
 
   return {
     immunizations,
+    queryUrl,
     isInitialLoading,
   };
 }
