@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Commonwealth Scientific and Industrial Research
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
  * Organisation (CSIRO) ABN 41 687 119 230.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,3 +39,6 @@ export const FORMS_SERVER_URL =
   import.meta.env.VITE_FORMS_SERVER_URL ??
   "https://smartforms.csiro.au/api/fhir";
 export const FORMS_SERVER_TOKEN = import.meta.env.VITE_FORMS_SERVER_TOKEN ?? "";
+
+// Non-environment variables, but still global constants
+export const NUM_OF_RESOURCES_TO_FETCH = 500;
