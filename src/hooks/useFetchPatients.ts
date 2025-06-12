@@ -21,6 +21,7 @@ import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
 import useFhirServerAxios from "@/hooks/useFhirServerAxios.ts";
+import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchPatientsReturnParams {
   patients: Patient[];
@@ -28,7 +29,7 @@ interface useFetchPatientsReturnParams {
 }
 
 function useFetchPatients(): useFetchPatientsReturnParams {
-  const numOfSearchEntries = 500;
+  const numOfSearchEntries = NUM_OF_RESOURCES_TO_FETCH;
 
   const queryUrl = `/Patient?_count=${numOfSearchEntries}`;
 
