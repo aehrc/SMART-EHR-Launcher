@@ -1,7 +1,7 @@
 {
   "fhirServerUrl": "https://proxy.smartforms.io/v/r4/fhir",
   "authRequired": false,
-  "launchParamConfigTypes": "proxy",
+  "launchParamConfigType": "proxy",
   "formsServerUrl": "https://smartforms.csiro.au/api/fhir",
   "appList": [
     {
