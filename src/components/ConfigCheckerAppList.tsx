@@ -36,7 +36,7 @@ function ConfigCheckerAppList(props: ConfigCheckerAppListProps) {
 
   return (
     <div className="border-b last:border-b-0">
-      <div className="flex items-center justify-between py-3">
+      <div className="flex items-center justify-between py-3 px-4">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <button
@@ -69,7 +69,7 @@ function ConfigCheckerAppList(props: ConfigCheckerAppListProps) {
           ) : (
             <div className="flex items-center gap-2 text-red-600">
               <X className="h-4 w-4" />
-              <span className="text-xs font-medium">Missing</span>
+              <span className="text-xs font-medium">Invalid</span>
             </div>
           )}
         </div>
@@ -77,13 +77,13 @@ function ConfigCheckerAppList(props: ConfigCheckerAppListProps) {
 
       {/* Collapsible App List */}
       {isExpanded && appList && appList.length > 0 && (
-        <div className="ml-4 border-l-2 border-muted pb-2">
+        <div className="ml-4 pb-2">
           {appList.map((app, index) => {
             const isAppValid = appConfigIsValid(app);
             return (
               <div
                 key={index}
-                className="flex items-center justify-between py-1.5 pl-3 border-b border-muted last:border-b-0"
+                className="flex items-center justify-between py-1.5 pl-4 pr-6 border-b border-muted last:border-b-0"
               >
                 <div className="flex flex-col gap-0.5">
                   <span className="font-medium text-xs">

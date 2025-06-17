@@ -43,6 +43,7 @@ const ConfigContextProvider = ({ children }: { children: ReactNode }) => {
     data: loadedConfig,
     isLoading,
     isError,
+    error,
   } = useQuery<ConfigFile>({
     queryKey: ["configFile"],
     queryFn: loadConfigFle,
@@ -57,6 +58,11 @@ const ConfigContextProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const configIsValid = responseIsConfigFile(config);
+
+  // Log error if the config is not valid
+  if (isError) {
+    console.error("[ConfigContext.tsx] Error from config.json:\n", error);
+  }
 
   return (
     <ConfigContext.Provider

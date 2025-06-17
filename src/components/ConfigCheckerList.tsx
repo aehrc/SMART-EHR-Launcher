@@ -22,9 +22,13 @@ import {
   isValidAuthRequired,
   isValidFhirServerUrl,
   isValidLaunchParamConfigType,
+  isValidOAuthClientId,
+  isValidOAuthGrantType,
+  isValidOAuthScope,
 } from "@/utils/configFile.ts";
 import ConfigCheckerListItem from "@/components/ConfigCheckerListItem.tsx";
 import ConfigCheckerAppList from "@/components/ConfigCheckerAppList.tsx";
+import ConfigCheckerProgress from "@/components/ConfigCheckerProgress.tsx";
 
 export interface ConfigCheckerItem {
   label: string;
@@ -40,7 +44,7 @@ interface ConfigCheckerListProps {
 function ConfigCheckerList(props: ConfigCheckerListProps) {
   const { config } = props;
 
-  const configItems: ConfigCheckerItem[] = [
+  const mandatoryConfigItems: ConfigCheckerItem[] = [
     {
       label: "FHIR Server URL",
       isValid: isValidFhirServerUrl(config.fhirServerUrl),
@@ -95,53 +99,120 @@ function ConfigCheckerList(props: ConfigCheckerListProps) {
     },
   ];
 
-  const validCount = configItems.filter((item) => item.isValid).length;
-  const totalCount = configItems.length;
+  const optionalConfigItems: ConfigCheckerItem[] = [
+    ...(config.oAuthGrantType !== undefined
+      ? [
+          {
+            label: "OAuth Grant Type",
+            isValid: isValidOAuthGrantType(config.oAuthGrantType),
+            description: `Set value: ${
+              (config.oAuthGrantType as never) === ""
+                ? "<empty string>"
+                : config.oAuthGrantType
+            }`,
+            type: '"authorization_code" | null',
+          },
+        ]
+      : []),
+    ...(config.oAuthScope !== undefined
+      ? [
+          {
+            label: "OAuth Scope",
+            isValid: isValidOAuthScope(config.oAuthScope),
+            description: `Set value: ${
+              config.oAuthScope === "" ? "<empty string>" : config.oAuthScope
+            }`,
+            type: "string | null",
+          },
+        ]
+      : []),
+    ...(config.oAuthClientId !== undefined
+      ? [
+          {
+            label: "OAuth Client ID",
+            isValid: isValidOAuthClientId(config.oAuthClientId),
+            description: `Set value: ${
+              config.oAuthClientId === ""
+                ? "<empty string>"
+                : config.oAuthClientId
+            }`,
+            type: "string | null",
+          },
+        ]
+      : []),
+  ];
+
+  const mandatoryValidCount = mandatoryConfigItems.filter(
+    (item) => item.isValid
+  ).length;
+  const mandatoryTotalCount = mandatoryConfigItems.length;
+  const optionalValidCount = optionalConfigItems.filter(
+    (item) => item.isValid
+  ).length;
+  const optionalTotalCount = optionalConfigItems.length;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Configuration Status: {validCount}/{totalCount} items configured
-        </div>
+    <div className="space-y-6">
+      {/* Mandatory Configuration */}
+      <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-24 bg-muted rounded-full overflow-hidden">
-            <div
-              className="h-full bg-green-600 transition-all duration-300"
-              style={{ width: `${(validCount / totalCount) * 100}%` }}
-            />
-          </div>
-          <span className="text-xs text-muted-foreground">
-            {Math.round((validCount / totalCount) * 100)}%
-          </span>
+          <h3 className="text-sm font-semibold">Mandatory Configuration</h3>
         </div>
-      </div>
-      <div className="space-y-0">
-        {configItems.map((item, index) => {
-          if (item.label === "App List") {
+        <ConfigCheckerProgress
+          totalCount={mandatoryTotalCount}
+          validCount={mandatoryValidCount}
+        />
+        <div className="space-y-0 border rounded-lg">
+          {mandatoryConfigItems.map((item, index) => {
+            if (item.label === "App List") {
+              return (
+                <ConfigCheckerAppList
+                  key={index}
+                  label={item.label}
+                  appList={config.appList || []}
+                  isValid={item.isValid}
+                  type={item.type}
+                  description={item.description}
+                />
+              );
+            }
+
             return (
-              <ConfigCheckerAppList
+              <ConfigCheckerListItem
                 key={index}
                 label={item.label}
-                appList={config.appList || []}
                 isValid={item.isValid}
                 type={item.type}
                 description={item.description}
               />
             );
-          }
-
-          return (
-            <ConfigCheckerListItem
-              key={index}
-              label={item.label}
-              isValid={item.isValid}
-              type={item.type}
-              description={item.description}
-            />
-          );
-        })}
+          })}
+        </div>
       </div>
+
+      {/* Optional Configuration */}
+      {optionalConfigItems.length ? (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold">Optional Configuration</h3>
+          </div>
+          <ConfigCheckerProgress
+            validCount={optionalValidCount}
+            totalCount={optionalTotalCount}
+          />
+          <div className="space-y-0 border rounded-lg">
+            {optionalConfigItems.map((item, index) => (
+              <ConfigCheckerListItem
+                key={index}
+                label={item.label}
+                isValid={item.isValid}
+                type={item.type}
+                description={item.description}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

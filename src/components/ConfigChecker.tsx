@@ -45,10 +45,10 @@ function ConfigChecker(props: ConfigListProps) {
             <div className="grid gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Configuration File Status</CardTitle>
+                  <CardTitle>⚠️ Configuration File Invalid </CardTitle>
                   <CardDescription>
-                    Review your FHIR application configuration settings. Missing
-                    or invalid items are marked with an X.
+                    Review your config.json. Missing or invalid items are marked
+                    with an X.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

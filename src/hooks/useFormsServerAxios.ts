@@ -19,7 +19,7 @@ import axios from "axios";
 import useConfig from "@/hooks/useConfig.ts";
 
 function useFormsServerAxios() {
-  const { formsServerUrl, formsServerToken } = useConfig();
+  const { formsServerUrl } = useConfig();
 
   const axiosInstance = axios.create({
     baseURL: formsServerUrl,
@@ -27,12 +27,7 @@ function useFormsServerAxios() {
 
   axiosInstance.interceptors.request.use(
     async (config) => {
-      // Use access token if provided
-      if (formsServerToken) {
-        config.headers.Authorization = `Bearer ${formsServerToken}`;
-      }
-
-      // Reuse existing config if no token
+      // Reuse existing config. Forms server token config removed as of 17 June 2026 - doesn't make sense for a Questionnaire definition server to have a token
       return config;
     },
     (error) => Promise.reject(error)

@@ -35,13 +35,12 @@ export interface ConfigFile {
   launchParamConfigType: "default" | "proxy";
 
   // (Optional) Need to include these config values if you are using OAuth configuration. Only authorization_code is implemented
-  oAuthGrantType: "authorization_code" | undefined;
-  oAuthScope: string | undefined;
-  oAuthClientId: string | undefined;
+  oAuthGrantType: "authorization_code" | null | undefined;
+  oAuthScope: string | null | undefined;
+  oAuthClientId: string | null | undefined;
 
   // FHIR server for Questionnaire definitions
   formsServerUrl: string;
-  formsServerToken: string | undefined; // Optional
 
   // List of applications preconfigured in "App Launch" settings
   appList: AppConfig[];
@@ -56,7 +55,6 @@ export const FALLBACK_CONFIG: ConfigFile = {
   oAuthScope: undefined,
   oAuthClientId: undefined,
   formsServerUrl: "https://smartforms.csiro.au/api/fhir",
-  formsServerToken: undefined,
   appList: [
     {
       appName: "Health Check Assessment",
@@ -83,12 +81,20 @@ export function responseIsConfigFile(response: any): response is ConfigFile {
   return (
     response &&
     typeof response === "object" &&
+    // Check required properties
     isValidFhirServerUrl(response.fhirServerUrl) &&
     isValidAuthRequired(response.authRequired) &&
     isValidLaunchParamConfigType(response.launchParamConfigType) &&
     isValidFormsServerUrl(response.formsServerUrl) &&
     isValidAppList(response.appList) &&
-    isValidDefaultApp(response.defaultApp)
+    isValidDefaultApp(response.defaultApp) &&
+    // Check optional properties
+    (response.oAuthGrantType === undefined ||
+      isValidOAuthGrantType(response.oAuthGrantType)) &&
+    (response.oAuthScope === undefined ||
+      isValidOAuthScope(response.oAuthScope)) &&
+    (response.oAuthClientId === undefined ||
+      isValidOAuthClientId(response.oAuthClientId))
   );
 }
 
@@ -104,6 +110,20 @@ export function isValidLaunchParamConfigType(
   value: any
 ): value is "default" | "proxy" {
   return value === "default" || value === "proxy";
+}
+
+export function isValidOAuthGrantType(
+  value: any
+): value is "authorization_code" | null {
+  return value === "authorization_code" || value === null;
+}
+
+export function isValidOAuthScope(value: any): value is string | null {
+  return typeof value === "string" || value === null;
+}
+
+export function isValidOAuthClientId(value: any): value is string | null {
+  return typeof value === "string" || value === null;
 }
 
 export function isValidFormsServerUrl(value: any): value is string {

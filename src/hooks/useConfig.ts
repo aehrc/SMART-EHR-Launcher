@@ -27,7 +27,6 @@ function useConfig(): {
   oAuthScope: ConfigFile["oAuthScope"];
   oAuthClientId: ConfigFile["oAuthClientId"];
   formsServerUrl: ConfigFile["formsServerUrl"];
-  formsServerToken: ConfigFile["formsServerToken"];
   appList: ConfigFile["appList"];
   defaultApp: ConfigFile["defaultApp"];
 } {
@@ -41,7 +40,6 @@ function useConfig(): {
     oAuthScope: config.oAuthScope,
     oAuthClientId: config.oAuthClientId,
     formsServerUrl: config.formsServerUrl,
-    formsServerToken: config.formsServerToken,
     appList: config.appList,
     defaultApp: config.defaultApp,
   };

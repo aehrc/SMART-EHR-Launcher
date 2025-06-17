@@ -49,13 +49,12 @@ export interface ConfigFile {
   launchParamConfigType: "default" | "proxy";
 
   // (Optional) Need to include these config values if you are using OAuth configuration. Only authorization_code is implemented
-  oAuthGrantType: "authorization_code" | undefined;
-  oAuthScope: string | undefined;
-  oAuthClientId: string | undefined;
+  oAuthGrantType: "authorization_code" | null | undefined;
+  oAuthScope: string | null | undefined;
+  oAuthClientId: string | null | undefined;
 
   // FHIR server for Questionnaire definitions
   formsServerUrl: string;
-  formsServerToken: string | undefined; // Optional
 
   // List of applications preconfigured in "App Launch" settings
   appList: AppConfig[];
@@ -82,9 +81,6 @@ See [this section](#smart-app-launchs-launch-parameter-config) for `launchParamC
 oAuthGrantType: <OAuth2.0 grant type>
 oAuthScope: fhirUser offline_access openid profile launch/practitioner user/*.rs (fixed scopes)
 oAuthClientId: <Client ID of this app registered with your server>
-
-# Questionnaire repository server token if relevant (Servers storing questionnaire definitions are usually public though)
-formsServerToken: <Questionnaire repository server access token>
 ```
 
 You are free to add your own environment variables to support your authorisation mechanism. If you are adding any sensitive information, please remove `config.json` from the git repository and add it to the `.gitignore` file.
