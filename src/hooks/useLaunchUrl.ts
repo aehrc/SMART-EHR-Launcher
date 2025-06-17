@@ -15,30 +15,19 @@
  * limitations under the License.
  */
 
-import axios from "axios";
+import { LauncherQuery } from "@/hooks/useLauncherQuery.ts";
+import { LaunchParams } from "@/lib/codec.ts";
 import useConfig from "@/hooks/useConfig.ts";
+import { getDefaultLaunchUrl, getProxyLaunchUrl } from "@/lib/launchUrl.ts";
 
-function useFormsServerAxios() {
-  const { formsServerUrl, formsServerToken } = useConfig();
+function useLaunchUrl(query: LauncherQuery, launch: LaunchParams): URL {
+  const { fhirServerUrl, launchParamConfigType } = useConfig();
 
-  const axiosInstance = axios.create({
-    baseURL: formsServerUrl,
-  });
+  if (launchParamConfigType === "proxy") {
+    return getProxyLaunchUrl(query, launch, fhirServerUrl);
+  }
 
-  axiosInstance.interceptors.request.use(
-    async (config) => {
-      // Use access token if provided
-      if (formsServerToken) {
-        config.headers.Authorization = `Bearer ${formsServerToken}`;
-      }
-
-      // Reuse existing config if no token
-      return config;
-    },
-    (error) => Promise.reject(error)
-  );
-
-  return axiosInstance;
+  return getDefaultLaunchUrl(query, launch, fhirServerUrl);
 }
 
-export default useFormsServerAxios;
+export default useLaunchUrl;

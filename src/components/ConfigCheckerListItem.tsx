@@ -17,6 +17,7 @@
 
 import { Check, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import AppConfigInterfaceHoverCard from "@/components/AppConfigInterfaceHoverCard.tsx";
 
 interface ConfigCheckerListItemProps {
   label: string;
@@ -33,9 +34,17 @@ function ConfigCheckerListItem(props: ConfigCheckerListItemProps) {
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span className="font-medium text-sm">{label}</span>
-          <Badge variant="secondary" className="text-xs">
-            {type}
-          </Badge>
+          {type === "AppConfig" ? (
+            <AppConfigInterfaceHoverCard>
+              <Badge variant="secondary" className="text-xs cursor-help">
+                {type}
+              </Badge>
+            </AppConfigInterfaceHoverCard>
+          ) : (
+            <Badge variant="secondary" className="text-xs">
+              {type}
+            </Badge>
+          )}
         </div>
         <span className="text-xs text-muted-foreground">{description}</span>
       </div>

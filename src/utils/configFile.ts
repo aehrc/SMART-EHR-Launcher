@@ -35,9 +35,9 @@ export interface ConfigFile {
   launchParamConfigType: "default" | "proxy";
 
   // Need to include these config values if you are using OAuth configuration. Only authorization_code is implemented
-  oauthGrantType: "authorization_code" | undefined;
-  oauthScope: string | undefined;
-  oauthClientId: string | undefined;
+  oAuthGrantType: "authorization_code" | undefined;
+  oAuthScope: string | undefined;
+  oAuthClientId: string | undefined;
 
   // FHIR server for Questionnaire definitions
   formsServerUrl: string;
@@ -52,9 +52,9 @@ export const FALLBACK_CONFIG: ConfigFile = {
   fhirServerUrl: "https://proxy.smartforms.io/v/r4/fhir",
   authRequired: false,
   launchParamConfigType: "proxy",
-  oauthGrantType: undefined,
-  oauthScope: undefined,
-  oauthClientId: undefined,
+  oAuthGrantType: undefined,
+  oAuthScope: undefined,
+  oAuthClientId: undefined,
   formsServerUrl: "https://smartforms.csiro.au/api/fhir",
   formsServerToken: undefined,
   appList: [
@@ -135,8 +135,7 @@ export async function loadConfigFle(): Promise<ConfigFile> {
 
   if (!response.ok) {
     throw new Error(
-      "Failed to load config.json. Falling back to fallback configuration." +
-        JSON.stringify(FALLBACK_CONFIG, null, 2)
+      "Failed to load config.json. It might be missing or malformed."
     );
   }
 

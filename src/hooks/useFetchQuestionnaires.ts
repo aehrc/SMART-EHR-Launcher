@@ -21,6 +21,7 @@ import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
 import useFormsServerAxios from "@/hooks/useFormsServerAxios.ts";
+import { NUM_OF_QUESTIONNAIRES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchQuestionnairesReturnParams {
   questionnaires: Questionnaire[];
@@ -29,7 +30,7 @@ interface useFetchQuestionnairesReturnParams {
 }
 
 function useFetchQuestionnaires(): useFetchQuestionnairesReturnParams {
-  const numOfSearchEntries = 200;
+  const numOfSearchEntries = NUM_OF_QUESTIONNAIRES_TO_FETCH;
 
   const queryUrl = `/Questionnaire?_count=${numOfSearchEntries}&_sort=-date&`;
 

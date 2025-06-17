@@ -19,6 +19,7 @@ import { useState } from "react";
 import { AppConfig, appConfigIsValid } from "@/utils/configFile.ts";
 import { Check, ChevronDown, ChevronRight, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import AppConfigInterfaceHoverCard from "@/components/AppConfigInterfaceHoverCard.tsx";
 
 interface ConfigCheckerAppListProps {
   label: string;
@@ -49,9 +50,11 @@ function ConfigCheckerAppList(props: ConfigCheckerAppListProps) {
               )}
               <span className="font-medium text-sm">{label}</span>
             </button>
-            <Badge variant="secondary" className="text-xs">
-              {type}
-            </Badge>
+            <AppConfigInterfaceHoverCard>
+              <Badge variant="secondary" className="text-xs cursor-help">
+                {type}
+              </Badge>
+            </AppConfigInterfaceHoverCard>
           </div>
           <span className="text-xs text-muted-foreground ml-4">
             {description}

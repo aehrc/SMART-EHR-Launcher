@@ -18,7 +18,6 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ActivePageContextProvider from "@/contexts/ActivePageContext.tsx";
 import { SnackbarProvider } from "notistack";
-import FormsServerContextProvider from "@/contexts/FormsServerContext.tsx";
 import QuestionnaireContextProvider from "@/contexts/QuestionnaireContext.tsx";
 import PatientContextProvider from "@/contexts/PatientContext.tsx";
 import UserContextProvider from "@/contexts/UserContext.tsx";
@@ -118,19 +117,17 @@ function App() {
     <TooltipProvider delayDuration={100}>
       <SnackbarProvider maxSnack={1} action={CloseSnackbar}>
         <FhirServerContextProvider>
-          <FormsServerContextProvider>
-            <ActivePageContextProvider>
-              <PatientContextProvider>
-                <UserContextProvider>
-                  <EncounterContextProvider>
-                    <QuestionnaireContextProvider>
-                      <RouterProvider router={router} />
-                    </QuestionnaireContextProvider>
-                  </EncounterContextProvider>
-                </UserContextProvider>
-              </PatientContextProvider>
-            </ActivePageContextProvider>
-          </FormsServerContextProvider>
+          <ActivePageContextProvider>
+            <PatientContextProvider>
+              <UserContextProvider>
+                <EncounterContextProvider>
+                  <QuestionnaireContextProvider>
+                    <RouterProvider router={router} />
+                  </QuestionnaireContextProvider>
+                </EncounterContextProvider>
+              </UserContextProvider>
+            </PatientContextProvider>
+          </ActivePageContextProvider>
         </FhirServerContextProvider>
       </SnackbarProvider>
     </TooltipProvider>
