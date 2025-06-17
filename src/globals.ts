@@ -15,30 +15,9 @@
  * limitations under the License.
  */
 
-// Source FHIR server
-export const FHIR_SERVER_URL =
-  import.meta.env.VITE_FHIR_SERVER_URL ??
-  "https://proxy.smartforms.io/v/r4/fhir";
-
-// Determine if authorization is required
-export const AUTH_REQUIRED = import.meta.env.VITE_AUTH_REQUIRED === "true";
-
-// Launch parameter configuration
-export const LAUNCH_PARAM_CONFIG =
-  import.meta.env.VITE_LAUNCH_PARAM_CONFIG ?? "proxy";
-
-// OAuth configuration - only authorization_code is implemented
-// If our server doesn't support authorization_code and you want to use your oauth mechanism, you can write your own Auth component and put it in src/layout/Home.tsx
-// You are free to define your own environment variables for your oauth configuration. Remember to update vite-env.d.ts and globals.ts for Typescript types
-export const OAUTH_GRANT_TYPE = import.meta.env.VITE_OAUTH_GRANT_TYPE ?? "";
-export const OAUTH_SCOPE = import.meta.env.VITE_OAUTH_SCOPE ?? "";
-export const OAUTH_CLIENT_ID = import.meta.env.VITE_OAUTH_CLIENT_ID ?? "";
-
-// Questionnaire repository configuration (optional, mainly used for launching Smart Forms)
-export const FORMS_SERVER_URL =
-  import.meta.env.VITE_FORMS_SERVER_URL ??
-  "https://smartforms.csiro.au/api/fhir";
-export const FORMS_SERVER_TOKEN = import.meta.env.VITE_FORMS_SERVER_TOKEN ?? "";
-
-// Non-environment variables, but still global constants
+// Global constants
+// From source FHIR server
 export const NUM_OF_RESOURCES_TO_FETCH = 500;
+
+// From forms server (Questionnaire definition only)
+export const NUM_OF_QUESTIONNAIRES_TO_FETCH = 200;

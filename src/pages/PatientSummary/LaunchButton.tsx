@@ -1,6 +1,22 @@
+/*
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
+ * Organisation (CSIRO) ABN 41 687 119 230.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import useLauncherQuery from "../../hooks/useLauncherQuery";
 import { getValidationErrors } from "../../lib/URLValidation";
-import { getLaunchUrl } from "../../lib/launchUrl";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import {
   Tooltip,
@@ -10,6 +26,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import useActivePage from "@/hooks/useActivePage.ts";
 import CopyButton from "@/components/CopyButton.tsx";
+import useLaunchUrl from "@/hooks/useLaunchUrl.ts";
 
 function LaunchButton() {
   // The URL to launch the user-specified app
@@ -17,7 +34,7 @@ function LaunchButton() {
 
   const { switchActivePage } = useActivePage();
 
-  const launchUrl = getLaunchUrl(query, launch);
+  const launchUrl = useLaunchUrl(query, launch);
 
   const isEmbeddedView = launch.is_embedded_view;
   const appName = query.app_name !== "" ? query.app_name : "SMART app";
