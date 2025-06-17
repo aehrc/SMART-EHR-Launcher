@@ -28,20 +28,20 @@ export interface ConfigFile {
   // FHIR server for Patient record data
   fhirServerUrl: string;
 
-  // Determine if authorization is required. If using proxy, this should be false.
+  // Whether your server requires authorisation. If launchParamConfigType="proxy", this should be false.
   authRequired: boolean;
 
   // Launch parameter configuration type. "proxy" or "default" - See README.md
   launchParamConfigType: "default" | "proxy";
 
-  // Need to include these config values if you are using OAuth configuration. Only authorization_code is implemented
+  // (Optional) Need to include these config values if you are using OAuth configuration. Only authorization_code is implemented
   oAuthGrantType: "authorization_code" | undefined;
   oAuthScope: string | undefined;
   oAuthClientId: string | undefined;
 
   // FHIR server for Questionnaire definitions
   formsServerUrl: string;
-  formsServerToken: string | undefined;
+  formsServerToken: string | undefined; // Optional
 
   // List of applications preconfigured in "App Launch" settings
   appList: AppConfig[];
