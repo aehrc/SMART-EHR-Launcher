@@ -1,0 +1,96 @@
+{
+  "fhirServerUrl": "https://proxy.smartforms.io/v/r4/fhir",
+  "authRequired": false,
+  "launchParamConfigTypes": "proxy",
+  "formsServerUrl": "https://smartforms.csiro.au/api/fhir",
+  "appList": [
+    {
+      "appName": "Health Check Assessment",
+      "launchUrl": "https://smartforms.csiro.au/launch",
+      "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
+      "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      "redirectUris": "https://smartforms.csiro.au",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "Pediatric Growth Chart",
+      "launchUrl": "http://examples.smarthealthit.org/growth-chart-app/launch.html",
+      "clientId": "growth_chart",
+      "scope": "openid profile launch patient/Observation.read patient/Patient.read offline_access",
+      "redirectUris": "http://examples.smarthealthit.org/growth-chart-app",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "SMART Australian Tester",
+      "launchUrl": "https://smartqedit4.azurewebsites.net/ts/Tester/smart-launch.html",
+      "clientId": "16cbfe7c-6c56-4876-944f-534f9306bf8b",
+      "scope": "openid profile patient/Patient.read patient/Flag.read user/Practitioner.read user/PractitionerRole.read user/Organization.read launch",
+      "redirectUris": "https://smartqedit4.azurewebsites.net/ts/Tester/smart-index.html",
+      "isEmbeddedView": true
+    },
+    {
+      "appName": "dev.smartforms.io",
+      "launchUrl": "https://dev.smartforms.io/launch",
+      "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
+      "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      "redirectUris": "https://dev.smartforms.io/",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "acdcpilot.smartforms.io",
+      "launchUrl": "https://acdcpilot.smartforms.io/launch",
+      "clientId": "31b7f0fa-369f-49b4-4ad7-08dc6e2e0cf1",
+      "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      "redirectUris": "https://acdcpilot.smartforms.io/",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "healthchecks.smartforms.io",
+      "launchUrl": "https://healthchecks.smartforms.io/launch",
+      "clientId": "29b79fe3-720e-48a8-976f-eca25b19f187",
+      "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      "redirectUris": "https://healthchecks.smartforms.io/",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "localhost:5173",
+      "launchUrl": "http://localhost:5173/launch",
+      "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
+      "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      "redirectUris": "http://localhost:5173/",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "AusCVDRisk-i Calculator Demo",
+      "launchUrl": "https://main.dlnanw1r5u3dw.amplifyapp.com/launch",
+      "clientId": "aus-cvd-risk-i",
+      "scope": "launch openid fhirUser online_access patient/Patient.r patient/Encounter.r patient/Condition.s patient/Observation.cs patient/Medication.r patient/MedicationRequest.s",
+      "redirectUris": "https://main.dlnanw1r5u3dw.amplifyapp.com/",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "SMART on FHIR Problem List Demo",
+      "launchUrl": "https://main.d2gc21b6xr8ukx.amplifyapp.com/launch",
+      "clientId": "a5403f19-3b1c-4f19-b298-cc42e8c3a9c0",
+      "scope": "fhirUser online_access openid profile launch patient/Patient.rs patient/Encounter.cruds patient/Condition.cruds",
+      "redirectUris": "https://main.d2gc21b6xr8ukx.amplifyapp.com/",
+      "isEmbeddedView": false
+    },
+    {
+      "appName": "Beda EMR",
+      "launchUrl": "https://emr.au-core.beda.software/launch",
+      "clientId": "beda-emr",
+      "scope": "",
+      "redirectUris": "https://emr.au-core.beda.software/",
+      "isEmbeddedView": false
+    }
+  ],
+  "defaultApp": {
+    "appName": "Health Check Assessment",
+    "launchUrl": "https://smartforms.csiro.au/launch",
+    "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
+    "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+    "redirectUris": "https://smartforms.csiro.au",
+    "isEmbeddedView": false
+  }
+}
