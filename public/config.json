@@ -13,14 +13,6 @@
       "isEmbeddedView": false
     },
     {
-      "appName": "Pediatric Growth Chart",
-      "launchUrl": "http://examples.smarthealthit.org/growth-chart-app/launch.html",
-      "clientId": "growth_chart",
-      "scope": "openid profile launch patient/Observation.read patient/Patient.read offline_access",
-      "redirectUris": "http://examples.smarthealthit.org/growth-chart-app",
-      "isEmbeddedView": false
-    },
-    {
       "appName": "SMART Australian Tester",
       "launchUrl": "https://smartqedit4.azurewebsites.net/ts/Tester/smart-launch.html",
       "clientId": "16cbfe7c-6c56-4876-944f-534f9306bf8b",
@@ -29,11 +21,11 @@
       "isEmbeddedView": true
     },
     {
-      "appName": "dev.smartforms.io",
-      "launchUrl": "https://dev.smartforms.io/launch",
+      "appName": "alpha.smartforms.io",
+      "launchUrl": "https://alpha.smartforms.io/launch",
       "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
       "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
-      "redirectUris": "https://dev.smartforms.io/",
+      "redirectUris": "https://alpha.smartforms.io/",
       "isEmbeddedView": false
     },
     {
