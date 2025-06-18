@@ -252,6 +252,80 @@ export function createMedicationRequestTableColumns(): ColumnDef<MedicationReque
   ];
 }
 
+// MedicationRequest functions and types
+export interface MedicationStatementTableData {
+  id: string;
+  medication: string;
+  dosage: string;
+  reasonCode: string;
+  effective: Dayjs | null;
+}
+
+export function createMedicationStatementTableColumns(): ColumnDef<MedicationStatementTableData>[] {
+  return [
+    {
+      accessorKey: "medication",
+      header: "Medication",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div className="font-medium">{row.getValue("medication") ?? "-"}</div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+            {row.getValue("id") ?? "-"}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "dosage",
+      header: "Dosage",
+      cell: ({ row }) =>
+        row.getValue("status") ? (
+          <div className="flex">
+            <div>{row.getValue("dosage") ?? "-"}</div>
+          </div>
+        ) : (
+          "-"
+        ),
+    },
+    {
+      accessorKey: "reasonCode",
+      header: "Reason Code",
+      cell: ({ row }) =>
+        row.getValue("reasonCode") ? (
+          <div className="flex">
+            <div>{row.getValue("reasonCode") ?? "-"}</div>
+          </div>
+        ) : (
+          "-"
+        ),
+    },
+    {
+      accessorKey: "effective",
+      header: "Effective",
+      sortingFn: (a, b) => {
+        if (a.original.effective === null || b.original.effective === null) {
+          return 0;
+        }
+
+        return a.original.effective.diff(b.original.effective);
+      },
+      cell: ({ row }) => {
+        return row.original.effective
+          ? row.original.effective.format("DD/MM/YYYY")
+          : "-";
+      },
+    },
+  ];
+}
+
 // AllergyIntolerances functions and types
 export interface AllergyTableData {
   id: string;
