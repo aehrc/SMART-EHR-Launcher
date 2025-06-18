@@ -31,6 +31,7 @@ import PatientProcedures from "@/pages/PatientSummary/PatientTabs/PatientProcedu
 import PatientImmunizations from "@/pages/PatientSummary/PatientTabs/PatientImmunizations.tsx";
 import PatientEncounters from "@/pages/PatientSummary/PatientTabs/PatientEncounters.tsx";
 import PatientObservations from "@/pages/PatientSummary/PatientTabs/PatientObservations.tsx";
+import PatientMedicationStatements from "@/pages/PatientSummary/PatientTabs/PatientMedicationStatements.tsx";
 
 interface PatientDetailsProps {
   patient: Patient | null;
@@ -55,6 +56,9 @@ function PatientDetails(props: PatientDetailsProps) {
             </TabsTrigger>
             <TabsTrigger value="medicationRequests" disabled={!patient}>
               Medication Requests
+            </TabsTrigger>
+            <TabsTrigger value="medicationStatements" disabled={!patient}>
+              Medication Statements
             </TabsTrigger>
             <TabsTrigger value="allergies" disabled={!patient}>
               Allergies
@@ -83,6 +87,9 @@ function PatientDetails(props: PatientDetailsProps) {
             </TabsContent>
             <TabsContent value="medicationRequests">
               <PatientMedicationRequests patientId={patient.id} />
+            </TabsContent>
+            <TabsContent value="medicationStatements">
+              <PatientMedicationStatements patientId={patient.id} />
             </TabsContent>
             <TabsContent value="allergies">
               <PatientAllergies patientId={patient.id} />
