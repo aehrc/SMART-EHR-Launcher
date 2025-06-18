@@ -1,40 +1,53 @@
+/*
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
+ * Organisation (CSIRO) ABN 41 687 119 230.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import useValidateCodeAndState from "@/hooks/useValidateCodeAndState.ts";
-import { OAUTH_CLIENT_ID, OAUTH_GRANT_TYPE, OAUTH_SCOPE } from "@/globals.ts";
-import { getFhirServerBaseUrl } from "@/utils/misc.ts";
 import { Button } from "@/components/ui/button.tsx";
 import useRequestTokenCode from "@/hooks/useRequestTokenCode.ts";
 import useAuthorize from "@/hooks/useAuthorize.ts";
-
-const responseType = "code";
-const clientId = OAUTH_CLIENT_ID;
-const scope = OAUTH_SCOPE;
-const aud = getFhirServerBaseUrl();
-const grantType = OAUTH_GRANT_TYPE;
+import useConfig from "@/hooks/useConfig.ts";
 
 function AuthCallback() {
   const { protocol, host } = window.location;
 
-  const redirectUri = `${protocol}//${host}/authcallback`;
+  const REDIRECT_URI = `${protocol}//${host}/authcallback`;
 
   // Check if code and state are present/valid
   const { code, stateIsValid } = useValidateCodeAndState();
 
+  const { fhirServerUrl, oAuthGrantType, oAuthScope, oAuthClientId } =
+    useConfig();
+
   // Perform authorize() if code missing or state is invalid
   const { authorizeStatus } = useAuthorize({
-    responseType,
-    clientId,
-    redirectUri,
-    scope,
-    aud,
+    responseType: "code",
+    clientId: oAuthClientId ?? "",
+    redirectUri: REDIRECT_URI,
+    scope: oAuthScope ?? "",
+    aud: fhirServerUrl,
     enabled: !stateIsValid,
   });
 
   // Perform token() if authorisation is complete i.e. code and state are valid
   const { tokenStatus } = useRequestTokenCode({
-    grantType,
-    code,
-    redirectUri,
-    clientId,
+    grantType: oAuthGrantType ?? "",
+    code: code,
+    redirectUri: REDIRECT_URI,
+    clientId: oAuthClientId ?? "",
   });
 
   if (authorizeStatus === "error") {

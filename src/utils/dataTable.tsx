@@ -1,3 +1,20 @@
+/*
+ * Copyright 2025 Commonwealth Scientific and Industrial Research
+ * Organisation (CSIRO) ABN 41 687 119 230.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ColumnDef } from "@tanstack/react-table";
 import { Encounter, Patient, Practitioner, Questionnaire } from "fhir/r4";
 import { Button } from "@/components/ui/button.tsx";
@@ -87,6 +104,7 @@ export function createPatientTableColumns(
         <>
           {selectedPatientId !== row.getValue("id") ? (
             <Button
+              title="Set as context"
               variant="ghost"
               className="flex h-8 w-8 p-0 m-0"
               onClick={() => onButtonClick(row.getValue("id"))}
@@ -155,6 +173,7 @@ export function createUserTableColumns(
         <>
           {selectedUserId !== row.getValue("id") ? (
             <Button
+              title="Set as context"
               variant="ghost"
               className="flex h-8 w-8 p-0 m-0"
               onClick={() => onButtonClick(row.getValue("id"))}
@@ -225,6 +244,11 @@ export function createEncounterTableColumns(
       id: "actions",
       cell: ({ row }) => (
         <Button
+          title={
+            selectedEncounterId === row.getValue("id")
+              ? "Clear"
+              : "Set as context"
+          }
           variant="ghost"
           className="flex h-8 w-8 p-0 m-0"
           onClick={() => onButtonClick(row.getValue("id"))}
@@ -234,7 +258,11 @@ export function createEncounterTableColumns(
           ) : (
             <MousePointerClick className="h-4 w-4" />
           )}
-          <span className="sr-only">Set as context</span>
+          <span className="sr-only">
+            {selectedEncounterId === row.getValue("id")
+              ? "Clear"
+              : "Set as context"}
+          </span>
         </Button>
       ),
     },
@@ -291,6 +319,11 @@ export function createQuestionnaireTableColumns(
       id: "actions",
       cell: ({ row }) => (
         <Button
+          title={
+            selectedQuestionnaireId === row.getValue("id")
+              ? "Clear"
+              : "Set as context"
+          }
           variant="ghost"
           className="flex h-8 w-8 p-0 m-0"
           onClick={() => onButtonClick(row.getValue("id"))}
@@ -300,7 +333,11 @@ export function createQuestionnaireTableColumns(
           ) : (
             <MousePointerClick className="h-4 w-4" />
           )}
-          <span className="sr-only">Set as context</span>
+          <span className="sr-only">
+            {selectedQuestionnaireId === row.getValue("id")
+              ? "Clear"
+              : "Set as context"}
+          </span>
         </Button>
       ),
     },

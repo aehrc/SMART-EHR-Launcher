@@ -15,25 +15,19 @@
  * limitations under the License.
  */
 
-import axios from "axios";
+import { LauncherQuery } from "@/hooks/useLauncherQuery.ts";
+import { LaunchParams } from "@/lib/codec.ts";
 import useConfig from "@/hooks/useConfig.ts";
+import { getDefaultLaunchUrl, getProxyLaunchUrl } from "@/lib/launchUrl.ts";
 
-function useFormsServerAxios() {
-  const { formsServerUrl } = useConfig();
+function useLaunchUrl(query: LauncherQuery, launch: LaunchParams): URL {
+  const { fhirServerUrl, launchParamConfigType } = useConfig();
 
-  const axiosInstance = axios.create({
-    baseURL: formsServerUrl,
-  });
+  if (launchParamConfigType === "proxy") {
+    return getProxyLaunchUrl(query, launch, fhirServerUrl);
+  }
 
-  axiosInstance.interceptors.request.use(
-    async (config) => {
-      // Reuse existing config. Forms server token config removed as of 17 June 2026 - doesn't make sense for a Questionnaire definition server to have a token
-      return config;
-    },
-    (error) => Promise.reject(error)
-  );
-
-  return axiosInstance;
+  return getDefaultLaunchUrl(query, launch, fhirServerUrl);
 }
 
-export default useFormsServerAxios;
+export default useLaunchUrl;

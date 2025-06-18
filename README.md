@@ -22,7 +22,7 @@ Contact **Sean Fong** sean.fong@csiro.au or **Heath Frankel** <heath@intervise.c
 ## Features
 
 #### General features:
-- Provides a concise Patient summary with referenced Encounters, Conditions, MedicationRequests, AllergyIntolerances, Procedures, Immunisations, Observations
+- Provides concise Patient health information with referenced Encounters, Conditions, MedicationRequests, AllergyIntolerances, Procedures, Immunisations, Observations
 - Easy switching of Patient, user (Practitioner) and Encounter launch context
 - Easy switching of pre-configured SMART apps or manual config of a new SMART app (requires app registration with underlying server)
 - Supports embedded SMART app view within EHR
@@ -34,49 +34,82 @@ Contact **Sean Fong** sean.fong@csiro.au or **Heath Frankel** <heath@intervise.c
 - Performs OAuth2.0 authorisation with grant type `authorization_code`
 - Support background refresh for OAuth2.0 `refresh_token`
 
-## Environment Configuration
-#### Mandatory environment variables:
-```
-VITE_FHIR_SERVER_URL=<Source FHIR API to connect to>
-VITE_AUTH_REQUIRED=<Whether your server requires authorisation>
-VITE_LAUNCH_PARAM_CONFIG=<default | proxy>
-```
-See [this section](#smart-app-launchs-launch-parameter-config) for `VITE_LAUNCH_PARAM_CONFIG` details.
+## Configuration
+This app is configured via a config.json in the /public folder. This uses a server-fetch approach to load the configuration at runtime, so you can change the config.json file without rebuilding the app.
+Below is the interface of the config.json file. See [config.json](/public/config.json) for the configuration file used in https://ehr.smartforms.io.
+```ts
+export interface ConfigFile {
+  // FHIR server for Patient record data
+  fhirServerUrl: string;
 
-#### Optional environment variables:
+  // Whether your server requires authorisation. If launchParamConfigType="proxy", this should be false.
+  authRequired: boolean;
+
+  // Launch parameter configuration type. "proxy" or "default"
+  launchParamConfigType: "default" | "proxy";
+
+  // (Optional) Need to include these config values if you are using OAuth configuration. Only authorization_code is implemented
+  oAuthGrantType: "authorization_code" | null | undefined;
+  oAuthScope: string | null | undefined;
+  oAuthClientId: string | null | undefined;
+
+  // FHIR server for Questionnaire definitions
+  formsServerUrl: string;
+
+  // List of applications preconfigured in "App Launch" settings
+  appList: AppConfig[];
+  defaultApp: AppConfig;
+}
+```
+
+See [this section](#smart-app-launchs-launch-parameter-config) for `launchParamConfigType` details.
+
+#### Mandatory configs:
+```
+fhirServerUrl: <FHIR server for Patient record data>
+authRequired: <Whether your server requires authorisation>
+launchParamConfigType: <"default" | "proxy">
+formsServerUrl: <Questionnaire repository server URL> (Use https://smartforms.csiro.au/api/fhir if you don't have one)
+appList: <List of applications preconfigured in "App Launch" settings>
+defaultApp: <Default application to launch>
+```
+See [this section](#smart-app-launchs-launch-parameter-config) for `launchParamConfigType` details.
+
+#### Optional configs:
 ```
 # OAuth2.0 authorisation configuration, leave empty is your server is open
-VITE_OAUTH_GRANT_TYPE=<OAuth2.0 grant type>
-VITE_OAUTH_SCOPE=fhirUser offline_access openid profile launch/practitioner user/*.rs (fixed scopes)
-VITE_OAUTH_CLIENT_ID=<Client ID of this app registered with your server>
-
-# Questionnaire context configuration, leave empty or use default values if not using Questionnaire context
-VITE_FORMS_SERVER_URL=<Questionnaire repository server URL> (Default: https://smartforms.csiro.au/api/fhir)
-VITE_FORMS_SERVER_TOKEN=<Questionnaire repository server access token>
+oAuthGrantType: <OAuth2.0 grant type>
+oAuthScope: fhirUser offline_access openid profile launch/practitioner user/*.rs (fixed scopes)
+oAuthClientId: <Client ID of this app registered with your server>
 ```
 
-It is safe to commit this .env file as it does not contain any sensitive information.
-
-You are free to add your own environment variables to support your authorisation mechanism. If you are adding any sensitive information, please remove the `.env` file from the git repository and add it to the `.gitignore` file.
-See the .env file for comments on the environment configuration.
+You are free to add your own environment variables to support your authorisation mechanism. If you are adding any sensitive information, please remove `config.json` from the git repository and add it to the `.gitignore` file.
 
 #### Below is the configuration for the Smart Forms proxy server:
-```
-VITE_FHIR_SERVER_URL=https://proxy.smartforms.io/v/r4/fhir
-VITE_AUTH_REQUIRED=false
-VITE_LAUNCH_PARAM_CONFIG=proxy
-VITE_FORMS_SERVER_URL=https://smartforms.csiro.au/api/fhir
+```json
+{
+  "fhirServerUrl": "https://proxy.smartforms.io/v/r4/fhir",
+  "authRequired": false,
+  "launchParamConfigType": "proxy",
+  "formsServerUrl": "https://smartforms.csiro.au/api/fhir",
+  "appList": ["<snipped for brevity>"],
+  "defaultApp": "<snipped for brevity>"
+}
 ```
 
 #### Below is the configuration for the Sparked AU Core reference server:
-```
-VITE_FHIR_SERVER_URL=https://fhir.hl7.org.au/aucore/fhir/DEFAULT
-VITE_AUTH_REQUIRED=true
-VITE_LAUNCH_PARAM_CONFIG=default
-VITE_OAUTH_GRANT_TYPE=authorization_code
-VITE_OAUTH_SCOPE=fhirUser offline_access openid profile launch/practitioner user/*.rs
-VITE_OAUTH_CLIENT_ID=smartforms-ehr
-VITE_FORMS_SERVER_URL=https://smartforms.csiro.au/api/fhir
+```json
+{
+  "fhirServerUrl": "https://fhir.hl7.org.au/aucore/fhir/DEFAULT",
+  "authRequired": true,
+  "launchParamConfigType": "default",
+  "oAuthGrantType": "authorization_code",
+  "oAuthScope": "fhirUser offline_access openid profile launch/practitioner user/*.rs",
+  "oAuthClientId": "smartforms-ehr",
+  "formsServerUrl": "https://smartforms.csiro.au/api/fhir",
+  "appList": ["<snipped for brevity>"],
+  "defaultApp": "<snipped for brevity>"
+}
 ```
 
 
@@ -86,7 +119,7 @@ This app supports two types of launch parameter configurations: `default` and `p
 
 #### Default
 This is a minimal configuration which contains the `patient`, `practitioner` and `encounter` IDs in a base64-encoded JSON object.
-The Sparked AU Core reference server uses this configuration. It is recommended to use `default` in `VITE_LAUNCH_PARAM_CONFIG` if you are setting up your own server.
+The Sparked AU Core reference server uses this configuration. It is recommended to use `default` in `launchParamConfigType` if you are setting up your own server.
 
 Example:
 Decoded JSON
@@ -106,7 +139,7 @@ Launch URL
 
 #### Proxy
 The Smart App Launch Proxy service define its own fairly comprehensive launch parameter configuration as a base64-encoded JSON array.
-The Smart Forms proxy server uses this configuration. If you are planning to use this proxy service, you need to use set `VITE_LAUNCH_PARAM_CONFIG` as `proxy`.
+The Smart Forms proxy server uses this configuration. If you are planning to use this proxy service, you need to use set `launchParamConfigType` as `proxy`.
 
 Visit https://ehr.smartforms.io and copy the app launch link to view an example of this configuration.
 
@@ -122,7 +155,7 @@ docker run -p 8080:80 -e FHIR_SERVER_R4=<Insert FHIR server base URL> aehrc/smar
 ```
 Visit `http:localhost:8080/v/r4/fhir` to see your proxied FHIR server.
 
-It is recommended to use this [environment configuration](#below-is-the-configuration-for-the-smart-forms-proxy-server) when using the proxy service.
-Remember to set `VITE_FHIR_SERVER_URL` to the proxy server's base URL, not the source FHIR server's!
+It is recommended to use this [configuration](#below-is-the-configuration-for-the-smart-forms-proxy-server) when using the proxy service.
+Remember to set `fhirServerUrl` to the proxy server's base URL, e.g. `http:localhost:8080/v/r4/fhir`, not `http:localhost:8080/fhir`.
 
 Note: This proxy service is only tested on open servers so far, and it is not guaranteed to work with servers that require authorisation.
