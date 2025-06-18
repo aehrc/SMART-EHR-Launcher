@@ -1,0 +1,24 @@
+{
+  "fhirServerUrl": "http://localhost:8081/v/r4/fhir",
+  "authRequired": false,
+  "launchParamConfigType": "proxy",
+  "formsServerUrl": "http://localhost:8080/fhir",
+  "appList": [
+    {
+      "appName": "localhost:8080",
+      "launchUrl": "http://localhost:8080/launch",
+      "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
+      "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      "redirectUris": "http://localhost:8080/",
+      "isEmbeddedView": false
+    }
+  ],
+  "defaultApp": {
+    "appName": "localhost:8080",
+    "launchUrl": "http://localhost:8080/launch",
+    "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
+    "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+    "redirectUris": "http://localhost:8080/",
+    "isEmbeddedView": false
+  }
+}
