@@ -31,6 +31,8 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import SimpleTable from "@/components/SimpleTable.tsx";
+import { getMedicationLabel } from "@/utils/medicationText.ts";
+import useConfig from "@/hooks/useConfig.ts";
 
 interface PatientMedicationRequestsProps {
   patientId: string;
@@ -39,25 +41,23 @@ interface PatientMedicationRequestsProps {
 function PatientMedicationRequests(props: PatientMedicationRequestsProps) {
   const { patientId } = props;
 
-  const { medicationRequests, queryUrl, isInitialLoading } =
-    useFetchMedicationRequests(patientId);
+  const { fhirServerUrl } = useConfig();
+
+  const {
+    medicationRequests,
+    referencedMedications,
+    queryUrl,
+    isInitialLoading,
+  } = useFetchMedicationRequests(patientId);
 
   const medicationRequestTableData: MedicationRequestTableData[] =
     useMemo(() => {
       return medicationRequests.map((entry) => {
-        let medicationText =
-          entry.medicationCodeableConcept?.coding?.[0].display ??
-          entry.medicationCodeableConcept?.text ??
-          entry.medicationCodeableConcept?.coding?.[0].code ??
-          entry.medicationReference?.display ??
-          "*";
-
-        if (
-          entry.medicationCodeableConcept?.coding?.[0].system ===
-          "http://terminology.hl7.org/CodeSystem/data-absent-reason"
-        ) {
-          medicationText = "*" + medicationText.toLowerCase();
-        }
+        const medicationText = getMedicationLabel(
+          entry,
+          referencedMedications,
+          fhirServerUrl
+        );
 
         return {
           id: entry.id ?? nanoid(),

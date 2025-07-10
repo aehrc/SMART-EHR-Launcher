@@ -16,7 +16,7 @@
  */
 
 import { useQuery } from "@tanstack/react-query";
-import { Bundle, MedicationRequest } from "fhir/r4";
+import { Bundle, Medication, MedicationRequest } from "fhir/r4";
 import { useMemo } from "react";
 import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { getResources } from "@/utils/getResources.ts";
@@ -25,6 +25,7 @@ import { NUM_OF_RESOURCES_TO_FETCH } from "@/globals.ts";
 
 interface useFetchMedicationRequestsReturnParams {
   medicationRequests: MedicationRequest[];
+  referencedMedications: Medication[];
   queryUrl: string;
   isInitialLoading: boolean;
 }
@@ -34,7 +35,7 @@ function useFetchMedicationRequests(
 ): useFetchMedicationRequestsReturnParams {
   const numOfSearchEntries = NUM_OF_RESOURCES_TO_FETCH;
 
-  const queryUrl = `/MedicationRequest?patient=${patientId}&_count=${numOfSearchEntries}&_sort=-authoredon`;
+  const queryUrl = `/MedicationRequest?patient=${patientId}&_count=${numOfSearchEntries}&_sort=-authoredon&_include=MedicationRequest:medication`;
 
   const axiosInstance = useFhirServerAxios();
   const { data: bundle, isInitialLoading } = useQuery<Bundle>(
@@ -51,8 +52,14 @@ function useFetchMedicationRequests(
     [bundle]
   );
 
+  const referencedMedications: Medication[] = useMemo(
+    () => getResources<Medication>(bundle, "Medication"),
+    [bundle]
+  );
+
   return {
     medicationRequests,
+    referencedMedications,
     queryUrl,
     isInitialLoading,
   };

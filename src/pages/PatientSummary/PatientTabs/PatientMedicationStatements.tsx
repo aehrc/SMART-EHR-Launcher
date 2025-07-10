@@ -31,6 +31,8 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import SimpleTable from "@/components/SimpleTable.tsx";
+import { getMedicationLabel } from "@/utils/medicationText.ts";
+import useConfig from "@/hooks/useConfig.ts";
 
 interface PatientMedicationStatementsProps {
   patientId: string;
@@ -39,25 +41,23 @@ interface PatientMedicationStatementsProps {
 function PatientMedicationStatements(props: PatientMedicationStatementsProps) {
   const { patientId } = props;
 
-  const { medicationStatements, queryUrl, isInitialLoading } =
-    useFetchMedicationStatements(patientId);
+  const { fhirServerUrl } = useConfig();
+
+  const {
+    medicationStatements,
+    referencedMedications,
+    queryUrl,
+    isInitialLoading,
+  } = useFetchMedicationStatements(patientId);
 
   const medicationStatementTableData: MedicationStatementTableData[] =
     useMemo(() => {
       return medicationStatements.map((entry) => {
-        let medicationText =
-          entry.medicationCodeableConcept?.coding?.[0].display ??
-          entry.medicationCodeableConcept?.text ??
-          entry.medicationCodeableConcept?.coding?.[0].code ??
-          entry.medicationReference?.display ??
-          "*";
-
-        if (
-          entry.medicationCodeableConcept?.coding?.[0].system ===
-          "http://terminology.hl7.org/CodeSystem/data-absent-reason"
-        ) {
-          medicationText = "*" + medicationText.toLowerCase();
-        }
+        const medicationLabel = getMedicationLabel(
+          entry,
+          referencedMedications,
+          fhirServerUrl
+        );
 
         const effectivePeriodStart = entry.effectivePeriod?.start
           ? dayjs(entry.effectivePeriod.start)
@@ -69,7 +69,7 @@ function PatientMedicationStatements(props: PatientMedicationStatementsProps) {
 
         return {
           id: entry.id ?? nanoid(),
-          medication: medicationText,
+          medication: medicationLabel,
           dosage: entry.dosage?.[0].text ?? "",
           reasonCode:
             entry.reasonCode?.[0]?.coding?.[0]?.display ??
@@ -79,7 +79,7 @@ function PatientMedicationStatements(props: PatientMedicationStatementsProps) {
           effective: effective,
         };
       });
-    }, [medicationStatements]);
+    }, [fhirServerUrl, medicationStatements, referencedMedications]);
 
   const columns = createMedicationStatementTableColumns();
 

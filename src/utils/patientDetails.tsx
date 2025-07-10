@@ -19,6 +19,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge.tsx";
 import { Observation, ObservationComponent, Period } from "fhir/r4";
+import { MedicationLabel } from "@/utils/medicationText.ts";
 
 // Encounter functions and types
 export interface EncounterTableData {
@@ -187,7 +188,7 @@ export function createConditionTableColumns(): ColumnDef<ConditionTableData>[] {
 // MedicationRequest functions and types
 export interface MedicationRequestTableData {
   id: string;
-  medication: string;
+  medication: MedicationLabel;
   status: string;
   authoredOn: Dayjs | string | null;
 }
@@ -197,11 +198,37 @@ export function createMedicationRequestTableColumns(): ColumnDef<MedicationReque
     {
       accessorKey: "medication",
       header: "Medication",
-      cell: ({ row }) => (
-        <div className="flex">
-          <div className="font-medium">{row.getValue("medication") ?? "-"}</div>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const { text, source, referenceLink } = row.getValue(
+          "medication"
+        ) as MedicationLabel;
+        return (
+          <div className="flex min-w-[280px]">
+            <div className="space-y-1">
+              <div className="font-medium">{text ?? "-"}</div>
+              {source ? (
+                <div className="text-xs text-muted-foreground">
+                  From: {source}{" "}
+                  {referenceLink ? (
+                    <span className="text-xs text-muted-foreground">
+                      -{" "}
+                      <a
+                        href={referenceLink}
+                        title={referenceLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                      >
+                        View referenced Medication
+                      </a>
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "id",
@@ -255,7 +282,7 @@ export function createMedicationRequestTableColumns(): ColumnDef<MedicationReque
 // MedicationRequest functions and types
 export interface MedicationStatementTableData {
   id: string;
-  medication: string;
+  medication: MedicationLabel;
   dosage: string;
   reasonCode: string;
   effective: Dayjs | null;
@@ -266,11 +293,37 @@ export function createMedicationStatementTableColumns(): ColumnDef<MedicationSta
     {
       accessorKey: "medication",
       header: "Medication",
-      cell: ({ row }) => (
-        <div className="flex">
-          <div className="font-medium">{row.getValue("medication") ?? "-"}</div>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const { text, source, referenceLink } = row.getValue(
+          "medication"
+        ) as MedicationLabel;
+        return (
+          <div className="flex min-w-[390px]">
+            <div className="space-y-1">
+              <div className="font-medium">{text ?? "-"}</div>
+              {source ? (
+                <div className="text-xs text-muted-foreground">
+                  From: {source}{" "}
+                  {referenceLink ? (
+                    <span className="text-xs text-muted-foreground">
+                      -{" "}
+                      <a
+                        href={referenceLink}
+                        title={referenceLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                      >
+                        View referenced Medication
+                      </a>
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "id",
@@ -287,9 +340,9 @@ export function createMedicationStatementTableColumns(): ColumnDef<MedicationSta
       accessorKey: "dosage",
       header: "Dosage",
       cell: ({ row }) =>
-        row.getValue("status") ? (
+        row.getValue("dosage") ? (
           <div className="flex">
-            <div>{row.getValue("dosage") ?? "-"}</div>
+            <div className="text-sm">{row.getValue("dosage") ?? "-"}</div>
           </div>
         ) : (
           "-"
