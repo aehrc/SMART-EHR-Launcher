@@ -283,6 +283,7 @@ export function createMedicationRequestTableColumns(): ColumnDef<MedicationReque
 export interface MedicationStatementTableData {
   id: string;
   medication: MedicationLabel;
+  status: string;
   dosage: string;
   reasonCode: string;
   effective: Dayjs | null;
@@ -337,12 +338,22 @@ export function createMedicationStatementTableColumns(): ColumnDef<MedicationSta
       ),
     },
     {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) =>
+        row.getValue("status") ? (
+          <Badge variant="outline">{row.getValue("status")}</Badge>
+        ) : (
+          "-"
+        ),
+    },
+    {
       accessorKey: "dosage",
       header: "Dosage",
       cell: ({ row }) =>
         row.getValue("dosage") ? (
           <div className="flex">
-            <div className="text-sm">{row.getValue("dosage") ?? "-"}</div>
+            <div>{row.getValue("dosage") ?? "-"}</div>
           </div>
         ) : (
           "-"

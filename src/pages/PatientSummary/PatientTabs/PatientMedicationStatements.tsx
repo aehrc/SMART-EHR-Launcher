@@ -70,6 +70,7 @@ function PatientMedicationStatements(props: PatientMedicationStatementsProps) {
         return {
           id: entry.id ?? nanoid(),
           medication: medicationLabel,
+          status: entry.status ?? "",
           dosage: entry.dosage?.[0].text ?? "",
           reasonCode:
             entry.reasonCode?.[0]?.coding?.[0]?.display ??
