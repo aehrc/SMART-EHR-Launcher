@@ -46,7 +46,7 @@ export function createEncounterTableColumns(): ColumnDef<EncounterTableData>[] {
       header: "ID",
       cell: ({ row }) => (
         <div className="flex">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>
@@ -138,7 +138,7 @@ export function createConditionTableColumns(): ColumnDef<ConditionTableData>[] {
       header: "ID",
       cell: ({ row }) => (
         <div className="flex">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>
@@ -235,7 +235,7 @@ export function createMedicationRequestTableColumns(): ColumnDef<MedicationReque
       header: "ID",
       cell: ({ row }) => (
         <div className="flex">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>
@@ -330,7 +330,7 @@ export function createMedicationStatementTableColumns(): ColumnDef<MedicationSta
       header: "ID",
       cell: ({ row }) => (
         <div className="flex">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>
@@ -405,7 +405,7 @@ export function createAllergyTableColumns(): ColumnDef<AllergyTableData>[] {
       header: "ID",
       cell: ({ row }) => (
         <div className="flex">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>
@@ -484,7 +484,7 @@ export function createProcedureTableColumns(): ColumnDef<ProcedureTableData>[] {
       header: "ID",
       cell: ({ row }) => (
         <div className="flex">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>
@@ -554,7 +554,7 @@ export function createImmunizationTableColumns(): ColumnDef<ImmunizationTableDat
       header: "ID",
       cell: ({ row }) => (
         <div className="flex">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>
@@ -626,7 +626,7 @@ export function createObservationTableColumns(): ColumnDef<ObservationTableData>
       header: "ID",
       cell: ({ row }) => (
         <div className="flex max-w-64">
-          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-sm">
+          <div className="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-xs">
             {row.getValue("id") ?? "-"}
           </div>
         </div>

@@ -57,7 +57,7 @@ export function createPatientTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded text-xs ${
               selectedPatientId === row.getValue("id")
                 ? getSelectedDataIDColorClass(row.original.resourceType)
                 : "bg-gray-100 text-gray-600"
@@ -156,7 +156,7 @@ export function createUserTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded text-xs ${
               selectedUserId === row.getValue("id")
                 ? getSelectedDataIDColorClass(row.original.resourceType)
                 : "bg-gray-100 text-gray-600"
@@ -212,7 +212,7 @@ export function createEncounterTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded text-xs ${
               selectedEncounterId === row.getValue("id")
                 ? "bg-orange-100 text-orange-700"
                 : "bg-gray-100 text-gray-600"
@@ -229,7 +229,7 @@ export function createEncounterTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded text-xs ${
               selectedPatientId === row.getValue("id")
                 ? "bg-orange-100 text-orange-700"
                 : "bg-blue-100 text-blue-800"
@@ -304,7 +304,7 @@ export function createQuestionnaireTableColumns(
       cell: ({ row }) => (
         <div className="flex">
           <div
-            className={`px-2 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded text-xs ${
               selectedQuestionnaireId === row.getValue("id")
                 ? getSelectedDataIDColorClass(row.original.resourceType)
                 : "bg-gray-100 text-gray-600"
