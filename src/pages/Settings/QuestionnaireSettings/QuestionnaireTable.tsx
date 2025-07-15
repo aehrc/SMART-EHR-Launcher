@@ -84,10 +84,13 @@ function QuestionnaireTable() {
     if (newQuestionnaire.version) {
       questionnaireCanonical += `|${newQuestionnaire.version}`;
     }
+
+    // Use Australian Digital Health namespace with the "new" role for fhirContext:
+    // https://confluence.hl7.org/spaces/FHIRI/pages/202409650/fhirContext+Role+Registry#:~:text=N/A-,http%3A//ns.electronichealth.net.au/smart/role/new,-URL%20made%20more
     const questionnaireFhirContext = {
-      role: "questionnaire-render-on-launch",
-      canonical: questionnaireCanonical,
+      role: "http://ns.electronichealth.net.au/smart/role/new",
       type: "Questionnaire",
+      canonical: questionnaireCanonical,
     };
 
     setSelectedQuestionnaire(newQuestionnaire);
