@@ -16,6 +16,7 @@
  */
 
 import useLauncherQuery from "@/hooks/useLauncherQuery";
+import { parseFhirContext } from "@/utils/fhirContext";
 import { Info } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -33,10 +34,7 @@ function LaunchContextDialog() {
   const patientId = launch.patient ?? null;
   const userId = launch.provider ?? null;
   const encounterId = launch.encounter ?? null;
-  const fhirContext = launch.fhir_context ?? null;
-
-  const fhirContextJson =
-    fhirContext !== null && fhirContext !== "" ? JSON.parse(fhirContext) : null;
+  const fhirContextArray = parseFhirContext(launch.fhir_context);
 
   return (
     <Dialog>
@@ -92,11 +90,11 @@ function LaunchContextDialog() {
             <div className="flex items-center text-xs mb-2">
               <span className="text-muted-foreground w-20">FhirContext</span>
               <span className="text-muted-foreground mr-2">:</span>
-              {fhirContext === null || fhirContext === "" ? "N/A" : null}
+              {fhirContextArray.length === 0 ? "N/A" : null}
             </div>
-            {fhirContext ? (
+            {fhirContextArray.length > 0 ? (
               <pre className="bg-muted p-2 rounded text-xs overflow-x-auto max-h-32">
-                <code>{JSON.stringify(fhirContextJson, null, 2)}</code>
+                <code>{JSON.stringify(fhirContextArray, null, 2)}</code>
               </pre>
             ) : null}
           </div>

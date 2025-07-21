@@ -1,13 +1,16 @@
-import { FileText } from "lucide-react";
-import { useContext, useEffect } from "react";
+import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
 import { QuestionnaireContext } from "@/contexts/QuestionnaireContext.tsx";
+import useFormsServerAxios from "@/hooks/useFormsServerAxios.ts";
 import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
-import { fhirContextIsQuestionnaireContext } from "@/utils/fhirContext.ts";
+import {
+  findQuestionnaireContext,
+  parseFhirContext,
+} from "@/utils/fhirContext.ts";
+import { getFirstResource } from "@/utils/getResources.ts";
 import { useQuery } from "@tanstack/react-query";
 import { Bundle, Questionnaire } from "fhir/r4";
-import { fetchResourceFromEHR } from "@/api/fhirApi.ts";
-import useFormsServerAxios from "@/hooks/useFormsServerAxios.ts";
-import { getFirstResource } from "@/utils/getResources.ts";
+import { FileText } from "lucide-react";
+import { useContext, useEffect } from "react";
 
 function QuestionnaireNavProfile() {
   const {
@@ -18,20 +21,9 @@ function QuestionnaireNavProfile() {
 
   const { launch } = useLauncherQuery();
 
-  const fhirContext = launch.fhir_context;
-  let questionnaireCanonical = "";
-  if (fhirContext) {
-    try {
-      // Decoding the JSON string into a JavaScript object
-      const fhirContextJson = JSON.parse(fhirContext);
-      if (fhirContextIsQuestionnaireContext(fhirContextJson)) {
-        questionnaireCanonical = fhirContextJson.canonical;
-      }
-    } catch (error) {
-      // Handle any errors that occur during parsing
-      console.error("Error parsing JSON:", error);
-    }
-  }
+  const fhirContextArray = parseFhirContext(launch.fhir_context);
+  const questionnaireContext = findQuestionnaireContext(fhirContextArray);
+  const questionnaireCanonical = questionnaireContext?.canonical || "";
 
   const queryUrl = `/Questionnaire?url=${questionnaireCanonical}`;
   const axiosInstance = useFormsServerAxios();
@@ -54,7 +46,7 @@ function QuestionnaireNavProfile() {
     }
 
     setSelectedQuestionnaire(newQuestionnaire);
-  }, [newQuestionnaire]);
+  }, [newQuestionnaire, setSelectedQuestionnaire]);
 
   const questionnaireSelected =
     selectedQuestionnaire && selectedQuestionnaire.id
