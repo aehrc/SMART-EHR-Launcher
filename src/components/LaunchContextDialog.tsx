@@ -28,7 +28,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 function LaunchContextDialog() {
-  const { query, launch } = useLauncherQuery();
+  const { launch } = useLauncherQuery();
 
   const patientId = launch.patient ?? null;
   const userId = launch.provider ?? null;
@@ -80,7 +80,7 @@ function LaunchContextDialog() {
               <span className="text-muted-foreground w-20">Encounter</span>
               <span className="text-muted-foreground mr-2">:</span>
               {encounterId ? (
-                <div className="px-1.5 py-0.5 rounded text-blue-800 bg-blue-100">
+                <div className="px-1.5 py-0.5 rounded text-orange-700 bg-orange-100">
                   {encounterId}
                 </div>
               ) : (
