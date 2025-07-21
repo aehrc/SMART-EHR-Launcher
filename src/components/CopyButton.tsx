@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
-import { Button } from "@/components/ui/button.tsx";
 import { CheckCheck, Copy } from "lucide-react";
+import { useState } from "react";
 
 interface CopyButtonProps {
   link: string;
@@ -51,7 +51,7 @@ function CopyButton(props: CopyButtonProps) {
             <span className="sr-only">{tooltipText}</span>
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="left">{tooltipText}</TooltipContent>
+        <TooltipContent>{tooltipText}</TooltipContent>
       </Tooltip>
     </div>
   );

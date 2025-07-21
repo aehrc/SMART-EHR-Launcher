@@ -15,18 +15,19 @@
  * limitations under the License.
  */
 
-import useLauncherQuery from "../../hooks/useLauncherQuery";
-import { getValidationErrors } from "../../lib/URLValidation";
-import { ArrowRight, CircleAlert } from "lucide-react";
+import CopyButton from "@/components/CopyButton.tsx";
+import LaunchContextDialog from "@/components/LaunchContextDialog";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
-import { Button } from "@/components/ui/button.tsx";
 import useActivePage from "@/hooks/useActivePage.ts";
-import CopyButton from "@/components/CopyButton.tsx";
 import useLaunchUrl from "@/hooks/useLaunchUrl.ts";
+import { ArrowRight, CircleAlert } from "lucide-react";
+import useLauncherQuery from "../../hooks/useLauncherQuery";
+import { getValidationErrors } from "../../lib/URLValidation";
 
 function LaunchButton() {
   // The URL to launch the user-specified app
@@ -68,6 +69,9 @@ function LaunchButton() {
   return (
     <div className="flex items-center gap-2">
       <CopyButton link={launchUrl.href} tooltipText="Copy app launch link" />
+
+      <LaunchContextDialog />
+
       <a
         href={launchUrl.href}
         target="_blank"
