@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+import { Questionnaire } from "fhir/r4";
+
 export const QUESTIONNAIRE_CONTEXT_ROLE =
   "http://ns.electronichealth.net.au/smart/role/new";
 
@@ -27,15 +29,15 @@ export interface QuestionnaireFhirContext {
   canonical: string;
 }
 
-export interface DocumentReferenceFhirContext {
+export interface EndpointFhirContext {
   role: string;
-  type: "DocumentReference";
+  type: "Endpoint";
   reference: string;
 }
 
 export type FhirContextEntry =
   | QuestionnaireFhirContext
-  | DocumentReferenceFhirContext
+  | EndpointFhirContext
   | {
       role: string;
       type: string;
@@ -138,27 +140,26 @@ export function removeFhirContext(
   return currentFhirContextArray.filter((context) => !predicate(context));
 }
 
-// Check if a context is a document reference context
-export function fhirContextIsDocumentReferenceContext(
+// Check if a context is an endpoint context
+export function fhirContextIsEndpointContext(
   fhirContext: unknown
-): fhirContext is DocumentReferenceFhirContext {
+): fhirContext is EndpointFhirContext {
   return (
     typeof fhirContext === "object" &&
     fhirContext !== null &&
-    (fhirContext as DocumentReferenceFhirContext)?.type ===
-      "DocumentReference" &&
-    !!(fhirContext as DocumentReferenceFhirContext)?.reference &&
-    !!(fhirContext as DocumentReferenceFhirContext)?.role
+    (fhirContext as EndpointFhirContext)?.type === "Endpoint" &&
+    !!(fhirContext as EndpointFhirContext)?.reference &&
+    !!(fhirContext as EndpointFhirContext)?.role
   );
 }
 
 // Check if a context is specifically for AusCVDRisk-i
 export function fhirContextIsAusCVDRiskContext(
   fhirContext: unknown
-): fhirContext is DocumentReferenceFhirContext {
+): fhirContext is EndpointFhirContext {
   return (
-    fhirContextIsDocumentReferenceContext(fhirContext) &&
-    (fhirContext as DocumentReferenceFhirContext)?.role ===
+    fhirContextIsEndpointContext(fhirContext) &&
+    (fhirContext as EndpointFhirContext)?.role ===
       LAUNCH_AUSCVDRISKI_CONTEXT_ROLE
   );
 }
@@ -166,6 +167,39 @@ export function fhirContextIsAusCVDRiskContext(
 // Find AusCVDRisk context in the array
 export function findAusCVDRiskIContext(
   fhirContextArray: FhirContextArray
-): DocumentReferenceFhirContext | null {
+): EndpointFhirContext | null {
   return fhirContextArray.find(fhirContextIsAusCVDRiskContext) || null;
+}
+
+export function getGenericFhirContextNavDisplay(
+  entry: FhirContextEntry
+): string {
+  // For other types, return reference, canonical, or N/A
+  if ("reference" in entry && typeof entry.reference === "string") {
+    return entry.reference;
+  }
+
+  if ("canonical" in entry && typeof entry.canonical === "string") {
+    return entry.canonical;
+  }
+
+  return "N/A";
+}
+
+export function getQuestionnaireFhirContextNavDisplay(
+  selectedQuestionnaire: Questionnaire
+): string {
+  if (selectedQuestionnaire.title) {
+    return selectedQuestionnaire.title;
+  }
+
+  if (selectedQuestionnaire.name) {
+    return selectedQuestionnaire.name;
+  }
+
+  if (selectedQuestionnaire.id) {
+    return selectedQuestionnaire.id;
+  }
+
+  return "Untitled Questionnaire";
 }

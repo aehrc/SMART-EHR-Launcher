@@ -16,7 +16,6 @@
  */
 
 import CopyButton from "@/components/CopyButton.tsx";
-import LaunchContextDialog from "@/components/LaunchContextDialog";
 import { Button } from "@/components/ui/button.tsx";
 import {
   Tooltip,
@@ -69,8 +68,6 @@ function LaunchButton() {
   return (
     <div className="flex items-center gap-2">
       <CopyButton link={launchUrl.href} tooltipText="Copy app launch link" />
-
-      <LaunchContextDialog />
 
       <a
         href={launchUrl.href}

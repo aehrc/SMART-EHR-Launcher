@@ -25,11 +25,14 @@ import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 import useLoadResources from "@/hooks/useLoadResources.ts";
 import useConfig from "@/hooks/useConfig.ts";
 import useAusCVDRiskDocumentReference from "@/hooks/useAusCVDRiskDocumentReference.tsx";
+import { useQuestionnaireContextSync } from "@/hooks/useQuestionnaireContextSync.ts";
 
 function Home() {
   const { accessToken, fhirUser } = useContext(FhirServerContext);
 
+  // Hooks to sync search params with launch contexts (selected resources)
   useLoadResources();
+  useQuestionnaireContextSync();
   useAusCVDRiskDocumentReference();
 
   const { authRequired, oAuthGrantType } = useConfig();

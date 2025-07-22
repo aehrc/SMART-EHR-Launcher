@@ -16,14 +16,14 @@
  */
 
 import { AxiosInstance } from "axios";
-import { DocumentReference } from "fhir/r4";
-import { base64UrlEncode, encode, LaunchParams } from "@/lib/codec";
+import { Endpoint } from "fhir/r4";
+import { encode, LaunchParams } from "@/lib/codec";
 import { DEFAULT_LAUNCH_PARAMS } from "@/lib/launchUrl";
 
 export const LAUNCH_AUSCVDRISKI_ROLE =
   "https://smartforms.csiro.au/ig/smart/role/launch-aus-cvd-risk-i";
 export const LAUNCH_AUSCVDRISKI_SCOPE =
-  "launch/documentreference?role=https://smartforms.csiro.au/ig/smart/role/launch-aus-cvd-risk-i";
+  "launch/endpoint?role=https://smartforms.csiro.au/ig/smart/role/launch-aus-cvd-risk-i";
 
 // Fixed AusCVDRisk-i App Launch config
 const AUSCVDRISKI_LAUNCH_URL =
@@ -36,7 +36,7 @@ const AUSCVDRISK_REDIRECT_URIS = `https://main.dlnanw1r5u3dw.amplifyapp.com/`;
 /**
  * Create launch URL for AusCVDRisk-i without fhirContext
  */
-export function createAusCVDRiskLaunchUrl(
+export function createAusCVDRiskILaunchUrl(
   launch: LaunchParams,
   fhirServerUrl: string
 ): string {
@@ -69,32 +69,54 @@ export function createAusCVDRiskLaunchUrl(
 }
 
 /**
- * Create document reference for AusCVDRisk-i
+ * Create endpoint for AusCVDRisk-i
  */
-export async function createAusCVDRiskIDocumentReference(
+export async function createAusCVDRiskIEndpoint(
   axiosInstance: AxiosInstance,
   launch: LaunchParams,
   fhirServerUrl: string
-): Promise<DocumentReference> {
-  const launchUrl = createAusCVDRiskLaunchUrl(launch, fhirServerUrl);
-  const documentReference: Partial<DocumentReference> = {
-    resourceType: "DocumentReference",
-    status: "current",
-    content: [
+): Promise<Endpoint> {
+  // Create the AusCVDRisk-i endpoint address
+  const ausCVDRiskILaunchUrl = createAusCVDRiskILaunchUrl(
+    launch,
+    fhirServerUrl
+  );
+
+  const endpoint: Partial<Endpoint> = {
+    resourceType: "Endpoint",
+    status: "active",
+    connectionType: {
+      system: "http://terminology.hl7.org/CodeSystem/endpoint-connection-type",
+      code: "hl7-fhir-rest",
+    },
+    name: "AusCVDRisk-i Launch Endpoint",
+    managingOrganization: {
+      display: "National Heart Foundation of Australia",
+    },
+    contact: [
       {
-        attachment: {
-          contentType: "text/plain",
-          data: base64UrlEncode(launchUrl),
-          title: "AusCVDRisk-i Launch",
-        },
+        system: "email",
+        value: "cvdriskteam@heartfoundation.org.au",
+        use: "work",
       },
     ],
+    payloadType: [
+      {
+        coding: [
+          {
+            system: "urn:ihe:pcc:cm:2008",
+            code: "urn:ihe:pcc:cm:2008",
+            display: "Care Management (CM)",
+          },
+        ],
+        text: "Care Management Document",
+      },
+    ],
+    payloadMimeType: ["text/html"],
+    address: ausCVDRiskILaunchUrl,
   };
 
-  const { data } = await axiosInstance.post<DocumentReference>(
-    "/DocumentReference",
-    documentReference
-  );
+  const { data } = await axiosInstance.post<Endpoint>("/Endpoint", endpoint);
   return data;
 }
 

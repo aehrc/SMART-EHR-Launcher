@@ -4,7 +4,7 @@ import SideBarMobile from "@/layout/SidebarMobile/SideBarMobile.tsx";
 import PatientNavProfile from "@/layout/NavProfiles/PatientNavProfile.tsx";
 import UserNavProfile from "@/layout/NavProfiles/UserNavProfile.tsx";
 import EncounterNavProfile from "@/layout/NavProfiles/EncounterNavProfile.tsx";
-import QuestionnaireNavProfile from "@/layout/NavProfiles/QuestionnaireNavProfile.tsx";
+import FhirContextNavProfile from "@/layout/NavProfiles/FhirContextNavProfile.tsx";
 import Header from "@/components/Header.tsx";
 import CopyButton from "@/components/CopyButton.tsx";
 import Footer from "@/components/ui/Footer.tsx";
@@ -27,7 +27,7 @@ function DashboardLayout() {
           <PatientNavProfile />
           <UserNavProfile />
           <EncounterNavProfile />
-          <QuestionnaireNavProfile />
+          <FhirContextNavProfile />
         </Header>
         <Outlet />
       </div>
