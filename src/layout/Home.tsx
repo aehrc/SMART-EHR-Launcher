@@ -24,11 +24,13 @@ import InitialUserSelection from "@/pages/InitialUserSelection.tsx";
 import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 import useLoadResources from "@/hooks/useLoadResources.ts";
 import useConfig from "@/hooks/useConfig.ts";
+import useAusCVDRiskDocumentReference from "@/hooks/useAusCVDRiskDocumentReference.tsx";
 
 function Home() {
   const { accessToken, fhirUser } = useContext(FhirServerContext);
 
   useLoadResources();
+  useAusCVDRiskDocumentReference();
 
   const { authRequired, oAuthGrantType } = useConfig();
 

@@ -20,6 +20,7 @@ import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@/styles/globals.css";
 import ConfigContextProvider from "@/contexts/ConfigContext.tsx";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +35,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <QueryClientProvider client={queryClient}>
     <ConfigContextProvider>
       <App />
+      <Toaster />
     </ConfigContextProvider>
   </QueryClientProvider>
 );
