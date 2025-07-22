@@ -67,7 +67,7 @@ function LaunchButton() {
 
   return (
     <div className="flex items-center gap-2">
-      <CopyButton link={launchUrl.href} tooltipText="Copy app launch link" />
+      <CopyButton link={launchUrl.href} title="Copy app launch link" />
 
       <a
         href={launchUrl.href}

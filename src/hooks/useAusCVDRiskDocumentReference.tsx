@@ -136,7 +136,7 @@ function useAusCVDRiskDocumentReference() {
           () => (
             <AusCVDRiskIContextToastCard
               title="FhirContext Setup Complete"
-              detail="AusCVDRisk-i Endpoint launch context ready"
+              detail="AusCVDRisk-i Endpoint context ready"
               icon={<CheckCircle className="h-5 w-5 text-green-600" />}
               badge={
                 <Badge variant="secondary" className="text-xs">
