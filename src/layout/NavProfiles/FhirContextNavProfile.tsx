@@ -20,6 +20,7 @@ import useLauncherQuery from "@/hooks/useLauncherQuery";
 import {
   getGenericFhirContextNavDisplay,
   getQuestionnaireFhirContextNavDisplay,
+  LAUNCH_AUSCVDRISKI_CONTEXT_ROLE,
   parseFhirContext,
   serializeFhirContext,
 } from "@/utils/fhirContext";
@@ -35,14 +36,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import JsonViewer from "@/components/JSONViewer.tsx";
+import { hasAusCVDRiskScope } from "@/utils/ausCVDRisk.ts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 function FhirContextNavProfile() {
   const { launch, setQuery } = useLauncherQuery();
   const { selectedQuestionnaire, setSelectedQuestionnaire } =
     useContext(QuestionnaireContext);
 
-  const fhirContextArray = parseFhirContext(launch.fhir_context);
+  // Check if the launch has the AusCVDRisk-i scope
+  const ausCVDRiskIScopePresent = hasAusCVDRiskScope(launch.scope);
 
+  const fhirContextArray = parseFhirContext(launch.fhir_context);
   const fhirContextIsEmpty = fhirContextArray.length === 0;
 
   function handleClearSpecificFhirContext(indexToRemove: number) {
@@ -83,23 +92,51 @@ function FhirContextNavProfile() {
                 ? getQuestionnaireFhirContextNavDisplay(selectedQuestionnaire)
                 : getGenericFhirContextNavDisplay(entry);
 
+            // If the current scopes contains AusCVDRisk-i scope and entry is AusCVDRisk-i context role, disallow removal
+            const ausCVDRiskIScopeAndContextPresent =
+              ausCVDRiskIScopePresent &&
+              entry.type === "Endpoint" &&
+              entry.role === LAUNCH_AUSCVDRISKI_CONTEXT_ROLE;
+
             return (
               <div key={index} className="flex items-center gap-1 min-w-0">
                 <div className="text-xs">
                   <span className="text-gray-600">{entry.type}:</span>{" "}
-                  <span className="text-xs px-1.5 py-0.5 rounded text-green-800 bg-green-100 truncate">
+                  <span className="text-xs px-1 py-0.5 rounded text-green-800 bg-green-100 break-words max-w-xs inline-block">
                     {displayValue}
                   </span>
                 </div>{" "}
-                <Button
-                  variant="ghost"
-                  title="Remove this fhirContext entry"
-                  className="flex h-4 w-4 p-0 m-0 text-muted-foreground hover:text-red-500 hover:bg-red-50"
-                  onClick={() => handleClearSpecificFhirContext(index)}
-                >
-                  <X className="h-3 w-3 rounded-xl" />
-                  <span className="sr-only">Remove this fhirContext entry</span>
-                </Button>
+                {ausCVDRiskIScopeAndContextPresent ? (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div className="cursor-not-allowed">
+                        <Button
+                          variant="ghost"
+                          disabled={true}
+                          className="flex h-4 w-4 p-0 m-0 hover:text-red-500 hover:bg-red-50 hover:border hover:border-red-200 focus:outline-none rounded-xl"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Scopes contain launch AusCVDRisk-i role, which prevents
+                      removal of this fhirContext entry.
+                    </TooltipContent>
+                  </Tooltip>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    title="Remove this fhirContext entry"
+                    className="flex h-4 w-4 p-0 m-0 hover:text-red-500 hover:bg-red-50 hover:border hover:border-red-200 focus:outline-none rounded-xl"
+                    onClick={() => handleClearSpecificFhirContext(index)}
+                  >
+                    <X className="h-3 w-3" />
+                    <span className="sr-only">
+                      Remove this fhirContext entry
+                    </span>
+                  </Button>
+                )}
               </div>
             );
           })

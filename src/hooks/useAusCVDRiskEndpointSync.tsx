@@ -51,12 +51,13 @@ import useConfig from "@/hooks/useConfig.ts";
  *    - type: "Endpoint"
  *    - reference: Endpoint/456.
  */
-function useAusCVDRiskDocumentReference() {
+function useAusCVDRiskEndpointSync() {
   const { launch, setQuery } = useLauncherQuery();
   const { fhirServerUrl } = useConfig();
 
   const fhirAxios = useFhirServerAxios();
 
+  // Determine if the AusCVDRisk-i scope and fhirContext is present in the launch scope
   const ausCVDRiskIScopePresent = hasAusCVDRiskScope(launch.scope);
 
   const currentFhirContexts = parseFhirContext(launch.fhir_context);
@@ -207,4 +208,4 @@ function useAusCVDRiskDocumentReference() {
   ]);
 }
 
-export default useAusCVDRiskDocumentReference;
+export default useAusCVDRiskEndpointSync;

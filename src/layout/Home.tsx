@@ -24,7 +24,7 @@ import InitialUserSelection from "@/pages/InitialUserSelection.tsx";
 import useLauncherQuery from "@/hooks/useLauncherQuery.ts";
 import useLoadResources from "@/hooks/useLoadResources.ts";
 import useConfig from "@/hooks/useConfig.ts";
-import useAusCVDRiskDocumentReference from "@/hooks/useAusCVDRiskDocumentReference.tsx";
+import useAusCVDRiskEndpointSync from "@/hooks/useAusCVDRiskEndpointSync.tsx";
 import { useQuestionnaireContextSync } from "@/hooks/useQuestionnaireContextSync.ts";
 
 function Home() {
@@ -33,7 +33,7 @@ function Home() {
   // Hooks to sync search params with launch contexts (selected resources)
   useLoadResources();
   useQuestionnaireContextSync();
-  useAusCVDRiskDocumentReference();
+  useAusCVDRiskEndpointSync();
 
   const { authRequired, oAuthGrantType } = useConfig();
 
