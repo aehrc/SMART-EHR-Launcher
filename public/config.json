@@ -1,5 +1,5 @@
 {
-  "fhirServerUrl": "http://localhost:8445/v/r4/fhir",
+  "fhirServerUrl": "https://proxy.smartforms.io/v/r4/fhir",
   "authRequired": false,
   "launchParamConfigType": "proxy",
   "formsServerUrl": "https://smartforms.csiro.au/api/fhir",
@@ -24,7 +24,7 @@
       "appName": "alpha.smartforms.io",
       "launchUrl": "https://alpha.smartforms.io/launch",
       "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/Practitioner.r patient/QuestionnaireResponse.crus launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new launch/documentreference?role=https://smartforms.csiro.au/ig/smart/role/launch-aus-cvd-risk-i",
+      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/Practitioner.r patient/QuestionnaireResponse.crus",
       "redirectUris": "https://alpha.smartforms.io/",
       "isEmbeddedView": false
     },
@@ -48,7 +48,7 @@
       "appName": "localhost:5173",
       "launchUrl": "http://localhost:5173/launch",
       "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/Practitioner.r patient/QuestionnaireResponse.crus launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new launch/documentreference?role=https://smartforms.csiro.au/ig/smart/role/launch-aus-cvd-risk-i",
+      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/Practitioner.r patient/QuestionnaireResponse.crus",
       "redirectUris": "http://localhost:5173/",
       "isEmbeddedView": false
     },
