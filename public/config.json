@@ -29,14 +29,6 @@
       "isEmbeddedView": false
     },
     {
-      "appName": "alpha.smartforms.io + AusCVDRisk-i launch endpoint",
-      "launchUrl": "https://alpha.smartforms.io/launch",
-      "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/Practitioner.r patient/QuestionnaireResponse.crus launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new launch/endpoint?role=https://smartforms.csiro.au/ig/smart/role/launch-aus-cvd-risk-i",
-      "redirectUris": "https://alpha.smartforms.io/",
-      "isEmbeddedView": false
-    },
-    {
       "appName": "acdcpilot.smartforms.io",
       "launchUrl": "https://acdcpilot.smartforms.io/launch",
       "clientId": "31b7f0fa-369f-49b4-4ad7-08dc6e2e0cf1",
