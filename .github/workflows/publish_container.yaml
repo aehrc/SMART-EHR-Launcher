@@ -40,6 +40,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}/smart-launcher-v2
           # generate Docker tags based on Git refs
           tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
             type=ref,event=branch
             type=ref,event=tag
             type=sha,prefix=sha-
