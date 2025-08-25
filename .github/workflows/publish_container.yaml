@@ -1,12 +1,15 @@
 name: Build and Push Docker Image
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - main
+  push:
+    branches-ignore:
+      - main
     paths:
-      - 'Dockerfile' # Trigger only if Dockerfile is modified
-      - 'src/**' # Trigger if anything in the src folder is changed.
+      - 'Dockerfile'
+      - 'src/**'
 
 jobs:
   build_and_push:
