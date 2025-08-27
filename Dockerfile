@@ -25,6 +25,9 @@ FROM nginx:alpine
 # Copy the build files from the builder stage to the Nginx web directory
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Copy your Nginx configuration file into the container
+COPY default.conf /etc/nginx/conf.d/
+
 # Expose port 80
 EXPOSE 80
 
