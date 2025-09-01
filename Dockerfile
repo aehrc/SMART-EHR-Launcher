@@ -1,7 +1,7 @@
 # Dockerfile
 
-# Step 1: Use a Node.js image to build the app (force amd64 for compatibility)
-FROM --platform=linux/amd64 node:18 AS builder
+# Step 1: Use a Node.js image to build the app with platform set by buildx
+FROM --platform=${TARGETPLATFORM:-linux/amd64} node:18 AS builder
 
 # Set working directory inside the container
 WORKDIR /app
@@ -11,11 +11,12 @@ COPY package*.json ./
 
 # Set npm config for better compatibility using environment variable
 ENV NPM_CONFIG_UNSAFE_PERM=true
+ENV NODE_OPTIONS=--max_old_space_size=4096
 
 # Install dependencies with legacy peer deps
 RUN npm install --legacy-peer-deps
 
-# Copy the rest of the app’s source code
+# Copy the rest of the app's source code
 COPY . .
 
 # Build the app
@@ -23,7 +24,7 @@ RUN npm run build
 
 
 # Step 2: Use an Nginx image to serve the static files
-FROM nginx:alpine
+FROM --platform=${TARGETPLATFORM:-linux/amd64} nginx:alpine
 
 # Copy the build files from the builder stage to the Nginx web directory
 COPY --from=builder /app/dist /usr/share/nginx/html
