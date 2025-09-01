@@ -1,7 +1,7 @@
 # Dockerfile
 
-# Step 1: Use a Node.js image to build the app
-FROM node:18 AS builder
+# Step 1: Use a Node.js image to build the app (force amd64 for compatibility)
+FROM --platform=linux/amd64 node:18 AS builder
 
 # Set working directory inside the container
 WORKDIR /app
@@ -9,8 +9,11 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Set npm config for better compatibility using environment variable
+ENV NPM_CONFIG_UNSAFE_PERM=true
+
+# Install dependencies with legacy peer deps
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the app’s source code
 COPY . .
