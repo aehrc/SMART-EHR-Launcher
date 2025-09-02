@@ -1,7 +1,7 @@
 # Dockerfile
 
 # Step 1: Use a Node.js image to build the app with platform set by buildx
-FROM --platform=${TARGETPLATFORM:-linux/amd64} node:18 AS builder
+FROM --platform=$BUILDPLATFORM node:18 AS builder
 
 # Set working directory inside the container
 WORKDIR /app
@@ -24,7 +24,7 @@ RUN npm run build
 
 
 # Step 2: Use an Nginx image to serve the static files
-FROM --platform=${TARGETPLATFORM:-linux/amd64} nginx:alpine
+FROM --platform=$BUILDPLATFORM nginx:alpine
 
 # Copy the build files from the builder stage to the Nginx web directory
 COPY --from=builder /app/dist /usr/share/nginx/html
