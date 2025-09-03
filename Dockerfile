@@ -9,12 +9,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Set npm config for better compatibility using environment variable
-ENV NPM_CONFIG_UNSAFE_PERM=true
-ENV NODE_OPTIONS=--max_old_space_size=4096
-
 # Install dependencies with legacy peer deps
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 # Copy the rest of the app's source code
 COPY . .
