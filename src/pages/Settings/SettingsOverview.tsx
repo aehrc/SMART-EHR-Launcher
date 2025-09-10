@@ -31,9 +31,10 @@ import { useContext } from "react";
 import { QuestionnaireContext } from "@/contexts/QuestionnaireContext.tsx";
 import { FhirServerContext } from "@/contexts/FhirServerContext.tsx";
 import useConfig from "@/hooks/useConfig.ts";
+import useLaunchUrl from "@/hooks/useLaunchUrl.ts";
 
 function SettingsOverview() {
-  const { launch } = useLauncherQuery();
+  const { launch, query } = useLauncherQuery();
 
   const { fhirServerUrl, formsServerUrl } = useConfig();
 
@@ -47,6 +48,9 @@ function SettingsOverview() {
     ? fhirUser?.startsWith("Practitioner")
     : false;
   fhirUser = fhirUser ? fhirUser.replace("Practitioner/", "") : "";
+
+  const launchUrl = useLaunchUrl(query, launch);
+  const clientAppBaseUrl = launchUrl.href.split("/launch")[0];
 
   return (
     <div className="grid gap-6">
@@ -115,7 +119,7 @@ function SettingsOverview() {
                   path="/settings/app-launch"
                 />
               </div>
-              <Input disabled={true} value="https://smartforms.csiro.au" />
+              <Input disabled={true} value={clientAppBaseUrl} />
             </div>
 
             <Separator className="my-2" />
