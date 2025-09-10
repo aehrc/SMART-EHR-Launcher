@@ -39,7 +39,7 @@
     {
       "appName": "healthchecks.smartforms.io",
       "launchUrl": "https://healthchecks.smartforms.io/launch",
-      "clientId": "29b79fe3-720e-48a8-976f-eca25b19f187",
+      "clientId": "smart-health-checks-application",
       "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
       "redirectUris": "https://healthchecks.smartforms.io/",
       "isEmbeddedView": false
