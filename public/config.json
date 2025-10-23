@@ -8,7 +8,7 @@
       "appName": "Health Check Assessment",
       "launchUrl": "https://smartforms.csiro.au/launch",
       "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
       "redirectUris": "https://smartforms.csiro.au",
       "isEmbeddedView": false
     },
@@ -19,14 +19,6 @@
       "scope": "openid profile patient/Patient.read patient/Flag.read user/Practitioner.read user/PractitionerRole.read user/Organization.read launch",
       "redirectUris": "https://smartqedit4.azurewebsites.net/ts/Tester/smart-index.html",
       "isEmbeddedView": true
-    },
-    {
-      "appName": "alpha.smartforms.io",
-      "launchUrl": "https://alpha.smartforms.io/launch",
-      "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
-      "redirectUris": "https://alpha.smartforms.io/",
-      "isEmbeddedView": false
     },
     {
       "appName": "acdcpilot.smartforms.io",
@@ -81,7 +73,7 @@
     "appName": "Health Check Assessment",
     "launchUrl": "https://smartforms.csiro.au/launch",
     "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-    "scope": "fhirUser online_access openid profile patient/Condition.rs patient/Observation.rs launch patient/Encounter.rs patient/QuestionnaireResponse.cruds patient/Patient.rs",
+    "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
     "redirectUris": "https://smartforms.csiro.au",
     "isEmbeddedView": false
   }
