@@ -16,7 +16,7 @@ See the [Using the Smart App Launch Proxy service](#using-the-smart-app-launch-p
 
 This instance is configured to work with the Sparked AU Core reference server and uses it's underlying SMART on FHIR authorisation capability provided by SMILE CDR.
 
-Contact **Sean Fong** sean.fong@csiro.au or **Heath Frankel** <heath@intervise.com.au> to get test user credentials for login.
+Contact **Heath Frankel** <heath@intervise.com.au> to get test user credentials for login.
 
 
 ## Features
