@@ -18,6 +18,7 @@
 import { useContext } from "react";
 import useLauncherQuery from "@/hooks/useLauncherQuery";
 import {
+  getFhirContextNavTypeDisplay,
   getGenericFhirContextNavDisplay,
   getQuestionnaireFhirContextNavDisplay,
   LAUNCH_AUSCVDRISKI_CONTEXT_ROLE,
@@ -42,11 +43,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
+import { PractitionerRoleContext } from "@/contexts/PractitionerRoleContext";
 
 function FhirContextNavProfile() {
   const { launch, setQuery } = useLauncherQuery();
   const { selectedQuestionnaire, setSelectedQuestionnaire } =
     useContext(QuestionnaireContext);
+  const { setSelectedPractitionerRole } = useContext(PractitionerRoleContext);
 
   // Check if the launch has the AusCVDRisk-i scope
   const ausCVDRiskIScopePresent = hasAusCVDRiskScope(launch.scope);
@@ -57,7 +60,7 @@ function FhirContextNavProfile() {
   function handleClearSpecificFhirContext(indexToRemove: number) {
     // Remove the specific fhirContext entry at the given index
     const updatedContexts = fhirContextArray.filter(
-      (_, index) => index !== indexToRemove
+      (_, index) => index !== indexToRemove,
     );
 
     // If the removed fhirContext entry was a Questionnaire, clear the selected questionnaire
@@ -66,6 +69,13 @@ function FhirContextNavProfile() {
       selectedQuestionnaire
     ) {
       setSelectedQuestionnaire(null);
+    }
+
+    // Remove PractitionerRole selection if the removed fhirContext entry is a PractitionerRole reference
+    const resourceTypeFromReference =
+      fhirContextArray[indexToRemove].reference?.split("/")[0];
+    if (resourceTypeFromReference === "PractitionerRole") {
+      setSelectedPractitionerRole(null);
     }
 
     // Update the query with the new fhirContext
@@ -101,7 +111,9 @@ function FhirContextNavProfile() {
             return (
               <div key={index} className="flex items-center gap-1 min-w-0">
                 <div className="text-xs">
-                  <span className="text-gray-600">{entry.type}:</span>{" "}
+                  <span className="text-gray-600">
+                    {getFhirContextNavTypeDisplay(entry)}:
+                  </span>{" "}
                   <span className="text-xs px-1 py-0.5 rounded text-green-800 bg-green-100 break-words max-w-xs inline-block">
                     {displayValue}
                   </span>

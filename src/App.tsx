@@ -40,6 +40,7 @@ import { useContext } from "react";
 import { ConfigFile } from "@/utils/configFile.ts";
 import ConfigChecker from "@/components/ConfigChecker.tsx";
 import { X } from "lucide-react";
+import PractitionerRoleContextProvider from "./contexts/PractitionerRoleContext";
 
 function App() {
   const { config, configIsLoading, configIsValid, loadConfigHasError } =
@@ -122,7 +123,9 @@ function App() {
               <UserContextProvider>
                 <EncounterContextProvider>
                   <QuestionnaireContextProvider>
-                    <RouterProvider router={router} />
+                    <PractitionerRoleContextProvider>
+                      <RouterProvider router={router} />
+                    </PractitionerRoleContextProvider>
                   </QuestionnaireContextProvider>
                 </EncounterContextProvider>
               </UserContextProvider>

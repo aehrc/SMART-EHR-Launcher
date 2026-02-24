@@ -27,10 +27,18 @@ import { UserContext } from "@/contexts/UserContext.tsx";
 import useFetchPractitioners from "@/hooks/useFetchPractitioners.ts";
 import { humanName } from "@/utils/misc.ts";
 import { nanoid } from "nanoid";
+import { PractitionerRoleContext } from "@/contexts/PractitionerRoleContext";
+import {
+  fhirContextIsPractitionerRoleContext,
+  parseFhirContext,
+  removeFhirContext,
+  serializeFhirContext,
+} from "@/utils/fhirContext";
 
 function UserTable() {
   const { selectedUser, setSelectedUser } = useContext(UserContext);
-  const { setQuery } = useLauncherQuery();
+  const { setSelectedPractitionerRole } = useContext(PractitionerRoleContext);
+  const { launch, setQuery } = useLauncherQuery();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -48,7 +56,15 @@ function UserTable() {
 
   function handleSetUserContext(id: string) {
     const newUser = practitioners.find(
-      (practitioner) => practitioner.id === id
+      (practitioner) => practitioner.id === id,
+    );
+
+    // Unset PractitionerRole and remove from fhirContext array
+    setSelectedPractitionerRole(null);
+    const currentFhirContexts = parseFhirContext(launch.fhir_context);
+    const updatedContexts = removeFhirContext(
+      currentFhirContexts,
+      fhirContextIsPractitionerRoleContext,
     );
 
     // User not found OR user is already selected, unset user and context
@@ -56,6 +72,7 @@ function UserTable() {
       setSelectedUser(null);
       setQuery({
         provider: undefined,
+        fhir_context: serializeFhirContext(updatedContexts),
       });
       return;
     }
@@ -64,6 +81,7 @@ function UserTable() {
     setSelectedUser(newUser);
     setQuery({
       provider: newUser.id,
+      fhir_context: serializeFhirContext(updatedContexts),
     });
     enqueueSnackbar(`User set to ${humanName(newUser)} `, {
       variant: "success",

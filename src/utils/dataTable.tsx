@@ -16,7 +16,13 @@
  */
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Encounter, Patient, Practitioner, Questionnaire } from "fhir/r4";
+import {
+  Encounter,
+  Patient,
+  Practitioner,
+  PractitionerRole,
+  Questionnaire,
+} from "fhir/r4";
 import { Button } from "@/components/ui/button.tsx";
 import { MousePointerClick, X } from "lucide-react";
 
@@ -31,7 +37,7 @@ export interface PatientTableData {
 
 export function createPatientTableColumns(
   selectedPatient: Patient | null,
-  onButtonClick: (selectedId: string) => void
+  onButtonClick: (selectedId: string) => void,
 ): ColumnDef<PatientTableData>[] {
   const selectedPatientId = selectedPatient?.id ?? "";
 
@@ -130,7 +136,7 @@ export interface UserTableData {
 
 export function createUserTableColumns(
   selectedUser: Practitioner | null,
-  onButtonClick: (selectedId: string) => void
+  onButtonClick: (selectedId: string) => void,
 ): ColumnDef<UserTableData>[] {
   const selectedUserId = selectedUser?.id ?? "";
 
@@ -200,7 +206,7 @@ export interface EncounterTableData {
 export function createEncounterTableColumns(
   selectedEncounter: Encounter | null,
   selectedPatient: Patient | null,
-  onButtonClick: (selectedId: string) => void
+  onButtonClick: (selectedId: string) => void,
 ): ColumnDef<EncounterTableData>[] {
   const selectedEncounterId = selectedEncounter?.id ?? "";
   const selectedPatientId = selectedPatient?.id ?? "";
@@ -230,9 +236,9 @@ export function createEncounterTableColumns(
         <div className="flex">
           <div
             className={`px-2 py-0.5 rounded text-xs ${
-              selectedPatientId === row.getValue("id")
-                ? "bg-orange-100 text-orange-700"
-                : "bg-blue-100 text-blue-800"
+              row.getValue("patientRef") === `Patient/${selectedPatientId}`
+                ? getSelectedDataIDColorClass("Patient")
+                : "bg-gray-100 text-gray-600"
             }`}
           >
             {row.getValue("patientRef") ?? ""}
@@ -278,7 +284,7 @@ export interface QuestionnaireTableData {
 
 export function createQuestionnaireTableColumns(
   selectedQuestionnaire: Questionnaire | null,
-  onButtonClick: (selectedId: string) => void
+  onButtonClick: (selectedId: string) => void,
 ): ColumnDef<QuestionnaireTableData>[] {
   const selectedQuestionnaireId = selectedQuestionnaire?.id ?? "";
 
@@ -344,6 +350,86 @@ export function createQuestionnaireTableColumns(
   ];
 }
 
+// PractitionerRole functions and types
+export interface PractitionerRoleTableData {
+  id: string;
+  practitionerRef: string;
+  resourceType: string;
+}
+
+export function createPractitionerRoleTableColumns(
+  selectedPractitionerRole: PractitionerRole | null,
+  selectedUser: Practitioner | null,
+  onButtonClick: (selectedId: string) => void,
+): ColumnDef<PractitionerRoleTableData>[] {
+  const selectedPractitionerRoleId = selectedPractitionerRole?.id ?? "";
+  const selectedUserId = selectedUser?.id ?? "";
+
+  return [
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div
+            className={`px-2 py-0.5 rounded text-xs ${
+              selectedPractitionerRoleId === row.getValue("id")
+                ? getSelectedDataIDColorClass(row.original.resourceType)
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {row.getValue("id") ?? ""}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "practitionerRef",
+      header: "Practitioner Reference",
+      cell: ({ row }) => (
+        <div className="flex">
+          <div
+            className={`px-2 py-0.5 rounded text-xs ${
+              row.getValue("practitionerRef") ===
+              `Practitioner/${selectedUserId}`
+                ? getSelectedDataIDColorClass("Practitioner")
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {row.getValue("practitionerRef") ?? ""}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Button
+          title={
+            selectedPractitionerRoleId === row.getValue("id")
+              ? "Clear"
+              : "Set as context"
+          }
+          variant="ghost"
+          className="flex h-8 w-8 p-0 m-0"
+          onClick={() => onButtonClick(row.getValue("id"))}
+        >
+          {selectedPractitionerRoleId === row.getValue("id") ? (
+            <X className="h-4 w-4" />
+          ) : (
+            <MousePointerClick className="h-4 w-4" />
+          )}
+          <span className="sr-only">
+            {selectedPractitionerRoleId === row.getValue("id")
+              ? "Clear"
+              : "Set as context"}
+          </span>
+        </Button>
+      ),
+    },
+  ];
+}
+
 // General functions
 export function getSelectedDataIDColorClass(resourceType: string | null) {
   if (!resourceType) {
@@ -358,6 +444,7 @@ export function getSelectedDataIDColorClass(resourceType: string | null) {
     case "Encounter":
       return "bg-orange-100 text-orange-700";
     case "Questionnaire":
+    case "PractitionerRole":
       return "bg-green-100 text-green-800";
     default:
       return "bg-gray-100 text-gray-600";
@@ -377,6 +464,7 @@ export function getSelectedDataRowColorClass(resourceType: string | null) {
     case "Encounter":
       return "bg-orange-50 hover:bg-orange-50";
     case "Questionnaire":
+    case "PractitionerRole":
       return "bg-green-50 hover:bg-green-50";
     default:
       return "bg-gray-50 hover:bg-gray-50";

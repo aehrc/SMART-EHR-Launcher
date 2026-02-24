@@ -4,6 +4,7 @@ import UserSettings from "@/pages/Settings/UserSettings/UserSettings.tsx";
 import EncounterSettings from "@/pages/Settings/EncounterSettings/EncounterSettings.tsx";
 import AppLaunchSettings from "@/pages/Settings/AppLaunchSettings/AppLaunchSettings.tsx";
 import QuestionnaireSettings from "@/pages/Settings/QuestionnaireSettings/QuestionnaireSettings.tsx";
+import PractitionerRoleSettings from "@/pages/Settings/PractitionerRoleSettings/PractitionerRoleSettings";
 
 export interface SettingsMenuItem {
   title: string;
@@ -41,5 +42,10 @@ export const settingsMenuItems: SettingsMenuItem[] = [
     title: "Questionnaire Context",
     path: "/settings/questionnaire",
     element: <QuestionnaireSettings />,
+  },
+  {
+    title: "PractitionerRole Context",
+    path: "/settings/practitionerRole",
+    element: <PractitionerRoleSettings />,
   },
 ];
