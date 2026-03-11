@@ -26,6 +26,7 @@ import useLoadResources from "@/hooks/useLoadResources.ts";
 import useConfig from "@/hooks/useConfig.ts";
 import useAusCVDRiskEndpointSync from "@/hooks/useAusCVDRiskEndpointSync.tsx";
 import { useQuestionnaireContextSync } from "@/hooks/useQuestionnaireContextSync.ts";
+import { usePractitionerRoleContextSync } from "@/hooks/usePractitionerRoleContextSync";
 
 function Home() {
   const { accessToken, fhirUser } = useContext(FhirServerContext);
@@ -33,6 +34,7 @@ function Home() {
   // Hooks to sync search params with launch contexts (selected resources)
   useLoadResources();
   useQuestionnaireContextSync();
+  usePractitionerRoleContextSync();
   useAusCVDRiskEndpointSync();
 
   const { authRequired, oAuthGrantType } = useConfig();

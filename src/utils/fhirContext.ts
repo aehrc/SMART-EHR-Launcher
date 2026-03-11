@@ -23,35 +23,36 @@ export const QUESTIONNAIRE_CONTEXT_ROLE =
 export const LAUNCH_AUSCVDRISKI_CONTEXT_ROLE =
   "https://smartforms.csiro.au/ig/smart/role/launch-aus-cvd-risk-i";
 
-export interface QuestionnaireFhirContext {
+interface FhirContextEntry {
+  role?: string;
+  type?: string;
+  canonical?: string;
+  reference?: string;
+  [key: string]: unknown;
+}
+
+export interface QuestionnaireFhirContext extends FhirContextEntry {
   role: string;
   type: "Questionnaire";
   canonical: string;
 }
 
-export interface EndpointFhirContext {
+export interface EndpointFhirContext extends FhirContextEntry {
   role: string;
   type: "Endpoint";
   reference: string;
 }
 
-export type FhirContextEntry =
-  | QuestionnaireFhirContext
-  | EndpointFhirContext
-  | {
-      role: string;
-      type: string;
-      canonical?: string;
-      reference?: string;
-      [key: string]: unknown;
-    };
+export interface ResourceFhirContext extends FhirContextEntry {
+  reference: string;
+}
 
 export type FhirContextArray = FhirContextEntry[];
 
 // Use Australian Digital Health namespace with the "new" role for fhirContext:
 // https://confluence.hl7.org/spaces/FHIRI/pages/202409650/fhirContext+Role+Registry#:~:text=N/A-,http%3A//ns.electronichealth.net.au/smart/role/new,-URL%20made%20more
 export function fhirContextIsQuestionnaireContext(
-  fhirContext: unknown
+  fhirContext: unknown,
 ): fhirContext is QuestionnaireFhirContext {
   return (
     typeof fhirContext === "object" &&
@@ -63,9 +64,20 @@ export function fhirContextIsQuestionnaireContext(
   );
 }
 
+export function fhirContextIsPractitionerRoleContext(
+  fhirContext: unknown,
+): fhirContext is ResourceFhirContext {
+  return (
+    typeof fhirContext === "object" &&
+    fhirContext !== null &&
+    (fhirContext as ResourceFhirContext).reference?.split("/")[0] ===
+      "PractitionerRole"
+  );
+}
+
 // Parse fhir_context string into an array
 export function parseFhirContext(
-  fhirContextString: string | null | undefined
+  fhirContextString: string | null | undefined,
 ): FhirContextArray {
   if (!fhirContextString || fhirContextString.trim() === "") {
     return [];
@@ -93,7 +105,7 @@ export function parseFhirContext(
 
 // Serialize fhir context array to string
 export function serializeFhirContext(
-  fhirContextArray: FhirContextArray
+  fhirContextArray: FhirContextArray,
 ): string {
   if (!fhirContextArray || fhirContextArray.length === 0) {
     return "";
@@ -103,15 +115,21 @@ export function serializeFhirContext(
 
 // Find questionnaire context in the array
 export function findQuestionnaireContext(
-  fhirContextArray: FhirContextArray
+  fhirContextArray: FhirContextArray,
 ): QuestionnaireFhirContext | null {
   return fhirContextArray.find(fhirContextIsQuestionnaireContext) || null;
+}
+// Find PractitionerRole context in the array
+export function findPractitionerRoleContext(
+  fhirContextArray: FhirContextArray,
+): ResourceFhirContext | null {
+  return fhirContextArray.find(fhirContextIsPractitionerRoleContext) || null;
 }
 
 // Add or update a context entry in the array
 export function addOrUpdateFhirContext(
   currentFhirContextArray: FhirContextArray,
-  newContext: FhirContextEntry
+  newContext: FhirContextEntry,
 ): FhirContextArray {
   const updated = [...currentFhirContextArray];
 
@@ -135,14 +153,14 @@ export function addOrUpdateFhirContext(
 // Remove a context entry from the array
 export function removeFhirContext(
   currentFhirContextArray: FhirContextArray,
-  predicate: (context: FhirContextEntry) => boolean
+  predicate: (context: FhirContextEntry) => boolean,
 ): FhirContextArray {
   return currentFhirContextArray.filter((context) => !predicate(context));
 }
 
 // Check if a context is an endpoint context
 export function fhirContextIsEndpointContext(
-  fhirContext: unknown
+  fhirContext: unknown,
 ): fhirContext is EndpointFhirContext {
   return (
     typeof fhirContext === "object" &&
@@ -155,7 +173,7 @@ export function fhirContextIsEndpointContext(
 
 // Check if a context is specifically for AusCVDRisk-i
 export function fhirContextIsAusCVDRiskContext(
-  fhirContext: unknown
+  fhirContext: unknown,
 ): fhirContext is EndpointFhirContext {
   return (
     fhirContextIsEndpointContext(fhirContext) &&
@@ -166,16 +184,34 @@ export function fhirContextIsAusCVDRiskContext(
 
 // Find AusCVDRisk context in the array
 export function findAusCVDRiskIContext(
-  fhirContextArray: FhirContextArray
+  fhirContextArray: FhirContextArray,
 ): EndpointFhirContext | null {
   return fhirContextArray.find(fhirContextIsAusCVDRiskContext) || null;
 }
 
+export function getFhirContextNavTypeDisplay(entry: FhirContextEntry): string {
+  if (entry.type) {
+    return entry.type;
+  }
+
+  // For other types, return reference, canonical, or N/A
+  if (entry.reference) {
+    const resourceType = entry.reference.split("/")[0];
+    return resourceType || "Resource";
+  }
+
+  return "";
+}
+
 export function getGenericFhirContextNavDisplay(
-  entry: FhirContextEntry
+  entry: FhirContextEntry,
 ): string {
   // For other types, return reference, canonical, or N/A
   if ("reference" in entry && typeof entry.reference === "string") {
+    const resourceId = entry.reference.split("/")[1];
+    // if no type specified, use id portion of reference
+    if (!entry.type && resourceId) return resourceId;
+
     return entry.reference;
   }
 
@@ -187,7 +223,7 @@ export function getGenericFhirContextNavDisplay(
 }
 
 export function getQuestionnaireFhirContextNavDisplay(
-  selectedQuestionnaire: Questionnaire
+  selectedQuestionnaire: Questionnaire,
 ): string {
   if (selectedQuestionnaire.title) {
     return selectedQuestionnaire.title;
