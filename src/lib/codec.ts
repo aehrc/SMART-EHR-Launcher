@@ -54,6 +54,7 @@ export interface LaunchParams {
   fhir_context?: string; // non-patient, provider and encounter resources go here
   source_fhir_server?: string; // custom "Source-Fhir-Server" header
   is_embedded_view?: boolean; // custom embedded view
+  additional_context?: string; // JSON-encoded array of {key, value} pairs returned in the token response as additional context
 }
 
 /**
@@ -141,6 +142,7 @@ export function encode(params: LaunchParams, ignoreErrors = false): string {
     params.fhir_context || "",
     params.source_fhir_server || "",
     params.is_embedded_view || false,
+    params.additional_context || "",
   ];
 
   return base64UrlEncode(JSON.stringify(arr));
@@ -182,6 +184,7 @@ export function decode(launch: string): LaunchParams {
     fhir_context: typeof arr[16] === "string" ? arr[16] : undefined,
     source_fhir_server: arr[17] || "",
     is_embedded_view: arr[18] || false,
+    additional_context: arr[19] || "",
   };
 }
 

@@ -63,6 +63,7 @@ export function getProxyLaunchUrl(
     fhir_context: launch.fhir_context,
     source_fhir_server: launch.source_fhir_server,
     is_embedded_view: launch.is_embedded_view,
+    additional_context: launch.additional_context,
   });
 
   // FHIR baseUrl for EHR launches
