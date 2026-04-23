@@ -8,7 +8,7 @@
       "appName": "Health Check Assessment",
       "launchUrl": "https://smartforms.csiro.au/launch",
       "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
+      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cus patient/Condition.cus patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cus patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
       "redirectUris": "https://smartforms.csiro.au",
       "isEmbeddedView": false
     },
@@ -32,7 +32,7 @@
       "appName": "healthchecks.smartforms.io",
       "launchUrl": "https://healthchecks.smartforms.io/launch",
       "clientId": "smart-health-checks-application",
-      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
+      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cus patient/Condition.cus patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cus patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
       "redirectUris": "https://healthchecks.smartforms.io/",
       "isEmbeddedView": false
     },
@@ -40,7 +40,7 @@
       "appName": "localhost:5173",
       "launchUrl": "http://localhost:5173/launch",
       "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
+      "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cus patient/Condition.cus patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cus patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
       "redirectUris": "http://localhost:5173/",
       "isEmbeddedView": false
     },
@@ -73,7 +73,7 @@
     "appName": "Health Check Assessment",
     "launchUrl": "https://smartforms.csiro.au/launch",
     "clientId": "a57d90e3-5f69-4b92-aa2e-2992180863c1",
-    "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cs patient/Condition.cs patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cs patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
+    "scope": "launch openid fhirUser online_access patient/AllergyIntolerance.cus patient/Condition.cus patient/Encounter.r patient/Immunization.cs patient/Medication.r patient/MedicationStatement.cus patient/Observation.cs patient/Patient.r patient/QuestionnaireResponse.crus user/Practitioner.r launch/questionnaire?role=http://ns.electronichealth.net.au/smart/role/new",
     "redirectUris": "https://smartforms.csiro.au",
     "isEmbeddedView": false
   }
