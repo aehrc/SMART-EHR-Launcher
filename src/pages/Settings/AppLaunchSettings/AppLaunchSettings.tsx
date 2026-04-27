@@ -14,6 +14,8 @@ import { getValidationErrors } from "@/lib/URLValidation.tsx";
 import Alert from "@/components/Alert.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Plus, Trash2 } from "lucide-react";
 
 function AppLaunchSettings() {
   const { query, launch, setQuery } = useLauncherQuery();
@@ -27,6 +29,33 @@ function AppLaunchSettings() {
   const clientId = launch.client_id ?? "";
   const scopes = launch.scope ?? "";
   const redirectUris = launch.redirect_uris ?? "";
+
+  const additionalContext: { key: string; value: string }[] = (() => {
+    try {
+      return launch.additional_context ? JSON.parse(launch.additional_context) : [];
+    } catch {
+      return [];
+    }
+  })();
+
+  function setAdditionalContext(entries: { key: string; value: string }[]) {
+    setQuery({ additional_context: entries.length > 0 ? JSON.stringify(entries) : "" });
+  }
+
+  function handleAddContext() {
+    setAdditionalContext([...additionalContext, { key: "", value: "" }]);
+  }
+
+  function handleUpdateContext(index: number, field: "key" | "value", val: string) {
+    const updated = additionalContext.map((p, i) =>
+      i === index ? { ...p, [field]: val } : p
+    );
+    setAdditionalContext(updated);
+  }
+
+  function handleRemoveContext(index: number) {
+    setAdditionalContext(additionalContext.filter((_, i) => i !== index));
+  }
 
   return (
     <div className="grid gap-6">
@@ -140,6 +169,53 @@ function AppLaunchSettings() {
                   Comma-separated list of redirect URIs. If provided, your{" "}
                   <code>redirect_uri</code> must be included in this set.
                 </div>
+              </div>
+            </div>
+
+            <Separator className="my-2" />
+
+            {/* Additional Context */}
+            <div className="grid gap-2">
+              <Label>Additional Context</Label>
+              <div className="text-xs text-muted-foreground">
+                Extra key/value pairs returned as additional context in the
+                token response.
+              </div>
+              <div className="grid gap-2">
+                {additionalContext.map((entry, index) => (
+                  <div key={index} className="flex gap-2 items-center">
+                    <Input
+                      placeholder="Key"
+                      value={entry.key}
+                      onChange={(e) =>
+                        handleUpdateContext(index, "key", e.target.value)
+                      }
+                    />
+                    <Input
+                      placeholder="Value"
+                      value={entry.value}
+                      onChange={(e) =>
+                        handleUpdateContext(index, "value", e.target.value)
+                      }
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveContext(index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-fit"
+                  onClick={handleAddContext}
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Context
+                </Button>
               </div>
             </div>
           </div>
